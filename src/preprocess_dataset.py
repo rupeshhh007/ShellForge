@@ -2,7 +2,7 @@ import json
 import random
 from pathlib import Path
 
-INPUT_FILE = Path("data/sample_dataset.jsonl")
+INPUT_FILE = Path("data/pilot_dataset.jsonl")
 OUTPUT_DIR = Path("data/processed")
 
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
