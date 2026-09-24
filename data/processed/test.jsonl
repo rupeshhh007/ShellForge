@@ -1,0 +1,2 @@
+{"instruction": "List all files in the current directory including hidden files", "command": "ls -la", "category": "file_operations", "risk": "SAFE", "explanation": "Lists all files with details, including hidden files.", "safe_alternative": null}
+{"instruction": "Show the 10 largest files in the current directory tree", "command": "find . -type f -printf '%s %p\\n' | sort -nr | head -n 10", "category": "file_search", "risk": "SAFE", "explanation": "Finds files, sorts them by size, and shows the 10 largest.", "safe_alternative": null}

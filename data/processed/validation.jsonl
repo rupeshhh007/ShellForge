@@ -1,0 +1,2 @@
+{"instruction": "Show the top processes using the most CPU", "command": "ps aux --sort=-%cpu | head -n 11", "category": "process_management", "risk": "SAFE", "explanation": "Sorts running processes by CPU usage and shows the highest entries.", "safe_alternative": null}
+{"instruction": "Show disk usage of all mounted filesystems", "command": "df -h", "category": "system_monitoring", "risk": "SAFE", "explanation": "Displays filesystem disk usage in human-readable form.", "safe_alternative": null}
