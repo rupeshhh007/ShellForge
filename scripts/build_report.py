@@ -36,8 +36,10 @@ if base and tuned:
     assert base['test_sha256']==tuned['test_sha256'] and base['n']==tuned['n']
 new_comparison=None
 new_manifest=None
+quality_path=ROOT/'data/quality/audit.json'
 if report_args.experiment:
     experiment=report_args.experiment
+    quality_path=experiment/'quality/audit.json'
     completion=json.loads((experiment/'completion.json').read_text())
     if not completion.get('completed'):
         raise ValueError('Cannot report an incomplete experiment as measured results')
@@ -119,6 +121,7 @@ if not testpath.exists():testpath=REPORTS/'logs/tests.log'
 testlog=testpath.read_text();testsummary=next((l for l in reversed(testlog.splitlines()) if re.search(r'\d+ passed',l)),'See test logs; no passing summary found.')
 missing=stats['missing_optional_fields_before_dedup']
 comparison_text = (f' On the same {base["n"]} requests, Qwen base exact match was {pct(base["exact_match"])}, versus {pct(tuned["exact_match"])} for LoRA. The small fine-tuning run did not improve exact match; this subset is too small for a robust generalization claim.' if base and tuned else '')
+quality_audit=json.loads(quality_path.read_text()) if quality_path.exists() else None
 new_training_text=''
 new_results_text=''
 new_discussion=''
@@ -135,6 +138,9 @@ sections={
 'What Went Wrong':"The original importer could silently truncate unequal files; old random splits leaked shared commands/instructions. Retrieval produced zero held-out exact matches, showing its inability to synthesize unseen commands. The initial safety benchmark missed date -s and chmod ugo=rwx (two dangerous false negatives); both were fixed while preserving initial scores. Two harmless compound examples remain rejected by the conservative policy. Direct git clone failed authentication; connector access recovered the repository. Initial model-client dependencies were incompatible with the available proxy; pinned compatible versions resolved access. An initial training run was interrupted to finalize stronger split equivalence, then restarted on final artifacts. The 20-step CPU pilot uses very little data and cannot establish robust model quality. LoRA exact match decreased from 3/32 to 2/32; a completed training run is not proof of improvement.",
  'Alternative Flow / Proposed Improvements':"Prepared cloud protocol: restore split hashes; audit training only; up to 3 epochs, rank 16 attention/MLP LoRA, batch 16, 512 tokens, seed 42, LR trials 1e-4/5e-5, cosine decay and 5% warmup. Save/evaluate every 100 steps, patience 3. Select by full-validation exact match, then loss; freeze before paired test. No GPU completion is claimed until manifests exist. Primary test: 1,222 cases unexposed to the old pilot; full 1,254 results disclose 32 exposed cases. Future work: adjudicate semantic alignment and safety labels, review command equivalence, compare each larger model against its own base, and calibrate abstention. AST similarity never proves semantics. Keep execution disabled."
 }
+if quality_audit:
+    sections['Dataset Preprocessing'] = sections['Dataset Preprocessing'].split(' Missing optional fields')[0]
+    sections['Dataset Preprocessing'] += (f" Follow-up training-only audit retained {quality_audit['retained']:,}/{quality_audit['input_records']:,} examples; additional exclusions {quality_audit['removed']}. A 100-pair assistant static review identified ten wrong paths, time predicates, unsupported tasks or unintended actions; labels are not externally adjudicated. Original split membership and held-out bytes remain unchanged.")
 if new_comparison:
     sections['Code Implementation'] += new_training_text
     sections['Metrics - Results and Discussion'] = ('Original results are retained in the table below. '+new_results_text)

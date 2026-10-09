@@ -36,17 +36,26 @@ def audit_training(path='data/review2/train.jsonl', output='data/quality'):
     """Never inspect held-out records or drop valid alternative references as conflicts."""
     invalid = []
     loaded = read_jsonl(path, invalid)
+    review_path = Path(__file__).resolve().parents[1] / 'benchmarks/train_pair_exclusions.json'
+    review_manifest = json.loads(review_path.read_text()) if review_path.exists() else {'exclusions': []}
+    exclusions = {r['id']: r for r in review_manifest['exclusions']}
+    source_hash = sha256(path)
+    if source_hash != review_manifest.get('source_train_sha256'):
+        exclusions = {}
     seen = set()
     kept, removed = [], list(invalid)
     by_instruction = defaultdict(list)
     fingerprints = defaultdict(list)
     for row, source in loaded:
         key = (instruction_key(row['instruction']), row['command'])
-        reason = ('duplicate_pair' if key in seen else
+        entry = exclusions.get(row.get('id'))
+        if entry and (entry['instruction'], entry['command']) != (row['instruction'], row['command']):
+            raise ValueError('Reviewed exclusion does not match source bytes')
+        reason = ('reviewed_pair_mismatch_or_unsupported_task' if entry else 'duplicate_pair' if key in seen else
                   'invalid_bash_syntax' if not syntax_check(row['command']) else None)
         seen.add(key)
         if reason:
-            removed.append({**source, 'id': row.get('id'), 'reason': reason})
+            removed.append({**source, 'id': row.get('id'), 'reason': reason, 'review_reason': entry['reason'] if entry else None})
             continue
         kept.append(row)
         by_instruction[key[0]].append(row)
@@ -68,10 +77,10 @@ def audit_training(path='data/review2/train.jsonl', output='data/quality'):
         'structurally_shared_target_groups': sum(len(ids) > 1 for ids in fingerprints.values()),
         'long_commands_over_512_chars': len(long_rows), 'long_command_ids': [r.get('id') for r in long_rows],
         'semantic_alignment_certified': False,
-        'limitations': ['Only objectively invalid syntax and identical pairs are removed.',
+        'limitations': ['Invalid syntax, identical pairs and byte-verified training-only static-review exclusions are removed.',
                        'Multiple targets can be valid alternatives; retained pending human review.',
                        'Shared AST targets and long commands are audit flags, not automatic rejection.',
-                       '100 seeded training pairs are supplied for alignment review; no automated semantic certification.',
+                       '100 original seeded training pairs received limited assistant static review; ten clear mismatches/unsupported tasks are excluded. Remaining semantics are not certified.',
                        'Existing grouped split isolates shared commands; this is a stricter novel-command task than random NL2Bash splits.']})
     return json.loads((out / 'audit.json').read_text())
 

@@ -66,3 +66,18 @@ def test_protocol_notebook_valid_and_cloud_only():
     assert 'run_gpu_experiments.py' in cells and 'cuda.is_available' in cells
     assert all(c.get('execution_count') is None for c in notebook['cells'] if c['cell_type'] == 'code')
     assert all(not c.get('outputs') for c in notebook['cells'])
+
+
+def test_review_exclusions_are_training_only_and_byte_verified():
+    review = json.loads(Path('benchmarks/train_pair_exclusions.json').read_text())
+    from src.preprocess_dataset import read_jsonl
+    train = {r['id']: r for r, _ in read_jsonl('data/review2/train.jsonl')}
+    heldout = {r['id'] for split in ['validation','test']
+               for r, _ in read_jsonl(f'data/review2/{split}.jsonl')}
+    assert len(review['exclusions']) == 10 and review['reviewed_sample_count'] == 100
+    assert review['source_train_sha256'] == hashlib.sha256(Path('data/review2/train.jsonl').read_bytes()).hexdigest()
+    for excluded in review['exclusions']:
+        assert excluded['id'] not in heldout
+        assert train[excluded['id']]['instruction'] == excluded['instruction']
+        assert train[excluded['id']]['command'] == excluded['command']
+        assert excluded['reason'] and 'assistant' in excluded['reviewer']

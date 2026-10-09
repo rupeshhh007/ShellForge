@@ -1,0 +1,86 @@
+{
+  "source_train_sha256": "3451f3531390a9cad57d50d3ff0417532a2ddb1e2865c24923ce32f9c05ea9e3",
+  "reviewed_sample_count": 100,
+  "exclusions": [
+    {
+      "id": "350c84664f755de01197",
+      "instruction": "Find .rm files in the current directory tree and convert them to the MP3 format",
+      "command": "find . -type f -name \"*.rm\" -exec ffmpeg -i {} -sameq {}.mp3 \\; -exec rm {} \\;",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "Conversion request does not authorize deleting the original files; target additionally runs rm on every matched file."
+    },
+    {
+      "id": "411c4e62a09ae0a92396",
+      "instruction": "Move all files and directories in the current directory to \"/tmp/blah/\"",
+      "command": "find . -depth=1 -exec mv {} /tmp/blah/ \\;",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "find -depth=1 is not a valid GNU find depth option; the task also needs a bounded traversal before moving current-directory entries."
+    },
+    {
+      "id": "7d8b86f0a3ae8daf6d41",
+      "instruction": "search for all the symbolic links in a folder and delete them",
+      "command": "find /target/dir -type l ! -exec test -e {} \\; -exec rm {} \\;",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "Instruction requests all symbolic links; ! test -e restricts removal to broken links."
+    },
+    {
+      "id": "b101cb74cceba2372fa4",
+      "instruction": "Search the /var/www/ tree for files owned by root or unknown group and change their group to 'apache'",
+      "command": "find /var/www -group root -o -nogroup -print0 | xargs -0 chown :apache",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "Instruction requests root ownership or unknown group; target tests group root, not user root, and unparenthesized -o prevents -print0 on the first branch."
+    },
+    {
+      "id": "6e832af2e625b7fe6bca",
+      "instruction": "delete all the trace files (\".trc\") from the folder $DBA/$ORACLE_SID/bdump/ which have not been accessed in the last 7*24 hours",
+      "command": "find $DBA/$ORACLE_SID/bdump/*.trc -mtime +7 -exec rm {} \\;",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "Instruction asks time since access; target uses modification time (-mtime) instead of access time (-atime)."
+    },
+    {
+      "id": "501626cfd42940fea1b0",
+      "instruction": "Save \"something\" into variable \"param\" in ksh",
+      "command": "echo something | read param",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "Instruction explicitly requests ksh. Bash pipeline read runs in a subshell by default and does not retain the requested variable in the caller."
+    },
+    {
+      "id": "3a796fc0eacc4bb3167b",
+      "instruction": "Recursively copy directory or file /something on host \"myServer\" to current directory on local host, connecting as ssh user matching username on local host.",
+      "command": "scp -r myServer:/something",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "scp target has a remote source but no destination operand, so cannot perform the requested copy."
+    },
+    {
+      "id": "3047ee0af4aa16a5f5b8",
+      "instruction": "Find all *.csv files under /foo/bar and move them to some_dir",
+      "command": "find /foot/bar/ -name '*.csv' -print0 | xargs -0 mv -t some_dir",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "Instruction specifies /foo/bar; target searches /foot/bar instead."
+    },
+    {
+      "id": "af890569a104aa0ddcfb",
+      "instruction": "Delete all regular files with '.txt' extension that were modified in more than 25 minutes ago in maximum 1 level down the directory '/home/u20806/public_html'",
+      "command": "find /home/u20806/public_html -daystart -maxdepth 1 -mmin +25 -type f -name \"*.txt\" \\ -exec rm -f {} \\;",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "Backslash-space before -exec creates an operand beginning with a literal space instead of the find -exec predicate."
+    },
+    {
+      "id": "feedf627c929d278719c",
+      "instruction": "Search /etc for files modified within the last day",
+      "command": "find /etc -type f -ctime -1",
+      "reviewer": "assistant static review; not external human adjudication",
+      "review_status": "exclude",
+      "reason": "Instruction asks modification time; target tests inode status-change time (-ctime), not modification time (-mtime)."
+    }
+  ]
+}
