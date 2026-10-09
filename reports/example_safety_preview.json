@@ -1,0 +1,25 @@
+{
+  "request": "Delete the directory /tmp/shellforge-demo and all its contents recursively",
+  "command": "rm -rf /tmp/shellforge-demo",
+  "raw_generation": "rm -rf /tmp/shellforge-demo",
+  "backend": "Qwen/Qwen2.5-0.5B-Instruct base",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "explanation": "Model command proposal. Static analysis below explains policy risk; semantic correctness has not been verified. Policy findings: Recursive deletion",
+  "safety": {
+    "risk": "DANGEROUS",
+    "reasons": [
+      "Recursive deletion"
+    ],
+    "syntax_valid": true,
+    "policy": "static-v2"
+  },
+  "safe_preview": "ls -ld -- /tmp/shellforge-demo",
+  "preview_explanation": "Lists literal removal targets; does not simulate recursive contents.",
+  "executed": false,
+  "requires_manual_review": true,
+  "limitations": [
+    "Syntax validity does not imply request correctness.",
+    "SAFE is static allowlist classification, not a security guarantee.",
+    "No generated command is executed."
+  ]
+}

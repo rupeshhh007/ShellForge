@@ -1,0 +1,14 @@
+{
+  "n": 32,
+  "exact_match": 0.09375,
+  "bash_syntax_validity": 1.0,
+  "elapsed_seconds": 84.40578463100019,
+  "metric_definition": "Exact command bytes; syntax via bash -n with clean environment. No execution or semantic equivalence testing.",
+  "backend": "hf",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "adapter": null,
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "test_sha256": "0453571106fe629697aac7e3391c7803f618d5c703ddfdbbfd08c9a6f79a460b",
+  "test_selection": "first 32 deterministic test records",
+  "fine_tuning_completed": false
+}

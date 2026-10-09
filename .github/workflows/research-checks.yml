@@ -1,0 +1,70 @@
+name: Research pipeline checks
+on:
+  push:
+    branches: [codex/review2-cloud]
+  workflow_dispatch:
+permissions:
+  contents: read
+defaults:
+  run:
+    shell: bash
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - run: python -m pip install -r requirements.txt ruff pypdf nbformat ipython
+      - run: python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pip install -r requirements-model.txt
+      - name: Restore measured splits and audit training only
+        run: python -m src.experiment_data --restore > reports/logs/full_data_audit.log
+      - run: python scripts/analyze_pilot.py
+      - run: python -m pytest -q | tee reports/logs/full_data_tests.log
+      - run: python -m compileall -q src tests scripts
+      - run: python -m ruff check --select E9,F63,F7,F82 src tests scripts
+      - name: Build measured report in cloud
+        run: python scripts/build_report.py
+      - name: Verify report page count
+        run: |
+          python -c "from pypdf import PdfReader; r=PdfReader('reports/ShellForge_Review2.pdf'); assert len(r.pages)==4; assert all(abs(float(p.mediabox.width)-595.276)<1 and abs(float(p.mediabox.height)-841.89)<1 for p in r.pages)"
+          pdfinfo reports/ShellForge_Review2.pdf
+          pdftoppm -scale-to 1000 -png reports/ShellForge_Review2.pdf /tmp/review
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-checks
+          path: |
+            reports/logs/full_data_*.log
+            reports/ShellForge_Review2.pdf
+            reports/ShellForge_Review2.md
+            reports/figures/*.png
+            reports/pilot_diagnosis.json
+            data/quality/audit.json
+            data/quality/alignment_review.jsonl
+            /tmp/review-*.png
+
+  colab-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Resolve the notebook environment on a fresh cloud host
+        run: |
+          python -m venv --without-pip /tmp/shellforge-colab-env
+          python -m pip --python /tmp/shellforge-colab-env/bin/python install torch==2.14.1 --index-url https://download.pytorch.org/whl/cu126
+          python -m pip --python /tmp/shellforge-colab-env/bin/python install -r requirements-colab.txt
+          python -m pip --python /tmp/shellforge-colab-env/bin/python check
+      - name: Verify CUDA wheel and every CLI dependency without a GPU claim
+        run: |
+          /tmp/shellforge-colab-env/bin/python -c "import torch, transformers, peft, accelerate, bashlex, sklearn, numpy, matplotlib, reportlab, pypdf, pytest, nbformat, IPython; assert torch.version.cuda == '12.6'; print('Colab dependency imports verified; live T4 kernel requires Colab')"
+          /tmp/shellforge-colab-env/bin/python -m src.train --help
+          /tmp/shellforge-colab-env/bin/python -m src.evaluate --help
+          /tmp/shellforge-colab-env/bin/python scripts/run_gpu_experiments.py --help

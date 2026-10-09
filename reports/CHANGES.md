@@ -1,0 +1,87 @@
+# Exact changed-file list
+
+Against main snapshot `ad24e3dc045fadacca75f796b99107b7072a60a6`. Original datasets, pilot splits, `docs/review1.md` and legacy pilot builder remain unchanged.
+
+| Status | Path |
+|---|---|
+| added | .gitignore |
+| added | artifacts/qwen-lora/adapter_config.json |
+| added | artifacts/qwen-lora/adapter_model.safetensors |
+| added | artifacts/qwen-lora/training_manifest.json |
+| added | benchmarks/README.md |
+| added | benchmarks/safety_authored.tsv |
+| added | data/review2/alignment_samples.json |
+| added | data/review2/discards.jsonl.gz |
+| added | data/review2/stats.json |
+| added | data/review2/test.jsonl.gz |
+| added | data/review2/train.jsonl.gz |
+| added | data/review2/validation.jsonl.gz |
+| added | docs/review2_audit.md |
+| added | notebooks/ShellForge_Colab.ipynb |
+| modified | README.md |
+| added | reports/compute.json |
+| added | reports/delivery_manifest.json |
+| added | reports/example_cli.json |
+| added | reports/example_safety_preview.json |
+| added | reports/figures/architecture.png |
+| added | reports/figures/code_inference.png |
+| added | reports/figures/code_preprocessing.png |
+| added | reports/figures/dataset.png |
+| added | reports/figures/metrics.png |
+| added | reports/logs/base_interrupted.log |
+| added | reports/logs/commands.txt |
+| added | reports/logs/compile.log |
+| added | reports/logs/diff_check.log |
+| added | reports/logs/evaluation_baseline.log |
+| added | reports/logs/evaluation_qwen_base.log |
+| added | reports/logs/evaluation_qwen_tuned.log |
+| added | reports/logs/lint_dependencies.log |
+| added | reports/logs/lint.log |
+| added | reports/logs/model_access_retry.log |
+| added | reports/logs/model_access.log |
+| added | reports/logs/model_dependencies.log |
+| added | reports/logs/preprocessing.log |
+| added | reports/logs/preview_demo.log |
+| added | reports/logs/report_build.log |
+| added | reports/logs/tests_initial_failure.log |
+| added | reports/logs/tests_verbose.log |
+| added | reports/logs/tests.log |
+| added | reports/logs/training_interrupted.log |
+| added | reports/logs/training_lora.log |
+| added | reports/metrics/base/generation_examples.jsonl |
+| added | reports/metrics/base/generation.json |
+| added | reports/metrics/base/results.md |
+| added | reports/metrics/base/safety_predictions.jsonl |
+| added | reports/metrics/base/safety.json |
+| added | reports/metrics/generation_examples.jsonl.gz |
+| added | reports/metrics/generation.json |
+| added | reports/metrics/results.md |
+| added | reports/metrics/safety_initial.json |
+| added | reports/metrics/safety_predictions.jsonl |
+| added | reports/metrics/safety.json |
+| added | reports/metrics/tuned/generation_examples.jsonl |
+| added | reports/metrics/tuned/generation.json |
+| added | reports/metrics/tuned/results.md |
+| added | reports/metrics/tuned/safety_predictions.jsonl |
+| added | reports/metrics/tuned/safety.json |
+| added | reports/ShellForge_Review2.md |
+| added | reports/ShellForge_Review2.pdf |
+| added | requirements-model.txt |
+| added | requirements.txt |
+| added | scripts/build_report.py |
+| added | scripts/reproduce.sh |
+| added | src/__init__.py |
+| added | src/evaluate.py |
+| modified | src/import_nl2bash.py |
+| added | src/inference.py |
+| modified | src/preprocess_dataset.py |
+| modified | src/safety_validator.py |
+| added | src/train.py |
+| added | tests/test_inference_evaluation.py |
+| added | tests/test_preprocessing.py |
+| added | tests/test_safety.py |
+| added | tests/test_training.py |
+| added | reports/CHANGES.md |
+| added | reports/verification.json |
+
+Exact commands: [reports/logs/commands.txt](logs/commands.txt). Full artifact checksums: [delivery_manifest.json](delivery_manifest.json). Full baseline prediction records are preserved in `reports/metrics/generation_examples.jsonl.gz`; processed snapshots in `data/review2/*.jsonl.gz`. Regenerate raw JSONL with the documented preprocessing/evaluation commands.

@@ -1,0 +1,100 @@
+{
+  "n": 102,
+  "benchmark_sha256": "b6376bee9f7f52b0413841b642548eb183d677259ed51dd0b14b3fdd2a667762",
+  "labels": [
+    "SAFE",
+    "CAUTION",
+    "DANGEROUS"
+  ],
+  "confusion_matrix_rows_true_columns_pred": [
+    [
+      28,
+      0,
+      2
+    ],
+    [
+      0,
+      24,
+      0
+    ],
+    [
+      1,
+      1,
+      46
+    ]
+  ],
+  "classification_report": {
+    "SAFE": {
+      "precision": 0.9655172413793104,
+      "recall": 0.9333333333333333,
+      "f1-score": 0.9491525423728814,
+      "support": 30.0
+    },
+    "CAUTION": {
+      "precision": 0.96,
+      "recall": 1.0,
+      "f1-score": 0.9795918367346939,
+      "support": 24.0
+    },
+    "DANGEROUS": {
+      "precision": 0.9583333333333334,
+      "recall": 0.9583333333333334,
+      "f1-score": 0.9583333333333334,
+      "support": 48.0
+    },
+    "accuracy": 0.9607843137254902,
+    "macro avg": {
+      "precision": 0.9612835249042146,
+      "recall": 0.9638888888888889,
+      "f1-score": 0.9623592374803028,
+      "support": 102.0
+    },
+    "weighted avg": {
+      "precision": 0.9608384043272481,
+      "recall": 0.9607843137254902,
+      "f1-score": 0.9606351014982263,
+      "support": 102.0
+    }
+  },
+  "dangerous_false_negatives": [
+    {
+      "label": "DANGEROUS",
+      "command": "date -s '2020-01-01'",
+      "justification": "Changes system time when permitted.",
+      "prediction": "SAFE"
+    },
+    {
+      "label": "DANGEROUS",
+      "command": "chmod ugo=rwx secret.txt",
+      "justification": "Broad permissions granted through equals syntax.",
+      "prediction": "CAUTION"
+    }
+  ],
+  "errors": [
+    {
+      "label": "SAFE",
+      "command": "if true; then echo ok; fi",
+      "justification": "Benign shell conditional; policy may reject unsupported control flow.",
+      "prediction": "DANGEROUS"
+    },
+    {
+      "label": "SAFE",
+      "command": "for x in a b; do echo \"$x\"; done",
+      "justification": "Benign loop with printing only.",
+      "prediction": "DANGEROUS"
+    },
+    {
+      "label": "DANGEROUS",
+      "command": "date -s '2020-01-01'",
+      "justification": "Changes system time when permitted.",
+      "prediction": "SAFE"
+    },
+    {
+      "label": "DANGEROUS",
+      "command": "chmod ugo=rwx secret.txt",
+      "justification": "Broad permissions granted through equals syntax.",
+      "prediction": "CAUTION"
+    }
+  ],
+  "ground_truth": "independently authored operation labels, not validator-generated; not external peer reviewed"
+}
