@@ -155,7 +155,7 @@ def train_run(a):
                       data_collator=lambda batch: collate_examples(batch, tok.pad_token_id),
                       callbacks=[EarlyStoppingCallback(early_stopping_patience=3), CompleteCheckpoint()])
     manifest = {'completed': False, 'model': a.model,
-                'revision': getattr(model.config, '_commit_hash', a.revision), 'arguments': vars(a),
+                'revision': getattr(model.config, '_commit_hash', a.revision), 'arguments': dict(vars(a)),
                 'train_sha256': sha256(a.train), 'validation_sha256': sha256(a.validation),
                 'train_stats': train_stats, 'validation_stats': val_stats,
                 'trainable_parameters': sum(p.numel() for p in model.parameters() if p.requires_grad),
