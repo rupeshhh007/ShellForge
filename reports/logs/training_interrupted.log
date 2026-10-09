@@ -1,0 +1,11 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+trainable params: 540,672 || all params: 494,573,440 || trainable%: 0.1093
+
+  0%|          | 0/40 [00:00<?, ?it/s]/root/.local/lib/python3.12/site-packages/torch/utils/data/dataloader.py:759: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+  super().__init__(loader)
+
+  2%|▎         | 1/40 [00:11<07:14, 11.13s/it]
+  5%|▌         | 2/40 [00:21<06:41, 10.58s/it]
+  8%|▊         | 3/40 [00:30<06:09,  9.99s/it]
+ 10%|█         | 4/40 [00:39<05:38,  9.41s/it]
+ 12%|█▎        | 5/40 [00:46<05:02,  8.64s/it]

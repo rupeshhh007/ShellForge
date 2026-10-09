@@ -1,0 +1,445 @@
+{
+  "branch": "codex/review2-cloud",
+  "source_commit": "ad24e3dc045fadacca75f796b99107b7072a60a6",
+  "pdf_pages": 4,
+  "pdf_page_size": "A4",
+  "render_inspection": "All four final page PNGs visually inspected",
+  "tests": "37 passed in 16.56s",
+  "compile": "passed",
+  "focused_lint": "passed",
+  "commands_executed": false,
+  "fine_tuning": "CPU PEFT LoRA completed, 20 optimizer steps; no QLoRA run",
+  "baseline_examples_archive": "reports/metrics/generation_examples.jsonl.gz",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 75,
+      "git_blob_sha": "ab7c8664e037bda2872ce9bdd6e172497acc4c8f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8171,
+      "git_blob_sha": "ebd3dbeda23b3df5af9d19c8e13c5883a4c3d365"
+    },
+    {
+      "path": "artifacts/qwen-lora/adapter_config.json",
+      "bytes": 979,
+      "git_blob_sha": "96b577e7b26b9d7d81a34b45be40fdaccde0064f"
+    },
+    {
+      "path": "artifacts/qwen-lora/adapter_model.safetensors",
+      "bytes": 2175168,
+      "git_blob_sha": "0610d57752dc7c4a0706ef9edb54d9dd42ab6c1d"
+    },
+    {
+      "path": "artifacts/qwen-lora/training_manifest.json",
+      "bytes": 1246,
+      "git_blob_sha": "3d9256775bd0e7ce392d9e1d95d0cd29262678fc"
+    },
+    {
+      "path": "benchmarks/README.md",
+      "bytes": 882,
+      "git_blob_sha": "0d357b0c3ba0a2e01a80a8961bce43243fd14a16"
+    },
+    {
+      "path": "benchmarks/safety_authored.tsv",
+      "bytes": 6421,
+      "git_blob_sha": "39dab0b42ea7d42273c9ac723d29c4f40df01176"
+    },
+    {
+      "path": "data/nl2bash/all.cm",
+      "bytes": 575091,
+      "git_blob_sha": "c5dc20b1101210e4d2bd7f50f5d1055bc238c9d6"
+    },
+    {
+      "path": "data/nl2bash/all.nl",
+      "bytes": 1032340,
+      "git_blob_sha": "b9bf2b8c87834e1e3c290ece5284b31c3616eaa9"
+    },
+    {
+      "path": "data/nl2bash_sample.jsonl",
+      "bytes": 25260,
+      "git_blob_sha": "fadbf08ce91618339abd87f15e0d624f976d0ca7"
+    },
+    {
+      "path": "data/pilot_dataset.jsonl",
+      "bytes": 30405,
+      "git_blob_sha": "7245650392345c1645a70888ffbb6e00686adc70"
+    },
+    {
+      "path": "data/processed/test.jsonl",
+      "bytes": 2939,
+      "git_blob_sha": "dcb44b4dbd6c726d063cef9b39add7a720983a0c"
+    },
+    {
+      "path": "data/processed/train.jsonl",
+      "bytes": 24275,
+      "git_blob_sha": "869aca31c3503d645d161f2278baaadbb98fd64f"
+    },
+    {
+      "path": "data/processed/validation.jsonl",
+      "bytes": 3191,
+      "git_blob_sha": "5438d7d4a3e80454ab1ae2d1644836e38bf5e2f7"
+    },
+    {
+      "path": "data/review2/alignment_samples.json",
+      "bytes": 1334,
+      "git_blob_sha": "c6309ee9ad125d8fd033d1028e39c20aaab6f7f2"
+    },
+    {
+      "path": "data/review2/discards.jsonl.gz",
+      "bytes": 3847,
+      "git_blob_sha": "45adebe683b60b802a45d2b0bbd438599d62a6c0"
+    },
+    {
+      "path": "data/review2/stats.json",
+      "bytes": 3595,
+      "git_blob_sha": "bd0a6ce8134a065a159203a468015e5cbaee33dd"
+    },
+    {
+      "path": "data/review2/test.jsonl.gz",
+      "bytes": 116803,
+      "git_blob_sha": "03eb593da5436b02777cb19225239dc4d1ee026f"
+    },
+    {
+      "path": "data/review2/train.jsonl.gz",
+      "bytes": 753717,
+      "git_blob_sha": "569ad7d4610dc20921f3f028e7bfa552ca5f8049"
+    },
+    {
+      "path": "data/review2/validation.jsonl.gz",
+      "bytes": 116065,
+      "git_blob_sha": "e1d25205bd0a3f277701dc5c3d329bef1142b35f"
+    },
+    {
+      "path": "data/sample_dataset.jsonl",
+      "bytes": 4870,
+      "git_blob_sha": "4e5b34d6c2cd5192a2ebc741e5c07270a8dc9d89"
+    },
+    {
+      "path": "docs/review1.md",
+      "bytes": 5167,
+      "git_blob_sha": "0f4aeb76cd8f88f761b6ac2f3f8b3c2a05b99045"
+    },
+    {
+      "path": "docs/review2_audit.md",
+      "bytes": 3583,
+      "git_blob_sha": "4e813b05ee6703922af07b1bf8719e92d3590e9d"
+    },
+    {
+      "path": "notebooks/ShellForge_Colab.ipynb",
+      "bytes": 2201,
+      "git_blob_sha": "a0f55b4eb09776ea860c45dbcd2c2b63404863b3"
+    },
+    {
+      "path": "reports/ShellForge_Review2.md",
+      "bytes": 6814,
+      "git_blob_sha": "8a5c5b7bca213c8c7c90557eff0e27d4863cab56"
+    },
+    {
+      "path": "reports/ShellForge_Review2.pdf",
+      "bytes": 362726,
+      "git_blob_sha": "585722cdd803c78c57fad271c2ff261cc12ed621"
+    },
+    {
+      "path": "reports/compute.json",
+      "bytes": 473,
+      "git_blob_sha": "9c0f6c191294aecf2360ff34ae60122d51c4deed"
+    },
+    {
+      "path": "reports/example_cli.json",
+      "bytes": 1033,
+      "git_blob_sha": "aa311c25e213bedd19e8151bd66d3b654fe62268"
+    },
+    {
+      "path": "reports/example_safety_preview.json",
+      "bytes": 1017,
+      "git_blob_sha": "c5933d83ff8671316ec5323167f4a9bb1d9bb391"
+    },
+    {
+      "path": "reports/figures/architecture.png",
+      "bytes": 45114,
+      "git_blob_sha": "1269e0357b6917697fd73ca55175470141423013"
+    },
+    {
+      "path": "reports/figures/code_inference.png",
+      "bytes": 85169,
+      "git_blob_sha": "bd0a92f7c5a232b261aff5c8a7ceff724e743eaf"
+    },
+    {
+      "path": "reports/figures/code_preprocessing.png",
+      "bytes": 39161,
+      "git_blob_sha": "8dc35fc5d6718c06f9a765613e459348515b93ab"
+    },
+    {
+      "path": "reports/figures/dataset.png",
+      "bytes": 81768,
+      "git_blob_sha": "f44f69407841aaee0d0ea6db63a32b4c4ff9a97b"
+    },
+    {
+      "path": "reports/figures/metrics.png",
+      "bytes": 70491,
+      "git_blob_sha": "51aaaa75bc2fbb9c9ca1969d801981af9117afbf"
+    },
+    {
+      "path": "reports/logs/base_interrupted.log",
+      "bytes": 881,
+      "git_blob_sha": "8f9bb79d05fd5d123ed3d63281de6c09e8d0b15b"
+    },
+    {
+      "path": "reports/logs/commands.txt",
+      "bytes": 1973,
+      "git_blob_sha": "bf5b8539958d76179319792bda5081c24de38a51"
+    },
+    {
+      "path": "reports/logs/compile.log",
+      "bytes": 0,
+      "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "reports/logs/diff_check.log",
+      "bytes": 0,
+      "git_blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "reports/logs/evaluation_baseline.log",
+      "bytes": 687,
+      "git_blob_sha": "c8051c982e8f884a9c26cd4c7a5acc2e0e6c1bf9"
+    },
+    {
+      "path": "reports/logs/evaluation_qwen_base.log",
+      "bytes": 881,
+      "git_blob_sha": "8f9bb79d05fd5d123ed3d63281de6c09e8d0b15b"
+    },
+    {
+      "path": "reports/logs/evaluation_qwen_tuned.log",
+      "bytes": 881,
+      "git_blob_sha": "fc5be90754ed3dd83248df5e1c28760a2eefd39e"
+    },
+    {
+      "path": "reports/logs/lint.log",
+      "bytes": 19,
+      "git_blob_sha": "1f5f344d054fae10f39140fb7199c99321d9190a"
+    },
+    {
+      "path": "reports/logs/lint_dependencies.log",
+      "bytes": 877,
+      "git_blob_sha": "1af8f59cdc25c8c765bfe874a6597132784a7e14"
+    },
+    {
+      "path": "reports/logs/model_access.log",
+      "bytes": 3076,
+      "git_blob_sha": "b246d8b9459c9a2167fc35615964723b5d00bd09"
+    },
+    {
+      "path": "reports/logs/model_access_retry.log",
+      "bytes": 128,
+      "git_blob_sha": "783cd693e0218bb6968f71bec7befef014fb7ec9"
+    },
+    {
+      "path": "reports/logs/model_dependencies.log",
+      "bytes": 11475,
+      "git_blob_sha": "b4d9e6236735df4d05217fedd1324187e1b72006"
+    },
+    {
+      "path": "reports/logs/preprocessing.log",
+      "bytes": 695,
+      "git_blob_sha": "099f5fb33d488d7f196ac17f7a63dbcd2f7bdebc"
+    },
+    {
+      "path": "reports/logs/preview_demo.log",
+      "bytes": 202,
+      "git_blob_sha": "f9f8ed0569638c981d643aa681211c8d75146f10"
+    },
+    {
+      "path": "reports/logs/report_build.log",
+      "bytes": 57,
+      "git_blob_sha": "f9c57a2f4e4bc6f500448c67053a3645a1019e1c"
+    },
+    {
+      "path": "reports/logs/tests.log",
+      "bytes": 2928,
+      "git_blob_sha": "3f19d689b614a20984ef4897b3f1661466d60798"
+    },
+    {
+      "path": "reports/logs/tests_initial_failure.log",
+      "bytes": 3949,
+      "git_blob_sha": "eba6f7f648375790bca7fb36aa28de0852db270c"
+    },
+    {
+      "path": "reports/logs/tests_verbose.log",
+      "bytes": 3949,
+      "git_blob_sha": "eba6f7f648375790bca7fb36aa28de0852db270c"
+    },
+    {
+      "path": "reports/logs/training_interrupted.log",
+      "bytes": 636,
+      "git_blob_sha": "c8aa51611f3f61a6023d760af9a3c860d3842fdd"
+    },
+    {
+      "path": "reports/logs/training_lora.log",
+      "bytes": 10050,
+      "git_blob_sha": "508f315abd43dc968a2cc506de9667f26c2452f1"
+    },
+    {
+      "path": "reports/metrics/base/generation.json",
+      "bytes": 568,
+      "git_blob_sha": "1f5f82415a88fd7aacbc5d54a9bcff37074ab57d"
+    },
+    {
+      "path": "reports/metrics/base/generation_examples.jsonl",
+      "bytes": 13253,
+      "git_blob_sha": "0dceb4c71fe750d81ea047e13e52783d3a2219bd"
+    },
+    {
+      "path": "reports/metrics/base/results.md",
+      "bytes": 679,
+      "git_blob_sha": "49dff7e18331b356b482f045f513db7388533eec"
+    },
+    {
+      "path": "reports/metrics/base/safety.json",
+      "bytes": 1679,
+      "git_blob_sha": "5b1fb67848ea954c67259229be6e8e474f20a9d4"
+    },
+    {
+      "path": "reports/metrics/base/safety_predictions.jsonl",
+      "bytes": 13761,
+      "git_blob_sha": "01203875667c8f33fef6daa850ff9067a2b6b0af"
+    },
+    {
+      "path": "reports/metrics/generation.json",
+      "bytes": 495,
+      "git_blob_sha": "851e2205709ae44ff2c15e96edf8ca5738f83bb7"
+    },
+    {
+      "path": "reports/metrics/generation_examples.jsonl.gz",
+      "bytes": 120043,
+      "git_blob_sha": "d317c24481bd468e16c3d473c17fbabceb19994a"
+    },
+    {
+      "path": "reports/metrics/results.md",
+      "bytes": 687,
+      "git_blob_sha": "c8051c982e8f884a9c26cd4c7a5acc2e0e6c1bf9"
+    },
+    {
+      "path": "reports/metrics/safety.json",
+      "bytes": 1679,
+      "git_blob_sha": "5b1fb67848ea954c67259229be6e8e474f20a9d4"
+    },
+    {
+      "path": "reports/metrics/safety_initial.json",
+      "bytes": 2465,
+      "git_blob_sha": "990eca43eae63b00d77114cee7afa801efb35771"
+    },
+    {
+      "path": "reports/metrics/safety_predictions.jsonl",
+      "bytes": 13761,
+      "git_blob_sha": "01203875667c8f33fef6daa850ff9067a2b6b0af"
+    },
+    {
+      "path": "reports/metrics/tuned/generation.json",
+      "bytes": 583,
+      "git_blob_sha": "e0d1997ace51a9c94dbc65f4620e199a7b96e4df"
+    },
+    {
+      "path": "reports/metrics/tuned/generation_examples.jsonl",
+      "bytes": 13396,
+      "git_blob_sha": "0039f1c511f0fb312d65a820334515b20c0f5e78"
+    },
+    {
+      "path": "reports/metrics/tuned/results.md",
+      "bytes": 679,
+      "git_blob_sha": "a8453eaf1687b5192643f9a3d903335d09ef4e82"
+    },
+    {
+      "path": "reports/metrics/tuned/safety.json",
+      "bytes": 1679,
+      "git_blob_sha": "5b1fb67848ea954c67259229be6e8e474f20a9d4"
+    },
+    {
+      "path": "reports/metrics/tuned/safety_predictions.jsonl",
+      "bytes": 13761,
+      "git_blob_sha": "01203875667c8f33fef6daa850ff9067a2b6b0af"
+    },
+    {
+      "path": "requirements-model.txt",
+      "bytes": 162,
+      "git_blob_sha": "6e9722fb40e4b7a4a97af136416c6c0e613e6b9f"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 99,
+      "git_blob_sha": "83b969be6c4aa9bccfe71fba1680213d0275134b"
+    },
+    {
+      "path": "scripts/build_report.py",
+      "bytes": 20050,
+      "git_blob_sha": "edd1dda04d9d0e42988bbcbbd5ab6dea36991b22"
+    },
+    {
+      "path": "scripts/reproduce.sh",
+      "bytes": 526,
+      "git_blob_sha": "cb45f4a1ac561eeecaf579c5857aa4cf7ea90e99"
+    },
+    {
+      "path": "src/__init__.py",
+      "bytes": 67,
+      "git_blob_sha": "bb606206ecf61f7562e69adcb407d56da7515f50"
+    },
+    {
+      "path": "src/build_pilot_dataset.py",
+      "bytes": 2275,
+      "git_blob_sha": "0d5c98a2cc35a65d23e7bc3c4a4875f2a98a5668"
+    },
+    {
+      "path": "src/evaluate.py",
+      "bytes": 4757,
+      "git_blob_sha": "0ce12ad233943541a5057a1897ae3250a0d91a99"
+    },
+    {
+      "path": "src/import_nl2bash.py",
+      "bytes": 872,
+      "git_blob_sha": "252c4c057b92d7a7f6a8d049dd44e736be5444e4"
+    },
+    {
+      "path": "src/inference.py",
+      "bytes": 4919,
+      "git_blob_sha": "10c5fde90b63a8dc044be74ef8e2129146a1532d"
+    },
+    {
+      "path": "src/preprocess_dataset.py",
+      "bytes": 11664,
+      "git_blob_sha": "40fb5b6f9c78460e520ed3ed0520bd773b806fde"
+    },
+    {
+      "path": "src/safety_validator.py",
+      "bytes": 9447,
+      "git_blob_sha": "582dfc3ec332830aee483b7e757c649d6436740f"
+    },
+    {
+      "path": "src/train.py",
+      "bytes": 4514,
+      "git_blob_sha": "6ec4904fb25f7537a31f7da1f54c0798a3adc911"
+    },
+    {
+      "path": "tests/test_inference_evaluation.py",
+      "bytes": 1533,
+      "git_blob_sha": "0b29f452a00aa697c70ac6b3f9090cc4ddf05b66"
+    },
+    {
+      "path": "tests/test_preprocessing.py",
+      "bytes": 2027,
+      "git_blob_sha": "8558b89f8cef7766a50deaa0ed05eb3f344b9589"
+    },
+    {
+      "path": "tests/test_safety.py",
+      "bytes": 1813,
+      "git_blob_sha": "71d7ad51ee8e47392f3a4d6254ff4d0d6953b9b4"
+    },
+    {
+      "path": "tests/test_training.py",
+      "bytes": 639,
+      "git_blob_sha": "effc9dbb9ac718454a40e3ae5d69e61d195bb4cb"
+    }
+  ]
+}

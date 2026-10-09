@@ -1,0 +1,24 @@
+CLOUD ONLY: Linux x86_64 container, 9 CPUs, no available CUDA device.
+Source snapshot retrieved with GitHub fetch_file connector, all.nl/all.cm decoded in chunks.
+Remote branch created with GitHub create_branch: codex/review2-cloud from ad24e3dc045fadacca75f796b99107b7072a60a6.
+Initial direct git clone failed authentication; no user PC used.
+python -m pip install bashlex pytest
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+python -m pip install transformers peft accelerate
+python -m pip install 'transformers>=4.45,<5' 'peft>=0.14,<0.19'
+python -m src.preprocess_dataset > reports/logs/preprocessing.log 2>&1
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m pytest -q > reports/logs/tests.log 2>&1
+python -m src.evaluate > reports/logs/evaluation_baseline.log 2>&1
+python -m src.evaluate --backend hf --revision 7ae557604adf67be50417f59c2c2f167def9a775 --limit 32 --output reports/metrics/base > reports/logs/evaluation_qwen_base.log 2>&1
+python -m src.train --revision 7ae557604adf67be50417f59c2c2f167def9a775 --max-steps 20 --limit 128 --max-length 192 > reports/logs/training_lora.log 2>&1
+python -m src.inference 'List all files in the current directory including hidden files' > reports/example_cli.json
+
+python -m src.evaluate --backend hf --revision 7ae557604adf67be50417f59c2c2f167def9a775 --adapter artifacts/qwen-lora --limit 32 --output reports/metrics/tuned > reports/logs/evaluation_qwen_tuned.log 2>&1
+python -m compileall -q src tests scripts > reports/logs/compile.log 2>&1
+python -m ruff check --select E9,F63,F7,F82 src tests scripts > reports/logs/lint.log 2>&1
+git diff --check > reports/logs/diff_check.log 2>&1
+python scripts/build_report.py
+pdfinfo reports/ShellForge_Review2.pdf
+pdftoppm -r 110 -png reports/ShellForge_Review2.pdf tmp/final_page
+All four rendered pages visually inspected.
+GitHub Git-data connector: create_blob, create_tree, create_commit, update_ref on codex/review2-cloud only; draft PR #1.

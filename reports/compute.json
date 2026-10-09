@@ -1,0 +1,18 @@
+{
+  "execution": "cloud Linux container, not user PC",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "cpu_count": 9,
+  "cuda_available": false,
+  "torch": "2.14.1+cu130",
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "packages": {
+    "transformers": "4.57.6",
+    "peft": "0.18.1",
+    "accelerate": "1.15.0",
+    "bashlex": "0.18",
+    "scikit-learn": "1.8.0",
+    "pytest": "9.1.1",
+    "reportlab": "4.4.9",
+    "matplotlib": "3.10.8"
+  }
+}
