@@ -21,7 +21,7 @@ def repository_zip(path):
         for p in ROOT.rglob('*'):
             relative = p.relative_to(ROOT)
             if p.is_file() and relative.parts[0] in {'src', 'scripts', 'benchmarks', 'data', 'reports', 'artifacts'} and not any(x in relative.parts for x in ['__pycache__', '.pytest_cache']):
-                if relative.parts[0] == 'data' and p.suffix != '.gz':
+                if relative.parts[0] == 'data' and p.suffix not in {'.gz', '.json'}:
                     continue
                 archive.write(p, 'ShellForge/' + relative.as_posix())
         for name in SOURCE_FILES:
@@ -143,10 +143,13 @@ def test_every_notebook_cell_in_order(tmp_path, monkeypatch):
     assert codes[0].startswith((ROOT / 'src/archive_source.py').read_text())
     archive = repository_zip(tmp_path / 'upload.zip')
     content = tmp_path / 'content';content.mkdir()
+    from importlib.machinery import ModuleSpec
     colab = types.ModuleType('google.colab')
+    colab.__spec__ = ModuleSpec('google.colab', loader=None)
     colab.files = types.SimpleNamespace(upload=lambda: {'ShellForge.zip':archive.read_bytes()})
     colab.drive = types.SimpleNamespace(mount=lambda path: Path(path).mkdir(parents=True,exist_ok=True))
     google = types.ModuleType('google');google.colab = colab
+    google.__spec__ = ModuleSpec('google', loader=None)
     monkeypatch.setitem(sys.modules, 'google', google)
     monkeypatch.setitem(sys.modules, 'google.colab', colab)
     import subprocess
@@ -166,10 +169,21 @@ def test_every_notebook_cell_in_order(tmp_path, monkeypatch):
         elif 'scripts/run_gpu_experiments.py' in argv:
             run_dir = Path(argv[argv.index('--output')+1]);run_dir.mkdir(parents=True)
             atomic_json(run_dir/'completion.json', {'completed':True,'new_training_executed':False,'engineering_fixture':True})
-            atomic_json(run_dir/'comparison.json', {'primary_unexposed_test':{'engineering_fixture':True}})
-            atomic_json(run_dir/'selection.json', {'selected_adapter':'engineering-fixture','revision':'pinned'})
-            for name in ['ShellForge_Review2.pdf','ShellForge_Review2.md']:
-                shutil.copy2(ROOT/'reports'/name, run_dir/name)
+            # Report-only fixture stays in tmp_path; never becomes measured repository evidence.
+            trial = run_dir/'trial-fixture';trial.mkdir()
+            atomic_json(trial/'training_manifest.json', {
+                'completed':True,'engineering_fixture':True,'train_stats':{'used':2},
+                'actual_optimizer_steps':2,'completed_epochs':1.0,
+                'arguments':{'rank':2,'learning_rate':1e-4,'batch_size':1,'accumulation':1},
+                'train_metrics':{'train_loss':None},
+                'initial_validation_metrics':{'eval_loss':4.0},'validation_metrics':{'eval_loss':3.9}})
+            atomic_json(trial/'history.json', [{'step':1,'loss':4.0,'eval_loss':3.9}])
+            atomic_json(run_dir/'comparison.json', {'primary_unexposed_test':{
+                'n':2,'base':{'exact_match_count':1,'bash_syntax_validity':1.0},
+                'tuned':{'exact_match_count':1,'bash_syntax_validity':1.0},
+                'paired':{'exact_match_delta':0.0,'mcnemar_exact_p':1.0}}})
+            atomic_json(run_dir/'selection.json', {'selected_adapter':str(trial/'adapter'),
+                'revision':'pinned','improved_validation_exact_match':False})
         elif 'src.inference' in argv:
             pass  # No synthetic command is published as model evidence.
         else:

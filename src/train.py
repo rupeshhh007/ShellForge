@@ -87,6 +87,8 @@ def train_run(a):
     manifest_path = output / 'training_manifest.json'
     previous = json.loads(manifest_path.read_text()) if manifest_path.exists() else None
     contract_path = output / 'training_contract.json'
+    if output.exists() and any(output.iterdir()) and previous is None and not contract_path.exists():
+        raise ValueError('Unrecognized nonempty training directory; preserving its files')
     legacy = previous is not None and not contract_path.exists()
     if legacy:
         old_settings = {k: previous['arguments'].get(k) for k in settings}
