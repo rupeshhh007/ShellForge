@@ -1,0 +1,6 @@
+-r requirements.txt
+# Install the CPU torch wheel first when CUDA is unavailable (see README).
+torch==2.14.1
+transformers==4.57.6
+peft==0.18.1
+accelerate==1.15.0

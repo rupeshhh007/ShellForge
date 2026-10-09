@@ -1,0 +1,129 @@
+{
+  "seed": 42,
+  "source_commit": "ad24e3dc045fadacca75f796b99107b7072a60a6",
+  "sources": {
+    "data/nl2bash/all.cm": {
+      "sha256": "3a72eaced7fa14a0938354cefc42b2dcafb2d47297102f1279086e18c3abe57e",
+      "physical_lines": 12607,
+      "bytes": 575091
+    },
+    "data/nl2bash/all.nl": {
+      "sha256": "1db0c529c350b463919624550b8f5882a97c42ad5051c7d49fbc496bc4e8b770",
+      "physical_lines": 12607,
+      "bytes": 1032340
+    },
+    "data/nl2bash_sample.jsonl": {
+      "sha256": "19f6d58e6911d266b17d2c26eb50aec78f9e097467810af627c7ae0f775aa852",
+      "physical_lines": 100,
+      "bytes": 25260
+    },
+    "data/pilot_dataset.jsonl": {
+      "sha256": "2518d489d0813beccf09b1e084ef48471ab8f495ce9ea6b6aae91a84d07b69c1",
+      "physical_lines": 120,
+      "bytes": 30405
+    },
+    "data/processed/test.jsonl": {
+      "sha256": "e3ed45ed71492f81f0660ca115387370664c0d455ad1052cbdd0ebf32860c0fa",
+      "physical_lines": 12,
+      "bytes": 2939
+    },
+    "data/processed/train.jsonl": {
+      "sha256": "41a501a3a842968bfd9288ca78a457e599fee58f71959913722817a5ce176f4b",
+      "physical_lines": 96,
+      "bytes": 24275
+    },
+    "data/processed/validation.jsonl": {
+      "sha256": "fd1bbbcfb84b0d17ffdf5b219cd86696cbfefef818c147afccd75160e0228450",
+      "physical_lines": 12,
+      "bytes": 3191
+    },
+    "data/sample_dataset.jsonl": {
+      "sha256": "f29af490f7015e3487bca3fb999d7b078d31becdc23da5e8f34d79694bdd56f9",
+      "physical_lines": 20,
+      "bytes": 4870
+    }
+  },
+  "alignment": {
+    "nl_lines": 12607,
+    "command_lines": 12607,
+    "positional_count_match": true,
+    "semantic_alignment": "Not established for every pair; corpus pairing is assumed, not independently verified."
+  },
+  "input_records": 12967,
+  "retained": 12545,
+  "discard_counts": {
+    "invalid_bash_syntax": 74,
+    "duplicate_pair": 348
+  },
+  "missing_optional_fields_before_dedup": {
+    "category": 12607,
+    "risk": 12607,
+    "explanation": 12907,
+    "safe_alternative": 12949
+  },
+  "verified_risk_count": 0,
+  "category_counts": {
+    "process_management": 139,
+    "other": 2188,
+    "text_processing": 1629,
+    "file_search": 7632,
+    "networking": 155,
+    "unclassified": 70,
+    "permissions": 134,
+    "file_operations": 352,
+    "compression": 86,
+    "system_monitoring": 53,
+    "navigation": 107
+  },
+  "heuristic_risk_counts": {
+    "DANGEROUS": 6049,
+    "CAUTION": 2368,
+    "SAFE": 4128
+  },
+  "splits": {
+    "train": 10036,
+    "validation": 1255,
+    "test": 1254
+  },
+  "split_risk_counts": {
+    "train": {
+      "SAFE": 3372,
+      "DANGEROUS": 4899,
+      "CAUTION": 1765
+    },
+    "validation": {
+      "DANGEROUS": 575,
+      "SAFE": 378,
+      "CAUTION": 302
+    },
+    "test": {
+      "SAFE": 378,
+      "DANGEROUS": 575,
+      "CAUTION": 301
+    }
+  },
+  "leakage": {
+    "instruction": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "command": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "group_id": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    }
+  },
+  "equivalence_groups": 9328,
+  "largest_group": 45,
+  "limitations": [
+    "AST grouping handles literal quote/whitespace equivalence, known additive ls/rm flag variants and shared instructions/commands transitively, not arbitrary semantic paraphrases or all Bash equivalences.",
+    "No command execution. SAFE is a static policy label, never a guarantee.",
+    "Original pilot files are preserved; derived samples are deduplicated with provenance."
+  ]
+}
