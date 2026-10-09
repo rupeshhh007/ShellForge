@@ -4,7 +4,7 @@ Natural-language Bash command **proposals**, static safety review, explanations 
 
 ## Full-data GPU continuation
 
-[Open the Colab GPU workflow](https://colab.research.google.com/github/rupeshhh007/ShellForge/blob/codex/review2-cloud/notebooks/ShellForge_Colab.ipynb). Select a T4 GPU, connect Drive, and run all cells. Installs, model weights, training, evaluation, and report generation stay in cloud storage.
+[Open the Colab GPU workflow](https://colab.research.google.com/github/rupeshhh007/ShellForge/blob/codex/review2-cloud/notebooks/ShellForge_Colab.ipynb). For a private repository, download `notebooks/ShellForge_Colab.ipynb` while signed into GitHub and open it with Colab **File > Upload notebook**. Download the ZIP of `codex/review2-cloud` with **Code > Download ZIP**, select T4 GPU, and press Run all. Upload that ZIP and authorize Drive when prompted; no GitHub token or code edits are needed. Reconnect with the same ZIP to resume saved Drive checkpoints and predictions. Installs, model weights, training, evaluation, and report generation stay in cloud storage.
 
 The training-only audit excluded ten reviewed mismatches/unsupported tasks, leaving **10,026** examples before token-budget exclusions. The original splits and negative pilot remain preserved. New GPU training has **not executed**; no new adapter or improvement is claimed. The prepared runner uses validation to select checkpoints and trials before a single paired test evaluation, with the 32 pilot-exposed cases disclosed separately.
 

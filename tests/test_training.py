@@ -54,7 +54,8 @@ def test_trainer_checkpoint_roundtrip_with_tiny_random_model(tmp_path, monkeypat
     import argparse
     import json
     import pytest
-    pytest.importorskip('torch')
+    torch = pytest.importorskip('torch')
+    monkeypatch.setattr(torch.cuda, 'is_available', lambda: False)
     transformers = pytest.importorskip('transformers')
     pytest.importorskip('peft')
     from src.train import train_run, TARGET_MODULES
