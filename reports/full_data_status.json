@@ -1,0 +1,26 @@
+{
+  "status": "prepared_cloud_gpu_workflow_awaiting_user_connection",
+  "new_gpu_training_completed": false,
+  "new_trained_adapter": null,
+  "prepared_training_examples": 10026,
+  "training_only_exclusions": 10,
+  "validation_examples": 1255,
+  "full_test_examples": 1254,
+  "primary_unexposed_test_examples": 1222,
+  "historically_exposed_test_examples": 32,
+  "verification": {
+    "cloud_run": "https://github.com/rupeshhh007/ShellForge/actions/runs/37930727240",
+    "source_commit": "a6df5a77db17c4fdeb109b2e2197aca9c5960022",
+    "tests_passed": 48,
+    "warnings": 7,
+    "compilation_passed": true,
+    "focused_lint_passed": true,
+    "pdf_a4_pages": 4,
+    "pdf_visual_review_completed": true,
+    "tiny_random_model_test_is_engineering_only": true
+  },
+  "original_pilot_adapter": "artifacts/qwen-lora",
+  "original_pilot_results_preserved": true,
+  "new_training_steps_epochs_losses_accuracy": "Not available until Colab experiment executes",
+  "user_compute_preference": "cloud only; no local model downloads or training"
+}

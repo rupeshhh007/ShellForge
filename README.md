@@ -2,6 +2,14 @@
 
 Natural-language Bash command **proposals**, static safety review, explanations and narrowly verified read-only previews. Commands are never executed. A working CPU retrieval baseline, Qwen2.5 generator, real PEFT LoRA training entry point and measured cloud pilot are included.
 
+## Full-data GPU continuation
+
+[Open the Colab GPU workflow](https://colab.research.google.com/github/rupeshhh007/ShellForge/blob/codex/review2-cloud/notebooks/ShellForge_Colab.ipynb). Select a T4 GPU, connect Drive, and run all cells. Installs, model weights, training, evaluation, and report generation stay in cloud storage.
+
+The training-only audit excluded ten reviewed mismatches/unsupported tasks, leaving **10,026** examples before token-budget exclusions. The original splits and negative pilot remain preserved. New GPU training has **not executed**; no new adapter or improvement is claimed. The prepared runner uses validation to select checkpoints and trials before a single paired test evaluation, with the 32 pilot-exposed cases disclosed separately.
+
+Current cloud verification: **48 tests passed**, compilation and focused lint passed; the updated report has four visually checked A4 pages. Evidence: [status](reports/full_data_status.json), [audit](reports/full_data_audit.json), [diagnosis](reports/pilot_diagnosis.json), [cloud checks](https://github.com/rupeshhh007/ShellForge/actions/runs/37930727240), and [protocol](docs/full_data_experiments.md). The original delivery manifest describes the archived pilot snapshot; this continuation has its own status and evidence.
+
 ## Review 2 submission
 
 - Academic report: [reports/ShellForge_Review2.pdf](reports/ShellForge_Review2.pdf) (four A4 pages), with [Markdown source](reports/ShellForge_Review2.md).

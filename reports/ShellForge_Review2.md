@@ -1,6 +1,6 @@
 # ShellForge - Review 2
 
-Cloud-only implementation and measured pilot results. Source snapshot: ad24e3dc045fadacca75f796b99107b7072a60a6. Branch: codex/review2-cloud.
+Measured original cloud pilot; full-data GPU continuation status is stated explicitly. Source snapshot: ad24e3dc045fadacca75f796b99107b7072a60a6. Branch: codex/review2-cloud.
 
 ## 1. Dataset
 
@@ -8,7 +8,7 @@ The original NL2Bash corpus has 12,607 natural-language lines and 12,607 command
 
 ## 2. Dataset Preprocessing
 
-Typed JSON validation rejects malformed objects, missing/non-string/empty required fields and NULs. Command bytes, case, quotes and internal spacing are preserved. Syntax checks use Bash parse-only mode with a clean environment. Removed 348 duplicate occurrences and 74 syntax-invalid occurrences; retained 12,545. Connected components isolate shared normalized instructions, AST literal quote/spacing equivalents and known additive ls/rm flag variants. Seed 42 yields 9,328 groups (largest 45); splits 10,036/1,255/1,254. All checked cross-split overlaps are zero. Arbitrary semantic paraphrase leakage is not ruled out. Missing optional fields before dedup: category 12,607, risk 12,607, explanation 12,907, safe alternative 12,949; retained as missing/provenance rather than fabricated annotations.
+Typed JSON validation rejects malformed objects, missing/non-string/empty required fields and NULs. Command bytes, case, quotes and internal spacing are preserved. Syntax checks use Bash parse-only mode with a clean environment. Removed 348 duplicate occurrences and 74 syntax-invalid occurrences; retained 12,545. Connected components isolate shared normalized instructions, AST literal quote/spacing equivalents and known additive ls/rm flag variants. Seed 42 yields 9,328 groups (largest 45); splits 10,036/1,255/1,254. All checked cross-split overlaps are zero. Arbitrary semantic paraphrase leakage is not ruled out. Follow-up training-only audit retained 10,026/10,036 examples; additional exclusions 10. A 100-pair assistant static review identified ten wrong paths, time predicates, unsupported tasks or unintended actions; labels are not externally adjudicated. Original split membership and held-out bytes remain unchanged.
 
 ![Dataset distributions](figures/dataset.png)
 
@@ -47,15 +47,15 @@ Prediction: `find . -size +100M`
 
 ## 5. What Went Wrong
 
-The original importer could silently truncate unequal files; old random splits leaked shared commands/instructions. Retrieval produced zero held-out exact matches, showing its inability to synthesize unseen commands. The initial safety benchmark missed date -s and chmod ugo=rwx (two dangerous false negatives); both were fixed while preserving initial scores. Two harmless compound examples remain rejected by the conservative policy. Direct git clone failed authentication; connector access recovered the repository. Initial model-client dependencies were incompatible with the available proxy; pinned compatible versions resolved access. An initial training run was interrupted to finalize stronger split equivalence, then restarted on final artifacts. The 20-step CPU pilot uses very little data and cannot establish robust model quality. LoRA exact match decreased from 3/32 to 2/32; a completed training run is not proof of improvement.
+The original importer could silently truncate unequal files; old random splits leaked shared commands/instructions. Retrieval produced zero held-out exact matches, showing its inability to synthesize unseen commands. The initial safety benchmark missed date -s and chmod ugo=rwx (two dangerous false negatives); both were fixed while preserving initial scores. Two harmless compound examples remain rejected by the conservative policy. Direct git clone failed authentication; connector access recovered the repository. Initial model-client dependencies were incompatible with the available proxy; pinned compatible versions resolved access. An initial training run was interrupted to finalize stronger split equivalence, then restarted on final artifacts. The 20-step CPU pilot uses very little data and cannot establish robust model quality. LoRA exact match decreased from 3/32 to 2/32; a completed training run is not proof of improvement. No full-data GPU training has been executed in the prepared continuation; no new accuracy or loss is claimed.
 
 ## 6. Alternative Flow / Proposed Improvements
 
-Future work: externally adjudicate corpus pairs and safety labels; reserve a fresh safety holdout after policy development; expand AST analysis with argument-aware utility contracts and paraphrase clustering; test adversarial/obfuscated syntax. Run larger GPU LoRA/QLoRA experiments with identical split hashes, token budgets and a shared untouched evaluation set; compare base/tuned accuracy with uncertainty intervals. Add human semantic review of generated commands and calibrated abstention. Keep execution disabled: the system should remain a reviewed command-proposal tool. Completion evidence is stored in JSON metrics, example JSONL, source hashes, actual logs, training manifest and adapter files; no fake UI screenshots are used.
+Prepared cloud protocol: restore split hashes; audit training only; up to 3 epochs, rank 16 attention/MLP LoRA, batch 16, 512 tokens, seed 42, LR trials 1e-4/5e-5, cosine decay and 5% warmup. Save/evaluate every 100 steps, patience 3. Select by full-validation exact match, then loss; freeze before paired test. No GPU completion is claimed until manifests exist. Primary test: 1,222 cases unexposed to the old pilot; full 1,254 results disclose 32 exposed cases. Future work: adjudicate semantic alignment and safety labels, review command equivalence, compare each larger model against its own base, and calibrate abstention. AST similarity never proves semantics. Keep execution disabled.
 
 ## Verification and reproduction
 
-============================= 37 passed in 16.56s ==============================
+48 passed, 7 warnings in 15.43s
 
 See README.md for exact cloud commands. See reports/logs/commands.txt, data/review2/stats.json, reports/metrics/ and artifacts/qwen-lora/training_manifest.json for detailed evidence.
 
