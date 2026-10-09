@@ -72,7 +72,7 @@ for name,m in [('Qwen base\n(subset)',base),('Qwen LoRA\n(subset)',tuned)]:
 if new_comparison:
     for name,m in [('New base\n(unexposed)',new_comparison['primary_unexposed_test']['base']),('New LoRA\n(unexposed)',new_comparison['primary_unexposed_test']['tuned'])]:
         names.append(name);exact.append(m['exact_match_count']/new_comparison['primary_unexposed_test']['n']*100);syntax.append(m['bash_syntax_validity']*100)
-x=np.arange(len(names));axes[1].bar(x-.18,exact,.36,label='Exact match',color=BLUE);axes[1].bar(x+.18,syntax,.36,label='Bash syntax',color='#97b6e9');axes[1].set_xticks(x,names,fontsize=8);axes[1].set_ylim(0,119);axes[1].set_title('Generation results (%)');axes[1].legend(frameon=False,fontsize=8,loc='upper center')
+x=np.arange(len(names));axes[1].bar(x-.18,exact,.36,label='Exact match',color=BLUE);axes[1].bar(x+.18,syntax,.36,label='Bash syntax',color='#97b6e9');axes[1].set_xticks(x,names,fontsize=8);axes[1].set_ylim(0,119);axes[1].set_title('Generation results (%)');axes[1].legend(frameon=False,fontsize=7,loc='upper center',ncol=2)
 for i,(a,b) in enumerate(zip(exact,syntax)):
     axes[1].text(i-.18,a+2,f'{a:.1f}',ha='center',fontsize=8);axes[1].text(i+.18,b+2,f'{b:.1f}',ha='center',fontsize=8)
 fig.tight_layout();savefig('metrics.png')

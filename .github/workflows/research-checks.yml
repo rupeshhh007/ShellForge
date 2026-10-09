@@ -39,6 +39,7 @@ jobs:
             reports/logs/full_data_*.log
             reports/ShellForge_Review2.pdf
             reports/ShellForge_Review2.md
+            reports/figures/*.png
             reports/pilot_diagnosis.json
             data/quality/audit.json
             data/quality/alignment_review.jsonl
