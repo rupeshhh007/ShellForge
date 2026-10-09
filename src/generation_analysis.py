@@ -82,6 +82,8 @@ def summarize(examples):
             'per_category': {k: {'n': len(rows), 'exact_match': sum(e['exact_match'] for e in rows) / len(rows),
                                 'wilson_95': wilson(sum(e['exact_match'] for e in rows), len(rows))}
                              for k, rows in sorted(groups.items())},
+            'formatting_violation_count': sum(e.get('formatting_violation', False) for e in examples),
+            'generation_truncated_count': sum(e.get('generation_truncated', False) for e in examples),
             'failure_categories': dict(Counter(e['failure_category'] for e in examples)),
             'uncertainty_limit': 'Wilson intervals assume independent cases; grouped corpus dependencies can widen uncertainty.',
             'structural_metric_limit': 'AST trivia match and node-kind overlap are descriptive only, not semantic equivalence.'}

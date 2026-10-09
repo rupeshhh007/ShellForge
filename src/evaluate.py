@@ -36,6 +36,8 @@ def generation_metrics(generator,rows):
                          'syntax_valid':p['safety']['syntax_valid'],'risk':p['safety']['risk'],'backend':p['backend'],
                          'retrieval_score':p.get('score'),'executed':False,
                          'category':r.get('category','unclassified'), 'raw_generation':p.get('raw_generation'),
+                         'formatting_violation':p.get('raw_generation',p['command'])!=p['command'],
+                         'generation_truncated':p.get('generation_truncated',False),
                          **compare_command(p['command'],r['command'])})
     n=len(examples)
     if not n: raise ValueError('Empty evaluation set')
@@ -50,7 +52,7 @@ def main():
     if a.limit is not None: rows=rows[:a.limit]
     g=RetrievalGenerator(a.train) if a.backend=='baseline' else HFGenerator(a.model,a.adapter,a.revision)
     metrics,examples=generation_metrics(g,rows)
-    metrics.update({'backend':a.backend,'model':a.model if a.backend=='hf' else None,'adapter':a.adapter,'model_revision':getattr(g,'revision',None),'test_sha256':hashlib.sha256(Path(a.test).read_bytes()).hexdigest(),'test_selection':'entire held-out test' if a.limit is None else f'first {a.limit} deterministic test records','fine_tuning_completed':bool(a.adapter)})
+    metrics.update({'backend':a.backend,'model':a.model if a.backend=='hf' else None,'adapter':a.adapter,'model_revision':getattr(g,'revision',None),'test_sha256':hashlib.sha256(Path(a.test).read_bytes()).hexdigest(),'decoding':{'do_sample':False,'max_input_tokens':512,'max_new_tokens':256} if a.backend=='hf' else None,'test_selection':'entire held-out test' if a.limit is None else f'first {a.limit} deterministic test records','fine_tuning_completed':bool(a.adapter)})
     out=Path(a.output);write_json(out/'generation.json',metrics);write_jsonl(out/'generation_examples.jsonl',examples)
     safety, safety_rows=safety_metrics();write_json(out/'safety.json',safety);write_jsonl(out/'safety_predictions.jsonl',safety_rows)
     text=['# Actual evaluation results','',f"Generation backend: {metrics['backend']}; n={metrics['n']}; exact match={metrics['exact_match']:.4f}; Bash syntax validity={metrics['bash_syntax_validity']:.4f}.",'','| Class | Precision | Recall | F1 | Support |','|---|---:|---:|---:|---:|']

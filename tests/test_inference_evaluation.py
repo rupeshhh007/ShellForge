@@ -31,3 +31,32 @@ def test_independent_benchmark_schema():
     assert m['n']==102 and set(r['label'] for r in rows)=={'SAFE','CAUTION','DANGEROUS'}
     assert all(r['justification'] for r in rows)
     assert sum(sum(r) for r in m['confusion_matrix_rows_true_columns_pred'])==102
+
+
+def test_hf_refuses_long_prompts_and_records_decoding():
+    torch = pytest.importorskip('torch')
+    from src.inference import HFGenerator, MAX_NEW_TOKENS
+    class Inputs(dict):
+        @property
+        def input_ids(self): return self['input_ids']
+        def to(self, device): return self
+    class Tokenizer:
+        eos_token_id = 9
+        def apply_chat_template(self, *args, **kwargs): return 'prompt'
+        def __call__(self, *args, **kwargs):
+            assert kwargs.get('add_special_tokens') is False
+            assert not kwargs.get('truncation')
+            return Inputs(input_ids=torch.tensor([[1] * self.width]))
+        def decode(self, *args, **kwargs): return 'pwd'
+    class Model:
+        device = 'cpu'
+        def generate(self, **kwargs):
+            assert kwargs['max_new_tokens'] == MAX_NEW_TOKENS and not kwargs['do_sample']
+            return torch.tensor([[1, 1, 1, 8, 9]])
+    g = HFGenerator.__new__(HFGenerator)
+    g.tokenizer, g.model, g.name, g.revision = Tokenizer(), Model(), 'unit-test', 'revision'
+    g.tokenizer.width = 513
+    assert g.generate('long')['command'] == ''
+    g.tokenizer.width = 3
+    p = g.generate('short')
+    assert p['command'] == 'pwd' and not p['generation_truncated'] and p['generated_tokens'] == 2

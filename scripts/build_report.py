@@ -70,7 +70,7 @@ names=['Retrieval\n(full test)'];exact=[baseline['exact_match']*100];syntax=[bas
 for name,m in [('Qwen base\n(subset)',base),('Qwen LoRA\n(subset)',tuned)]:
     if m:names.append(name);exact.append(m['exact_match']*100);syntax.append(m['bash_syntax_validity']*100)
 if new_comparison:
-    for name,m in [('Full-data base\n(unexposed)',new_comparison['primary_unexposed_test']['base']),('Full-data tuned\n(unexposed)',new_comparison['primary_unexposed_test']['tuned'])]:
+    for name,m in [('New base\n(unexposed)',new_comparison['primary_unexposed_test']['base']),('New LoRA\n(unexposed)',new_comparison['primary_unexposed_test']['tuned'])]:
         names.append(name);exact.append(m['exact_match_count']/new_comparison['primary_unexposed_test']['n']*100);syntax.append(m['bash_syntax_validity']*100)
 x=np.arange(len(names));axes[1].bar(x-.18,exact,.36,label='Exact match',color=BLUE);axes[1].bar(x+.18,syntax,.36,label='Bash syntax',color='#97b6e9');axes[1].set_xticks(x,names,fontsize=8);axes[1].set_ylim(0,119);axes[1].set_title('Generation results (%)');axes[1].legend(frameon=False,fontsize=8,loc='upper center')
 for i,(a,b) in enumerate(zip(exact,syntax)):
@@ -95,6 +95,14 @@ def excerpt(path,start_marker,line_count,name):
     draw.text((28,18),f'{path} | rendered source excerpt (not an app screenshot)',font=title,fill=INK)
     for i,line in enumerate(wrapped):draw.text((28,67+i*29),line,font=font,fill=INK)
     img.save(FIG/name)
+if new_comparison:
+    history=json.loads((Path(selection['selected_adapter']).parent/'history.json').read_text())
+    fig,ax=plt.subplots(figsize=(9.2,2.0))
+    for key,label in [('loss','Training (logged batches)'),('eval_loss','Validation (mean loss)')]:
+        points=[(r.get('step',0),r[key]) for r in history if key in r]
+        if points:ax.plot([p[0] for p in points],[p[1] for p in points],label=label)
+    ax.set_xlabel('Optimizer step');ax.set_ylabel('Answer-token loss');ax.legend(frameon=False,fontsize=8)
+    ax.set_title('Measured full-data optimization history');fig.tight_layout();savefig('loss_history.png')
 excerpt('src/preprocess_dataset.py','def import_pairs',7,'code_preprocessing.png')
 excerpt('src/inference.py','def propose',12,'code_inference.png')
 
@@ -181,7 +189,7 @@ table([['Aligned corpus','Retained records','Train / Val / Test'],['12,607 pairs
 h('2. Dataset Preprocessing');b(sections['Dataset Preprocessing']);image('dataset.png')
 story.append(P('All distribution labels shown above are heuristic. Originals and old splits remain intact; full lineage and discard reasons are saved separately.','SmallSF'))
 story.append(PageBreak())
-h('3. Code Implementation');image('architecture.png');b(sections['Code Implementation']);image('code_preprocessing.png');image('code_inference.png')
+h('3. Code Implementation');image('architecture.png');b(sections['Code Implementation']);image('loss_history.png' if new_comparison else 'code_preprocessing.png');image('code_inference.png')
 story.append(P('Evidence: real excerpts rendered from committed source, not application screenshots. CLI emits command, safety reasons, syntax validity, explanation, optional preview, backend and executed=false.','SmallSF'))
 story.append(PageBreak())
 h('4. Metrics - Results and Discussion');b(sections['Metrics - Results and Discussion']);table(generation_rows,[230,45,115,115]);table(safety_rows,[145,90,90,90,90]);image('metrics.png')
