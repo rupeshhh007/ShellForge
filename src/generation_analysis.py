@@ -35,7 +35,7 @@ def ast_fingerprint(command):
         return (node.kind, tuple(values))
     try:
         return tuple(encode(n) for n in bashlex.parse(command)) or None
-    except (ValueError, NotImplementedError, RuntimeError, AssertionError):
+    except Exception:  # Parser rejects unsupported/malformed generated text; score unsupported.
         return None
 
 
@@ -48,7 +48,7 @@ def node_kinds(command):
     from .safety_validator import parse_nodes
     try:
         return Counter(n.kind for n in parse_nodes(command))
-    except (ValueError, NotImplementedError, RuntimeError, AssertionError):
+    except Exception:  # Parser rejects unsupported/malformed generated text; score unsupported.
         return None
 
 
