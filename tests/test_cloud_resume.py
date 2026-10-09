@@ -146,6 +146,8 @@ def test_every_notebook_cell_in_order(tmp_path, monkeypatch):
     colab = types.ModuleType('google.colab')
     colab.files = types.SimpleNamespace(upload=lambda: {'ShellForge.zip':archive.read_bytes()})
     colab.drive = types.SimpleNamespace(mount=lambda path: Path(path).mkdir(parents=True,exist_ok=True))
+    google = types.ModuleType('google');google.colab = colab
+    monkeypatch.setitem(sys.modules, 'google', google)
     monkeypatch.setitem(sys.modules, 'google.colab', colab)
     import subprocess
     real_run = subprocess.run

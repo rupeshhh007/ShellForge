@@ -44,3 +44,24 @@ jobs:
             data/quality/audit.json
             data/quality/alignment_review.jsonl
             /tmp/review-*.png
+
+  colab-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Resolve the notebook environment on a fresh cloud host
+        run: |
+          python -m venv --without-pip /tmp/shellforge-colab-env
+          python -m pip --python /tmp/shellforge-colab-env/bin/python install torch==2.14.1 --index-url https://download.pytorch.org/whl/cu126
+          python -m pip --python /tmp/shellforge-colab-env/bin/python install -r requirements-colab.txt
+          python -m pip --python /tmp/shellforge-colab-env/bin/python check
+      - name: Verify CUDA wheel and every CLI dependency without a GPU claim
+        run: |
+          /tmp/shellforge-colab-env/bin/python -c "import torch, transformers, peft, accelerate, bashlex, sklearn, numpy, matplotlib, reportlab, pypdf, pytest, nbformat, IPython; assert torch.version.cuda == '12.6'; print('Colab dependency imports verified; live T4 kernel requires Colab')"
+          /tmp/shellforge-colab-env/bin/python -m src.train --help
+          /tmp/shellforge-colab-env/bin/python -m src.evaluate --help
+          /tmp/shellforge-colab-env/bin/python scripts/run_gpu_experiments.py --help
