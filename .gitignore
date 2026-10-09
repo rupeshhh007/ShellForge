@@ -5,3 +5,5 @@ models/
 tmp/
 *.pyc
 data/review2/*.jsonl
+data/quality/
+cloud_runs/

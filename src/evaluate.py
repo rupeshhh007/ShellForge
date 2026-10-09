@@ -7,6 +7,7 @@ from pathlib import Path
 import time
 from sklearn.metrics import classification_report, confusion_matrix
 from .inference import RetrievalGenerator, HFGenerator, propose
+from .generation_analysis import compare_command, summarize
 from .preprocess_dataset import read_jsonl, write_json, write_jsonl
 from .safety_validator import check_command, syntax_check
 
@@ -33,10 +34,12 @@ def generation_metrics(generator,rows):
         examples.append({'id':r.get('id'),'instruction':r['instruction'],'reference':r['command'],
                          'prediction':p['command'],'exact_match':p['command']==r['command'],
                          'syntax_valid':p['safety']['syntax_valid'],'risk':p['safety']['risk'],'backend':p['backend'],
-                         'retrieval_score':p.get('score'),'executed':False})
+                         'retrieval_score':p.get('score'),'executed':False,
+                         'category':r.get('category','unclassified'), 'raw_generation':p.get('raw_generation'),
+                         **compare_command(p['command'],r['command'])})
     n=len(examples)
     if not n: raise ValueError('Empty evaluation set')
-    return {'n':n,'exact_match':sum(x['exact_match'] for x in examples)/n,
+    return {**summarize(examples),'n':n,'exact_match':sum(x['exact_match'] for x in examples)/n,
             'bash_syntax_validity':sum(x['syntax_valid'] for x in examples)/n,
             'elapsed_seconds':time.monotonic()-start,
             'metric_definition':'Exact command bytes; syntax via bash -n with clean environment. No execution or semantic equivalence testing.'},examples

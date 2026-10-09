@@ -9,6 +9,8 @@ from .preprocess_dataset import read_jsonl
 from .safety_validator import check_command, safe_preview
 
 MODEL_ID='Qwen/Qwen2.5-0.5B-Instruct'
+MAX_INPUT_TOKENS=512
+MAX_NEW_TOKENS=256
 SYSTEM='Translate the user request to a single Bash command. Return only the command, no Markdown or explanation. Never execute any command.'
 
 class RetrievalGenerator:
@@ -31,6 +33,14 @@ class HFGenerator:
         import torch
         from transformers import AutoTokenizer,AutoModelForCausalLM
         torch.manual_seed(42);torch.set_num_threads(4)
+        if adapter:
+            from peft import PeftConfig
+            config=PeftConfig.from_pretrained(adapter)
+            if config.base_model_name_or_path != model:
+                raise ValueError('Adapter base model does not match requested model')
+            if config.revision and revision and config.revision != revision:
+                raise ValueError('Adapter revision does not match requested model revision')
+            revision=revision or config.revision
         self.tokenizer=AutoTokenizer.from_pretrained(model,revision=revision)
         self.model=AutoModelForCausalLM.from_pretrained(model,revision=revision,torch_dtype=torch.float32 if not torch.cuda.is_available() else torch.float16)
         if adapter:
@@ -41,9 +51,12 @@ class HFGenerator:
     def generate(self,request):
         import torch
         prompt=self.tokenizer.apply_chat_template([{'role':'system','content':SYSTEM},{'role':'user','content':request}], tokenize=False,add_generation_prompt=True)
-        inputs=self.tokenizer(prompt,return_tensors='pt',truncation=True,max_length=512).to(self.model.device)
+        inputs=self.tokenizer(prompt,return_tensors='pt',add_special_tokens=False).to(self.model.device)
+        if inputs.input_ids.shape[1]>MAX_INPUT_TOKENS:
+            return {'command':'','raw_generation':'','backend':self.name,'model_revision':self.revision,
+                    'explanation':'Request exceeds model input token budget; generation abstained without truncation.'}
         with torch.inference_mode():
-            ids=self.model.generate(**inputs,max_new_tokens=96,do_sample=False,pad_token_id=self.tokenizer.eos_token_id)
+            ids=self.model.generate(**inputs,max_new_tokens=MAX_NEW_TOKENS,do_sample=False,pad_token_id=self.tokenizer.eos_token_id)
         raw=self.tokenizer.decode(ids[0,inputs.input_ids.shape[1]:],skip_special_tokens=True).strip()
         command=raw
         if raw.startswith('```') and raw.endswith('```'):

@@ -1,5 +1,9 @@
 """Generate a four-page A4 academic report from saved experiment evidence."""
 from pathlib import Path
+import argparse
+parser=argparse.ArgumentParser()
+parser.add_argument("--experiment",type=Path)
+report_args=parser.parse_args()
 import json
 import re
 import textwrap
@@ -30,7 +34,19 @@ tuned=load('reports/metrics/tuned/generation.json') if (REPORTS/'metrics/tuned/g
 manifest=load('artifacts/qwen-lora/training_manifest.json') if (ROOT/'artifacts/qwen-lora/training_manifest.json').exists() else None
 if base and tuned:
     assert base['test_sha256']==tuned['test_sha256'] and base['n']==tuned['n']
-BLUE='#2563eb';INK='#142238';MUTED='#526279';PALE='#eaf0f8'
+new_comparison=None
+new_manifest=None
+if report_args.experiment:
+    experiment=report_args.experiment
+    completion=json.loads((experiment/'completion.json').read_text())
+    if not completion.get('completed'):
+        raise ValueError('Cannot report an incomplete experiment as measured results')
+    selection=json.loads((experiment/'selection.json').read_text())
+    new_comparison=json.loads((experiment/'comparison.json').read_text())
+    new_manifest=json.loads((Path(selection['selected_adapter']).parent/'training_manifest.json').read_text())
+    if not new_manifest.get('completed'):
+        raise ValueError('Selected training did not complete')
+BLUE='#2563eb' ;INK='#142238';MUTED='#526279';PALE='#eaf0f8'
 plt.rcParams.update({'font.family':'DejaVu Sans','font.size':10,'axes.spines.top':False,'axes.spines.right':False,'axes.spines.left':False,'axes.spines.bottom':False,'axes.titleweight':'bold','axes.labelcolor':MUTED,'text.color':INK,'xtick.color':MUTED,'ytick.color':MUTED})
 
 def savefig(name):
@@ -51,6 +67,9 @@ for i in range(3):
 names=['Retrieval\n(full test)'];exact=[baseline['exact_match']*100];syntax=[baseline['bash_syntax_validity']*100]
 for name,m in [('Qwen base\n(subset)',base),('Qwen LoRA\n(subset)',tuned)]:
     if m:names.append(name);exact.append(m['exact_match']*100);syntax.append(m['bash_syntax_validity']*100)
+if new_comparison:
+    for name,m in [('Full-data base\n(unexposed)',new_comparison['primary_unexposed_test']['base']),('Full-data tuned\n(unexposed)',new_comparison['primary_unexposed_test']['tuned'])]:
+        names.append(name);exact.append(m['exact_match_count']/new_comparison['primary_unexposed_test']['n']*100);syntax.append(m['bash_syntax_validity']*100)
 x=np.arange(len(names));axes[1].bar(x-.18,exact,.36,label='Exact match',color=BLUE);axes[1].bar(x+.18,syntax,.36,label='Bash syntax',color='#97b6e9');axes[1].set_xticks(x,names,fontsize=8);axes[1].set_ylim(0,119);axes[1].set_title('Generation results (%)');axes[1].legend(frameon=False,fontsize=8,loc='upper center')
 for i,(a,b) in enumerate(zip(exact,syntax)):
     axes[1].text(i-.18,a+2,f'{a:.1f}',ha='center',fontsize=8);axes[1].text(i+.18,b+2,f'{b:.1f}',ha='center',fontsize=8)
@@ -98,15 +117,33 @@ else:
 testlog=(REPORTS/'logs/tests.log').read_text();testsummary=next((l for l in reversed(testlog.splitlines()) if re.search(r'\d+ passed',l)),'See test logs; no passing summary found.')
 missing=stats['missing_optional_fields_before_dedup']
 comparison_text = (f' On the same {base["n"]} requests, Qwen base exact match was {pct(base["exact_match"])}, versus {pct(tuned["exact_match"])} for LoRA. The small fine-tuning run did not improve exact match; this subset is too small for a robust generalization claim.' if base and tuned else '')
+new_training_text=''
+new_results_text=''
+new_discussion=''
+if new_comparison:
+    m=new_manifest;p=new_comparison['primary_unexposed_test'];paired=p['paired']
+    new_training_text=(f" New measured run: {m['train_stats']['used']:,} encoded training examples, {m['actual_optimizer_steps']} optimizer steps, {m['completed_epochs']:.3f} epochs; rank {m['arguments']['rank']}, attention/MLP LoRA, LR {m['arguments']['learning_rate']}, effective single-GPU batch {m['arguments']['batch_size']*m['arguments']['accumulation']}. Training loss {m['train_metrics']['train_loss']:.4f}; initial validation loss {m['initial_validation_metrics']['eval_loss']:.4f}; selected loss {m['validation_metrics']['eval_loss']:.4f}. Full validation selects trials; test is evaluated after selection.")
+    new_results_text=(f" New primary test: {p['n']} cases unexposed to the old pilot. Base {p['base']['exact_match_count']}/{p['n']}; tuned {p['tuned']['exact_match_count']}/{p['n']}; delta {paired['exact_match_delta']*100:+.2f} percentage points, paired exact McNemar p={paired['mcnemar_exact_p']:.4f}. Wilson intervals, normalized match, AST support, syntax and heuristic categories are in comparison.json. AST overlap does not prove semantics. The full 1,254-case comparison includes 32 previously exposed pilot cases.")
+    new_discussion=(' New validation exact match '+('improved' if selection['improved_validation_exact_match'] else 'did not improve')+'; unexposed test exact match '+('increased' if paired['exact_match_delta']>0 else 'did not increase')+'. No predetermined improvement or semantic-equivalence claim is made.')
 sections={
 'Dataset':f"The original NL2Bash corpus has 12,607 natural-language lines and 12,607 command lines. The repository also has 20 curated records, a 100-row import, 120-row pilot and old 96/12/12 splits. All original data and Review 1 documentation were preserved. Review 2 ingested {stats['input_records']:,} occurrences across the corpus and original JSONL files. Count equality and source SHA-256 hashes establish positional consistency, not universal semantic alignment. Original risk annotations remain unverified; independently verified corpus risk labels: 0.",
 'Dataset Preprocessing':f"Typed JSON validation rejects malformed objects, missing/non-string/empty required fields and NULs. Command bytes, case, quotes and internal spacing are preserved. Syntax checks use Bash parse-only mode with a clean environment. Removed {stats['discard_counts'].get('duplicate_pair',0)} duplicate occurrences and {stats['discard_counts'].get('invalid_bash_syntax',0)} syntax-invalid occurrences; retained {stats['retained']:,}. Connected components isolate shared normalized instructions, AST literal quote/spacing equivalents and known additive ls/rm flag variants. Seed 42 yields {stats['equivalence_groups']:,} groups (largest {stats['largest_group']}); splits {stats['splits']['train']:,}/{stats['splits']['validation']:,}/{stats['splits']['test']:,}. All checked cross-split overlaps are zero. Arbitrary semantic paraphrase leakage is not ruled out. Missing optional fields before dedup: category {missing.get('category',0):,}, risk {missing.get('risk',0):,}, explanation {missing.get('explanation',0):,}, safe alternative {missing.get('safe_alternative',0):,}; retained as missing/provenance rather than fabricated annotations.",
 'Code Implementation':"A training-only character TF-IDF retrieval baseline and optional Qwen Transformers generator feed the same static validator and structured JSON CLI. The validator handles deletion flag variants, find actions, file truncation, formatting, privilege changes, broad permissions, termination, wrappers, interpreters, substitutions and dangerous pipelines. Unknown utilities require review; unsupported shell constructs fail closed. A preview is emitted only for simple literal recursive rm and is revalidated as read-only. Other cases explicitly return no verified preview. Every response records executed=false and requires manual review. "+training_text,
 'Metrics - Results and Discussion':f"Generation is evaluated on held-out requests using strict command-byte exact match and Bash -n syntax validity. The retrieval baseline has {pct(baseline['exact_match'])} exact match on {baseline['n']} cases; command grouping intentionally prevents memorized command overlap. Its {pct(baseline['bash_syntax_validity'])} syntax validity reflects copying valid training commands, not task correctness. Qwen base/LoRA comparisons, when present, use the same deterministic {base['n'] if base else 0}-record held-out subset, not the full test. Safety uses {safety['n']} separately authored cases with operation-based labels, never validator-generated truth. Final macro F1 is {safety['classification_report']['macro avg']['f1-score']:.4f}; dangerous false negatives: {len(safety['dangerous_false_negatives'])}. This benchmark was used to refine the policy and is not an untouched generalization set. Labels are assistant-authored, not external expert consensus. No command execution or semantic correctness percentage is claimed." + comparison_text,
 'What Went Wrong':"The original importer could silently truncate unequal files; old random splits leaked shared commands/instructions. Retrieval produced zero held-out exact matches, showing its inability to synthesize unseen commands. The initial safety benchmark missed date -s and chmod ugo=rwx (two dangerous false negatives); both were fixed while preserving initial scores. Two harmless compound examples remain rejected by the conservative policy. Direct git clone failed authentication; connector access recovered the repository. Initial model-client dependencies were incompatible with the available proxy; pinned compatible versions resolved access. An initial training run was interrupted to finalize stronger split equivalence, then restarted on final artifacts. The 20-step CPU pilot uses very little data and cannot establish robust model quality. LoRA exact match decreased from 3/32 to 2/32; a completed training run is not proof of improvement.",
-'Alternative Flow / Proposed Improvements':"Future work: externally adjudicate corpus pairs and safety labels; reserve a fresh safety holdout after policy development; expand AST analysis with argument-aware utility contracts and paraphrase clustering; test adversarial/obfuscated syntax. Run larger GPU LoRA/QLoRA experiments with identical split hashes, token budgets and a shared untouched evaluation set; compare base/tuned accuracy with uncertainty intervals. Add human semantic review of generated commands and calibrated abstention. Keep execution disabled: the system should remain a reviewed command-proposal tool. Completion evidence is stored in JSON metrics, example JSONL, source hashes, actual logs, training manifest and adapter files; no fake UI screenshots are used."
+'Alternative Flow / Proposed Improvements':"Full-data cloud workflow: preserve archived split hashes; audit training only; maximum 3 epochs, rank 16 attention/MLP LoRA, effective batch 16, 512 tokens, seed 42, LR trials 1e-4/5e-5, cosine decay, 5% warmup. Save/evaluate each 100 steps, patience 3; choose trials by full-validation exact match, then loss. Freeze settings before one paired test. These settings are proposed until a completed manifest exists. Future work: externally adjudicate corpus pairs and safety labels; reserve a fresh safety holdout after policy development; expand AST analysis with argument-aware utility contracts and paraphrase clustering; test adversarial/obfuscated syntax. Run larger GPU LoRA/QLoRA experiments with identical split hashes, token budgets and a shared untouched evaluation set; compare base/tuned accuracy with uncertainty intervals. Add human semantic review of generated commands and calibrated abstention. Keep execution disabled: the system should remain a reviewed command-proposal tool. Completion evidence is stored in JSON metrics, example JSONL, source hashes, actual logs, training manifest and adapter files; no fake UI screenshots are used."
 }
-md=['# ShellForge - Review 2','', 'Cloud-only implementation and measured pilot results. Source snapshot: ad24e3dc045fadacca75f796b99107b7072a60a6. Branch: codex/review2-cloud.','']
+if new_comparison:
+    sections['Code Implementation'] += new_training_text
+    sections['Metrics - Results and Discussion'] = ('Original results are retained in the table below. '+new_results_text)
+    sections['What Went Wrong'] += new_discussion
+    sections['Alternative Flow / Proposed Improvements'] = ('The completed run uses validation-selected checkpoints and trial settings. Remaining work: human semantic adjudication, a fresh external safety benchmark, model-capacity comparisons against each model own base, and calibrated abstention. Keep generated execution disabled. Logs, loss history, hashes and the selected adapter are retained in the cloud experiment folder.')
+    p=new_comparison['primary_unexposed_test']
+    for name,m in [('New base / unexposed',p['base']),('New LoRA / unexposed',p['tuned'])]:
+        generation_rows.append([name,str(p['n']),pct(m['exact_match_count']/p['n']),pct(m['bash_syntax_validity'])])
+else:
+    sections['What Went Wrong'] += ' No full-data GPU training has been executed in the prepared continuation; no new accuracy or loss is claimed.'
+md=['# ShellForge - Review 2','', 'Measured original cloud pilot; full-data GPU continuation status is stated explicitly. Source snapshot: ad24e3dc045fadacca75f796b99107b7072a60a6. Branch: codex/review2-cloud.','']
 for idx,(heading,body) in enumerate(sections.items(),1):
     md += [f'## {idx}. {heading}','',body,'']
     if heading=='Dataset Preprocessing':md += ['![Dataset distributions](figures/dataset.png)','']
@@ -148,7 +185,7 @@ story.append(PageBreak())
 h('5. What Went Wrong');b(sections['What Went Wrong'])
 h('6. Alternative Flow / Proposed Improvements');b(sections['Alternative Flow / Proposed Improvements'])
 h('Verification and reproducibility');b(testsummary)
-b('Cloud runtime: Linux x86_64, 9 CPUs, no CUDA. Model revision: 7ae557604adf67be50417f59c2c2f167def9a775. See README.md for dependency installation and exact commands; use scripts/reproduce.sh for baseline, tests and report regeneration.')
+b('Original pilot: Linux x86_64, 9 CPUs, no CUDA. Full-data continuation runs in Colab; see selection.json and training_manifest.json for completion evidence. See README.md and notebooks/ShellForge_Colab.ipynb for exact commands. The 32 old test cases are disclosed separately from 1,222 unexposed cases.')
 table([['Evidence','Repository path'],['Source/data audit and counts','docs/review2_audit.md; data/review2/stats.json'],['Actual generation + safety predictions','reports/metrics/; reports/logs/'],['LoRA completion and model artifact','artifacts/qwen-lora/training_manifest.json'],['GPU continuation (future larger run)','notebooks/ShellForge_Colab.ipynb']],[210,295])
 story.append(P('References: Lin et al., NL2Bash (2018), github.com/TellinaTool/nl2bash; Hu et al., LoRA (2021), arxiv.org/abs/2106.09685; Qwen2.5 model card, huggingface.co/Qwen/Qwen2.5-0.5B-Instruct. Corpus file alignment is positional evidence only; no renewed claim of independently verified labels.','SmallSF'))
 

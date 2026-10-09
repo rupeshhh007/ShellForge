@@ -12,7 +12,7 @@ Natural-language Bash command **proposals**, static safety review, explanations 
 - Small trained adapter and completion manifest: `artifacts/qwen-lora/`. Read its manifest before interpreting training scope.
 - GPU continuation: [notebooks/ShellForge_Colab.ipynb](notebooks/ShellForge_Colab.ipynb).
 
-All work was performed in a cloud Linux CPU container. No user PC or GPU was used. Branch `codex/review2-cloud`; main was not merged or modified. Original datasets, original pilot splits and docs/review1.md are preserved.
+The original measured pilot was performed in a cloud Linux CPU container. The full-data continuation is prepared for Colab; no new GPU training is claimed. Branch `codex/review2-cloud`; main was not merged or modified. Original datasets, original pilot splits and docs/review1.md are preserved.
 
 ## Measured results
 
@@ -56,14 +56,16 @@ The base model is `Qwen/Qwen2.5-0.5B-Instruct`, pinned to revision `7ae557604adf
 python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
 python -m pip install -r requirements-model.txt
 python -m src.evaluate --backend hf --revision 7ae557604adf67be50417f59c2c2f167def9a775 --limit 32 --output reports/metrics/base
-python -m src.train --revision 7ae557604adf67be50417f59c2c2f167def9a775 --max-steps 20 --limit 128 --max-length 192
+# Archived pilot configuration is recorded in its manifest. New trainer uses validation checkpoints.
+python -m src.experiment_data --restore
+python -u scripts/run_gpu_experiments.py --output /content/drive/MyDrive/ShellForge/full-data-v1
 python -m src.evaluate --backend hf --revision 7ae557604adf67be50417f59c2c2f167def9a775 --adapter models/qwen-lora --limit 32 --output reports/metrics/tuned
 python -m src.inference "Show the current working directory" --backend hf --revision 7ae557604adf67be50417f59c2c2f167def9a775 --adapter artifacts/qwen-lora
 ```
 
-The base and tuned model must use identical test hashes, selection and decoding settings. `--limit 32` is a deterministic convenience subset, not a full test claim. Use no limit to evaluate all 1,254 held-out records. Training uses a seed-42 shuffled selection of 128 training examples, masked prompt labels, rank-8 q_proj/v_proj adapters and 20 optimizer steps with gradient accumulation 4. This is a tiny feasibility pilot; 128 prepared examples does not imply a full epoch was trained. The completion manifest contains actual loss, runtime, selected/used/discarded examples, model revision and dataset hashes. CLI inference works with the included adapter; base weights are downloaded from Hugging Face.
+The base and tuned model must use identical test hashes, selection and decoding settings. `--limit 32` is a deterministic convenience subset, not a full test claim. Use no limit to evaluate all 1,254 held-out records. The archived pilot used a seed-42 shuffled selection of 128 training examples, masked prompt labels, rank-8 q_proj/v_proj adapters and 20 optimizer steps with gradient accumulation 4. This is a tiny feasibility pilot; 128 prepared examples does not imply a full epoch was trained. The completion manifest contains actual loss, runtime, selected/used/discarded examples, model revision and dataset hashes. CLI inference works with the included adapter; base weights are downloaded from Hugging Face.
 
-For larger GPU experiments, use the Colab notebook or increase `--limit` and `--max-steps`. Optional QLoRA requires installing bitsandbytes on CUDA and passing `--qlora`; it was not run in this submission.
+For the full-data continuation, use the Colab notebook and [research protocol](docs/full_data_experiments.md). It trains without an example cap, saves validation-selected checkpoints, compares two learning rates on validation, then freezes selection before final testing. The primary test has 1,222 cases unexposed to the old pilot; the supplemental 1,254-case comparison discloses the 32 previously used cases. All compute and model storage remain in Colab/Drive. Optional QLoRA requires installing bitsandbytes on CUDA and passing `--qlora`; it was not run in this submission.
 
 ## Data integrity and policy limits
 
