@@ -1,0 +1,2 @@
+-r requirements-model.txt
+pypdf>=6,<7

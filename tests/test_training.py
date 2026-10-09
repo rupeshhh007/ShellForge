@@ -1,3 +1,5 @@
+import pytest
+
 from src.train import encode_example
 
 class Tokenizer:
@@ -46,7 +48,8 @@ def test_real_qwen_chat_template_prefix():
     assert tok.decode([x for x in encoded['labels'] if x != -100], skip_special_tokens=True) == 'pwd'
 
 
-def test_trainer_checkpoint_roundtrip_with_tiny_random_model(tmp_path, monkeypatch):
+@pytest.mark.parametrize('interrupt', [False, True])
+def test_trainer_checkpoint_roundtrip_with_tiny_random_model(tmp_path, monkeypatch, interrupt):
     """Engineering integration test, never a trained command-generation result."""
     import argparse
     import json
@@ -66,7 +69,7 @@ def test_trainer_checkpoint_roundtrip_with_tiny_random_model(tmp_path, monkeypat
         vocab_size=256, hidden_size=32, intermediate_size=64,
         num_hidden_layers=1, num_attention_heads=4, num_key_value_heads=2))
     monkeypatch.setattr(transformers.AutoTokenizer, 'from_pretrained', lambda *a, **kw: LocalTokenizer())
-    monkeypatch.setattr(transformers.AutoModelForCausalLM, 'from_pretrained', lambda *a, **kw: model)
+    monkeypatch.setattr(transformers.AutoModelForCausalLM, 'from_pretrained', lambda *a, **kw: __import__('copy').deepcopy(model))
     train = tmp_path / 'train.jsonl'
     val = tmp_path / 'validation.jsonl'
     write_jsonl(train, [{'instruction':'list', 'command':'ls'}, {'instruction':'files', 'command':'ls -a'}])
@@ -76,7 +79,26 @@ def test_trainer_checkpoint_roundtrip_with_tiny_random_model(tmp_path, monkeypat
         qlora=False, limit=None, epochs=1, max_steps=2, learning_rate=1e-4,
         batch_size=1, accumulation=1, eval_steps=1, rank=2, seed=42,
         max_length=64, target_modules=','.join(TARGET_MODULES))
+    if interrupt:
+        from transformers.trainer_callback import CallbackHandler
+        original = CallbackHandler.on_save
+        def disconnect(self, arguments, state, control):
+            result = original(self, arguments, state, control)
+            if state.global_step == 1:
+                raise RuntimeError('simulated cloud disconnect')
+            return result
+        monkeypatch.setattr(CallbackHandler, 'on_save', disconnect)
+        with pytest.raises(RuntimeError, match='simulated cloud disconnect'):
+            train_run(args)
+        monkeypatch.setattr(CallbackHandler, 'on_save', original)
+        args.resume = True
     manifest = train_run(args)
+    if interrupt:
+        assert manifest['resumed_from'].endswith('checkpoint-1')
+    before = {p: (p.read_bytes(), p.stat().st_mtime_ns) for p in (tmp_path / 'run').rglob('*') if p.is_file()}
+    args.resume = True
+    assert train_run(args) == manifest
+    assert before == {p: (p.read_bytes(), p.stat().st_mtime_ns) for p in (tmp_path / 'run').rglob('*') if p.is_file()}
     assert manifest['completed'] and manifest['actual_optimizer_steps'] == 2
     assert manifest['best_checkpoint'] and manifest['best_validation_loss'] > 0
     assert (tmp_path / 'run/adapter/adapter_model.safetensors').exists()
