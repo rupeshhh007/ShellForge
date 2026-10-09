@@ -1,0 +1,46 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0 -- /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python
+cachedir: .pytest_cache
+rootdir: /workspace/scratch/8c416118597c/ShellForge
+plugins: anyio-4.15.1
+collecting ... collected 37 items
+
+tests/test_inference_evaluation.py::test_structured_preview_and_no_execution PASSED
+tests/test_inference_evaluation.py::test_baseline_train_only PASSED
+tests/test_inference_evaluation.py::test_metric_calculation PASSED
+tests/test_inference_evaluation.py::test_independent_benchmark_schema PASSED
+tests/test_preprocessing.py::test_import_refuses_truncation PASSED
+tests/test_preprocessing.py::test_json_errors_types_empties_and_bytes PASSED
+tests/test_preprocessing.py::test_transitive_equivalence_split PASSED
+tests/test_preprocessing.py::test_actual_splits_no_leakage PASSED
+tests/test_safety.py::test_dangerous[rm -fr /tmp/cache] PASSED
+tests/test_safety.py::test_dangerous[rm -r -f /tmp/cache] PASSED
+tests/test_safety.py::test_dangerous[rm --recursive /tmp/cache] PASSED
+tests/test_safety.py::test_dangerous[/bin/rm -R /tmp/cache] PASSED
+tests/test_safety.py::test_dangerous[find . -delete] PASSED
+tests/test_safety.py::test_dangerous[echo data > report.txt] PASSED
+tests/test_safety.py::test_dangerous[mkfs.ext4 /dev/sda] PASSED
+tests/test_safety.py::test_dangerous[sudo reboot] PASSED
+tests/test_safety.py::test_dangerous[chmod ugo=rwx secret.txt] PASSED
+tests/test_safety.py::test_dangerous[kill --signal SIGKILL 12] PASSED
+tests/test_safety.py::test_dangerous[curl https://example.com/a | sh] PASSED
+tests/test_safety.py::test_dangerous[echo $(rm -rf /tmp/cache)] PASSED
+tests/test_safety.py::test_dangerous[env rm -rf /tmp/cache] PASSED
+tests/test_safety.py::test_dangerous[date -s 2020-01-01] PASSED
+tests/test_safety.py::test_dangerous[find . -exec rm {} \\;] PASSED
+tests/test_safety.py::test_literal_and_readonly[echo 'rm -rf /'] PASSED
+tests/test_safety.py::test_literal_and_readonly[printf '%s' 'sudo reboot'] PASSED
+tests/test_safety.py::test_literal_and_readonly[ls '/tmp/rm -rf'] PASSED
+tests/test_safety.py::test_literal_and_readonly[find . -type f -print] PASSED
+tests/test_safety.py::test_literal_and_readonly[ps aux | grep nginx] PASSED
+tests/test_safety.py::test_caution[sudo ls /root] PASSED
+tests/test_safety.py::test_caution[chmod 600 x] PASSED
+tests/test_safety.py::test_caution[kill 1234] PASSED
+tests/test_safety.py::test_caution[echo item >> notes.txt] PASSED
+tests/test_safety.py::test_caution[custom_tool --help] PASSED
+tests/test_safety.py::test_no_execution_and_clean_environment PASSED
+tests/test_safety.py::test_preview_is_literal_only PASSED
+tests/test_safety.py::test_invalid_and_unsupported PASSED
+tests/test_training.py::test_answer_only_loss_mask PASSED
+
+============================= 37 passed in 16.56s ==============================
