@@ -48,7 +48,7 @@ def test_real_qwen_chat_template_prefix():
     assert tok.decode([x for x in encoded['labels'] if x != -100], skip_special_tokens=True) == 'pwd'
 
 
-@pytest.mark.parametrize('interrupt', [False, True])
+@pytest.mark.parametrize('interrupt', [0, 1, 2])
 def test_trainer_checkpoint_roundtrip_with_tiny_random_model(tmp_path, monkeypatch, interrupt):
     """Engineering integration test, never a trained command-generation result."""
     import argparse
@@ -84,7 +84,7 @@ def test_trainer_checkpoint_roundtrip_with_tiny_random_model(tmp_path, monkeypat
         original = CallbackHandler.on_save
         def disconnect(self, arguments, state, control):
             result = original(self, arguments, state, control)
-            if state.global_step == 1:
+            if state.global_step == interrupt:
                 raise RuntimeError('simulated cloud disconnect')
             return result
         monkeypatch.setattr(CallbackHandler, 'on_save', disconnect)
@@ -94,7 +94,22 @@ def test_trainer_checkpoint_roundtrip_with_tiny_random_model(tmp_path, monkeypat
         args.resume = True
     manifest = train_run(args)
     if interrupt:
-        assert manifest['resumed_from'].endswith('checkpoint-1')
+        assert manifest['resumed_from'].endswith(f'checkpoint-{interrupt}')
+        if interrupt == 2:
+            assert manifest['train_metrics']['train_loss'] is None
+        # Same base weights and seed: restored optimizer/scheduler/RNG must reproduce uninterrupted LoRA.
+        import copy
+        import torch
+        from safetensors.torch import load_file
+        reference = copy.copy(args)
+        reference.output = str(tmp_path / 'reference')
+        reference.resume = False
+        train_run(reference)
+        actual = load_file(str(tmp_path / 'run/adapter/adapter_model.safetensors'))
+        expected = load_file(str(tmp_path / 'reference/adapter/adapter_model.safetensors'))
+        assert actual.keys() == expected.keys()
+        for name in actual:
+            torch.testing.assert_close(actual[name], expected[name], rtol=1e-6, atol=1e-7)
     before = {p: (p.read_bytes(), p.stat().st_mtime_ns) for p in (tmp_path / 'run').rglob('*') if p.is_file()}
     args.resume = True
     assert train_run(args) == manifest
