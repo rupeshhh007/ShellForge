@@ -62,7 +62,7 @@ class HFGenerator:
         if raw.startswith('```') and raw.endswith('```'):
             command='\n'.join(raw.splitlines()[1:-1]).strip()
         return {'command':command,'raw_generation':raw,'backend':self.name,'model_revision':self.revision,
-                'generation_truncated':bool(ids[0,-1].item()!=self.tokenizer.eos_token_id),
+                'generation_truncated':bool(ids.shape[1]-inputs.input_ids.shape[1]>=MAX_NEW_TOKENS and ids[0,-1].item()!=self.tokenizer.eos_token_id),
                 'generated_tokens':int(ids.shape[1]-inputs.input_ids.shape[1]),
                 'explanation':'Model command proposal. Static analysis below explains policy risk; semantic correctness has not been verified.'}
 

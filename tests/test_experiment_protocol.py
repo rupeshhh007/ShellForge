@@ -81,3 +81,13 @@ def test_review_exclusions_are_training_only_and_byte_verified():
         assert train[excluded['id']]['instruction'] == excluded['instruction']
         assert train[excluded['id']]['command'] == excluded['command']
         assert excluded['reason'] and 'assistant' in excluded['reviewer']
+
+
+def test_prediction_artifact_loader_keeps_historical_exposure(tmp_path):
+    from scripts.run_gpu_experiments import load_predictions
+    rows = load_predictions('reports/metrics/base/generation_examples.jsonl')
+    assert len(rows) == 32 and len({r['id'] for r in rows}) == 32
+    malformed = tmp_path / 'predictions.jsonl'
+    malformed.write_text('{"instruction":"a","command":"ls"}\n')
+    with pytest.raises(ValueError, match='Malformed'):
+        load_predictions(malformed)

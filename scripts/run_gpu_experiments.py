@@ -34,6 +34,15 @@ def run(command, directory, label):
         raise RuntimeError(f'{label} exited {code}; inspect its cloud log. No success is claimed.')
 
 
+def load_predictions(path):
+    # Prediction artifacts have reference/prediction fields, not training command fields.
+    rows = [json.loads(line) for line in Path(path).read_text().splitlines()]
+    if not rows or any(not isinstance(r, dict) or not all(k in r for k in
+                      ['id', 'instruction', 'reference', 'prediction', 'exact_match']) for r in rows):
+        raise ValueError('Malformed prediction artifact; refusing silent record loss')
+    return rows
+
+
 def evaluate(path, output, logs, label, adapter=None):
     command = [sys.executable, '-u', '-m', 'src.evaluate', '--backend', 'hf',
                '--revision', REVISION, '--test', str(path), '--output', str(output)]
@@ -102,7 +111,7 @@ def main():
     # Exclusive write freezes settings before loading test examples or running final generation.
     with (output / 'selection.json').open('x') as stream:
         json.dump(selection, stream, indent=2)
-    old = [r for r, _ in read_jsonl(ROOT / 'reports/metrics/base/generation_examples.jsonl')]
+    old = load_predictions(ROOT / 'reports/metrics/base/generation_examples.jsonl')
     exposed_ids = {r['id'] for r in old}
     test = ROOT / 'data/review2/test.jsonl'
     test_rows = [r for r, _ in read_jsonl(test)]
@@ -112,8 +121,10 @@ def main():
         raise ValueError('Duplicate test IDs')
     base_final = evaluate(test, output / 'test/base', logs, 'test_base')
     tuned_final = evaluate(test, output / 'test/tuned', logs, 'test_tuned', adapter)
-    base_examples = [r for r, _ in read_jsonl(output / 'test/base/generation_examples.jsonl')]
-    tuned_examples = [r for r, _ in read_jsonl(output / 'test/tuned/generation_examples.jsonl')]
+    if base_final['test_sha256'] != hashes['test'] or tuned_final['test_sha256'] != hashes['test']:
+        raise ValueError('Final test bytes differ from frozen split')
+    base_examples = load_predictions(output / 'test/base/generation_examples.jsonl')
+    tuned_examples = load_predictions(output / 'test/tuned/generation_examples.jsonl')
     unseen_base = [r for r in base_examples if r['id'] not in exposed_ids]
     unseen_tuned = [r for r in tuned_examples if r['id'] not in exposed_ids]
     comparison = {'full_test': paired_comparison(base_examples, tuned_examples),
