@@ -159,7 +159,13 @@ def test_every_notebook_cell_in_order(tmp_path, monkeypatch):
         commands.append(argv)
         assert kw.get('check') is True
         if 'venv' in argv:
-            python = Path(argv[-1]) / 'bin/python';python.parent.mkdir(parents=True);python.symlink_to(sys.executable)
+            python = Path(argv[-1]) / 'bin/python'
+            python.parent.mkdir(parents=True)
+            # A bare symlink loses the parent venv's pyvenv.cfg and site-packages.
+            # Delegate to its original executable so the harness uses installed deps.
+            import shlex
+            python.write_text('#!/bin/sh\nexec ' + shlex.quote(sys.executable) + ' "$@"\n')
+            python.chmod(0o755)
         elif 'pip' in argv or argv[0]=='apt-get':
             pass  # Dependency resolution is performed by the cloud CI setup, not inside this test.
         elif '-c' in argv and 'torch.cuda' in argv[-1]:
