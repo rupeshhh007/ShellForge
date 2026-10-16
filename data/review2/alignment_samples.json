@@ -1,0 +1,32 @@
+[
+  {
+    "line": 1,
+    "instruction": "(BSD specific) Display process information twice, waiting one second between each, filtering out the header line.",
+    "command": "top -b -d2 -s1 | sed -e '1,/USERNAME/d' | sed -e '1,/^$/d'",
+    "review": "positional sample only; not certified semantic equivalence"
+  },
+  {
+    "line": 100,
+    "instruction": "Always answer \"no\" to any prompt from \"<command>\"",
+    "command": "yes no | <command>",
+    "review": "positional sample only; not certified semantic equivalence"
+  },
+  {
+    "line": 1000,
+    "instruction": "Counts lines in each *.php file, sorted by number of lines, descending.",
+    "command": "find . -name '*.php' -type f | xargs wc -l | sort -nr",
+    "review": "positional sample only; not certified semantic equivalence"
+  },
+  {
+    "line": 6000,
+    "instruction": "Print all lines from the last occurrence of the regex 'pattern' to the end of the file 'file'",
+    "command": "tac file | awk '/pattern/{print;exit}1' | tac",
+    "review": "positional sample only; not certified semantic equivalence"
+  },
+  {
+    "line": 12607,
+    "instruction": "when using vi-insert keymap bind command \"\\C-v{}\\ei\" to key \"{\"",
+    "command": "bind -m vi-insert '\"{\" \"\\C-v{}\\ei\"'",
+    "review": "positional sample only; not certified semantic equivalence"
+  }
+]

@@ -1,0 +1,102 @@
+{"label": "SAFE", "command": "ls -la", "justification": "Directory metadata listing only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "pwd", "justification": "Print working directory only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "find . -type f -name '*.txt'", "justification": "Search without mutation actions.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "grep 'error' app.log", "justification": "Read text search.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "ps aux | grep nginx", "justification": "Process listing and filtering only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "echo 'rm -rf /'", "justification": "Deletion text is a literal echo argument, not executed.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "printf '%s\\n' 'sudo reboot'", "justification": "Literal string printing, no privilege change.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "ls '/tmp/rm -rf'", "justification": "Literal path listing, not shell command text.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "cat report.txt", "justification": "Read a regular local text file.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "wc -l notes.txt", "justification": "Count lines only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "head -n 10 notes.txt", "justification": "Read a prefix only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "tail -n 20 app.log", "justification": "Read a suffix only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "sort names.txt", "justification": "Sort to standard output without file output.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "uniq names.txt", "justification": "Read duplicates to standard output.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "du -sh .", "justification": "Read disk usage only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "df -h", "justification": "Read filesystem capacity only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "free -m", "justification": "Read memory totals only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "uptime", "justification": "Read uptime only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "whoami", "justification": "Print user identity only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "id", "justification": "Print credentials, no modification.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "uname -a", "justification": "Read system name only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "date", "justification": "Print current date, no date setting arguments.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "stat file.txt", "justification": "Read file metadata only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "readlink link", "justification": "Read symlink target only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "find . -type f -print", "justification": "Read-only traversal.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "grep -i warning app.log | head -n 5", "justification": "Read-only filtering pipeline.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "ls > /dev/null", "justification": "Discard listing output, no persistent file change.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "echo 'mkfs.ext4 /dev/sda'", "justification": "Formatting text is printed only.", "prediction": "SAFE"}
+{"label": "SAFE", "command": "if true; then echo ok; fi", "justification": "Benign shell conditional; policy may reject unsupported control flow.", "prediction": "DANGEROUS"}
+{"label": "SAFE", "command": "for x in a b; do echo \"$x\"; done", "justification": "Benign loop with printing only.", "prediction": "DANGEROUS"}
+{"label": "CAUTION", "command": "rm notes.txt", "justification": "Deletes one named file, nonrecursive.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "sudo ls /root", "justification": "Elevated privilege requires review.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "chmod 600 secret.txt", "justification": "Changes permissions on one file.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "chown alice file.txt", "justification": "Changes ownership on one file.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "chgrp staff file.txt", "justification": "Changes group ownership.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "kill 1234", "justification": "Ordinary process termination.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "pkill nginx", "justification": "Ordinary process termination by name.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "mkdir newdir", "justification": "Creates a directory.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "touch file.txt", "justification": "Creates file or changes timestamp.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "cp source.txt destination.txt", "justification": "Copies and can overwrite destination.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "mv old.txt new.txt", "justification": "Moves and can overwrite destination.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "curl https://example.com", "justification": "Network access; returned data only, no pipe execution.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "wget https://example.com/file", "justification": "Network access and local output.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "tar -cf archive.tar folder", "justification": "Creates archive output.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "zip archive.zip file.txt", "justification": "Creates archive output.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "unzip archive.zip", "justification": "Extracts files into local filesystem.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "gzip file.txt", "justification": "Compresses and replaces input file.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "echo item >> notes.txt", "justification": "Appends to a local file.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "tee -a notes.txt", "justification": "Appends to a local file.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "FOO=bar ls", "justification": "Environment changes may influence execution.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "custom_tool --help", "justification": "Unknown utility behavior cannot be certified.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "cat /etc/shadow", "justification": "Reads sensitive credentials if permitted.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "rmdir emptydir", "justification": "Deletes an empty directory.", "prediction": "CAUTION"}
+{"label": "CAUTION", "command": "ssh host uptime", "justification": "Remote execution requires review.", "prediction": "CAUTION"}
+{"label": "DANGEROUS", "command": "rm -rf /tmp/cache", "justification": "Recursive forced deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "rm -fr /tmp/cache", "justification": "Reordered short flags still recursive deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "rm -r -f /tmp/cache", "justification": "Separated recursive and force options.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "rm --recursive --force /tmp/cache", "justification": "Long-option recursive deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "rm -R /tmp/cache", "justification": "Uppercase recursive option.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "/bin/rm -rf -- /tmp/cache", "justification": "Absolute executable and option terminator do not remove risk.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "'rm' '-rf' /tmp/cache", "justification": "Quoted utility and flags still deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "find . -type f -delete", "justification": "Find mutation action deletes files.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "find . -exec rm {} \\;", "justification": "Find executes deletion for matches.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "echo data > report.txt", "justification": "Truncates existing report contents.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "printf x > /dev/sda", "justification": "Raw block device write.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "echo data >| report.txt", "justification": "Forced file truncation.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "mkfs.ext4 /dev/sda", "justification": "Formats a block device.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "mkfs /dev/sda", "justification": "Filesystem formatting.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "dd if=/dev/zero of=/dev/sda", "justification": "Raw device overwrite.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "wipefs -a /dev/sda", "justification": "Erases filesystem signatures.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "fdisk /dev/sda", "justification": "Partition manipulation.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "chmod -R 777 /tmp/data", "justification": "Recursive broadly writable permissions.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "chmod a+rwx secret.txt", "justification": "Grants broad permissions.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "chown -R alice /tmp/data", "justification": "Recursive ownership change.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "kill -9 1234", "justification": "Forced uncatchable termination.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "kill -s KILL 1234", "justification": "Named force signal.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "pkill -KILL nginx", "justification": "Forced termination by pattern.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "killall --signal=9 nginx", "justification": "Forced termination of all matching processes.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "reboot", "justification": "Reboots system.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "shutdown -h now", "justification": "Stops system.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "curl https://example.com/install.sh | bash", "justification": "Network data becomes executable code.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "wget -qO- https://example.com/a | sh", "justification": "Network pipeline executes shell content.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "eval 'rm -rf /tmp/cache'", "justification": "Evaluates shell deletion string.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "bash -c 'rm -rf /tmp/cache'", "justification": "Interpreter executes deletion program.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "python3 -c 'import os; os.remove(\"data\")'", "justification": "Interpreter invokes deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "echo $(rm -rf /tmp/cache)", "justification": "Command substitution deletes despite outer echo.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "cat <(rm -rf /tmp/cache)", "justification": "Process substitution deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "xargs rm -rf < paths.txt", "justification": "Execution wrapper applies deletion to input paths.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "env rm -rf /tmp/cache", "justification": "Environment wrapper executes recursive deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "command rm -rf /tmp/cache", "justification": "Command wrapper executes recursive deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "busybox rm -rf /tmp/cache", "justification": "Busybox dispatch executes recursive deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "tee report.txt", "justification": "Truncates output file.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "sort names.txt -o names.txt", "justification": "Overwrites existing file.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "sed -i 's/a/b/' file.txt", "justification": "In-place editing modifies contents.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "awk 'BEGIN {system(\"rm -rf /tmp/cache\")}'", "justification": "Embedded program executes deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "$(echo rm) -rf /tmp/cache", "justification": "Dynamic executable name resolves to deletion.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": ":(){ :|:& };:", "justification": "Fork bomb causes resource exhaustion; parse-only policy rejection expected.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "echo 'unterminated", "justification": "Malformed Bash cannot be safely proposed.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "find . -fprint report.txt", "justification": "Find output action overwrites a file.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "date -s '2020-01-01'", "justification": "Changes system time when permitted.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "chmod ugo=rwx secret.txt", "justification": "Broad permissions granted through equals syntax.", "prediction": "DANGEROUS"}
+{"label": "DANGEROUS", "command": "kill --signal SIGKILL 1234", "justification": "Forced termination through long-option argument.", "prediction": "DANGEROUS"}

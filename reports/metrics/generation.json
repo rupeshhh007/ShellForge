@@ -1,0 +1,14 @@
+{
+  "n": 1254,
+  "exact_match": 0.0,
+  "bash_syntax_validity": 1.0,
+  "elapsed_seconds": 73.59798588199965,
+  "metric_definition": "Exact command bytes; syntax via bash -n with clean environment. No execution or semantic equivalence testing.",
+  "backend": "baseline",
+  "model": null,
+  "adapter": null,
+  "model_revision": null,
+  "test_sha256": "0453571106fe629697aac7e3391c7803f618d5c703ddfdbbfd08c9a6f79a460b",
+  "test_selection": "entire held-out test",
+  "fine_tuning_completed": false
+}

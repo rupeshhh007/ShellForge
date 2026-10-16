@@ -1,0 +1,45 @@
+{
+  "completed": true,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "arguments": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "train": "data/review2/train.jsonl",
+    "validation": "data/review2/validation.jsonl",
+    "output": "models/qwen-lora",
+    "max_steps": 20,
+    "max_length": 192,
+    "limit": 128,
+    "qlora": false
+  },
+  "train_sha256": "3451f3531390a9cad57d50d3ff0417532a2ddb1e2865c24923ce32f9c05ea9e3",
+  "validation_sha256": "c069b7a1bdad92262c65f1943fe34586f653f41a4fca814ded34a6eafddcf49d",
+  "train_stats": {
+    "selected": 128,
+    "used": 128,
+    "too_long": 0
+  },
+  "validation_stats": {
+    "selected": 128,
+    "used": 128,
+    "too_long": 0
+  },
+  "train_metrics": {
+    "train_runtime": 143.6102,
+    "train_samples_per_second": 0.557,
+    "train_steps_per_second": 0.139,
+    "total_flos": 12632816503296.0,
+    "train_loss": 1.4333116054534911,
+    "epoch": 0.625
+  },
+  "validation_metrics": {
+    "eval_loss": 1.3759288787841797,
+    "eval_runtime": 83.4555,
+    "eval_samples_per_second": 1.534,
+    "eval_steps_per_second": 1.534,
+    "epoch": 0.625
+  },
+  "device": "cpu",
+  "seed": 42
+}

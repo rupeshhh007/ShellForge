@@ -1,0 +1,27 @@
+{
+  "source": "Archived 20-step pilot; no new training or model inference",
+  "paired": {
+    "n": 32,
+    "tuned_only_correct": 0,
+    "base_only_correct": 1,
+    "exact_match_delta": -0.03125,
+    "mcnemar_exact_p": 1.0,
+    "limitations": "Pairs can be correlated within corpus groups; this is not a semantic accuracy test."
+  },
+  "base_wilson_95": [
+    0.032401551298366194,
+    0.24218154728387864
+  ],
+  "tuned_wilson_95": [
+    0.017310567031640967,
+    0.2014712314415458
+  ],
+  "optimizer_steps": 20,
+  "example_presentations": 80,
+  "selected_training_examples": 128,
+  "completed_epochs": 0.625,
+  "train_loss": 1.4333116054534911,
+  "validation_loss": 1.3759288787841797,
+  "new_full_data_training_completed": false,
+  "caution": "Historical test evidence informs scope and limitations only, not new hyperparameter selection."
+}

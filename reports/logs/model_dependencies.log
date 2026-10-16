@@ -1,0 +1,90 @@
+Defaulting to user installation because normal site-packages is not writeable
+Collecting transformers<5,>=4.45
+  Downloading transformers-4.57.6-py3-none-any.whl.metadata (43 kB)
+Collecting peft<0.19,>=0.14
+  Downloading peft-0.18.1-py3-none-any.whl.metadata (14 kB)
+Requirement already satisfied: filelock in /root/.local/lib/python3.12/site-packages (from transformers<5,>=4.45) (3.32.3)
+Collecting huggingface-hub<1.0,>=0.34.0 (from transformers<5,>=4.45)
+  Downloading huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+Requirement already satisfied: numpy>=1.17 in /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages (from transformers<5,>=4.45) (2.3.5)
+Requirement already satisfied: packaging>=20.0 in /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages (from transformers<5,>=4.45) (26.3)
+Requirement already satisfied: pyyaml>=5.1 in /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages (from transformers<5,>=4.45) (6.0.3)
+Requirement already satisfied: regex!=2019.12.17 in /root/.local/lib/python3.12/site-packages (from transformers<5,>=4.45) (2026.9.29)
+Collecting requests (from transformers<5,>=4.45)
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting tokenizers<=0.23.0,>=0.22.0 (from transformers<5,>=4.45)
+  Downloading tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.3 kB)
+Requirement already satisfied: safetensors>=0.4.3 in /root/.local/lib/python3.12/site-packages (from transformers<5,>=4.45) (0.8.0)
+Requirement already satisfied: tqdm>=4.27 in /root/.local/lib/python3.12/site-packages (from transformers<5,>=4.45) (4.70.1)
+Requirement already satisfied: psutil in /root/.local/lib/python3.12/site-packages (from peft<0.19,>=0.14) (7.2.2)
+Requirement already satisfied: torch>=1.13.0 in /root/.local/lib/python3.12/site-packages (from peft<0.19,>=0.14) (2.14.1)
+Requirement already satisfied: accelerate>=0.21.0 in /root/.local/lib/python3.12/site-packages (from peft<0.19,>=0.14) (1.15.0)
+Requirement already satisfied: fsspec>=2023.5.0 in /root/.local/lib/python3.12/site-packages (from huggingface-hub<1.0,>=0.34.0->transformers<5,>=4.45) (2026.7.0)
+Requirement already satisfied: hf-xet<2.0.0,>=1.1.3 in /root/.local/lib/python3.12/site-packages (from huggingface-hub<1.0,>=0.34.0->transformers<5,>=4.45) (1.7.0)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages (from huggingface-hub<1.0,>=0.34.0->transformers<5,>=4.45) (4.16.0)
+Requirement already satisfied: setuptools>=77.0.3 in /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (84.0.0)
+Requirement already satisfied: sympy>=1.13.3 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (1.14.0)
+Requirement already satisfied: networkx>=2.5.1 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (3.7)
+Requirement already satisfied: jinja2 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (3.1.6)
+Requirement already satisfied: cuda-toolkit==13.0.3 in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (13.0.3.0)
+Requirement already satisfied: cuda-bindings<14,>=13.0.3 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (13.4.3)
+Requirement already satisfied: nvidia-cudnn-cu13==9.24.0.43 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (9.24.0.43)
+Requirement already satisfied: nvidia-cusparselt-cu13==0.8.1 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (0.8.1)
+Requirement already satisfied: nvidia-nccl-cu13==2.30.7 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (2.30.7)
+Requirement already satisfied: nvidia-nvshmem-cu13==3.4.5 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (3.4.5)
+Requirement already satisfied: triton~=3.8.0 in /root/.local/lib/python3.12/site-packages (from torch>=1.13.0->peft<0.19,>=0.14) (3.8.0)
+Requirement already satisfied: nvidia-cublas==13.1.1.3.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (13.1.1.3)
+Requirement already satisfied: nvidia-cuda-nvrtc==13.0.88.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (13.0.88)
+Requirement already satisfied: nvidia-cuda-runtime==13.0.96.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (13.0.96)
+Requirement already satisfied: nvidia-cufft==12.0.0.61.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (12.0.0.61)
+Requirement already satisfied: nvidia-nvjitlink<14,>=13.0.88 in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (13.4.92)
+Requirement already satisfied: nvidia-cufile==1.15.1.6.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (1.15.1.6)
+Requirement already satisfied: nvidia-cuda-cupti==13.0.85.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (13.0.85)
+Requirement already satisfied: nvidia-curand==10.4.0.35.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (10.4.0.35)
+Requirement already satisfied: nvidia-cusolver==12.0.4.66.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (12.0.4.66)
+Requirement already satisfied: nvidia-cusparse==12.6.3.3.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (12.6.3.3)
+Requirement already satisfied: nvidia-nvtx==13.0.85.* in /root/.local/lib/python3.12/site-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"->torch>=1.13.0->peft<0.19,>=0.14) (13.0.85)
+Requirement already satisfied: cuda-pathfinder>=1.4.2 in /root/.local/lib/python3.12/site-packages (from cuda-bindings<14,>=13.0.3->torch>=1.13.0->peft<0.19,>=0.14) (1.8.3)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in /root/.local/lib/python3.12/site-packages (from sympy>=1.13.3->torch>=1.13.0->peft<0.19,>=0.14) (1.3.0)
+Requirement already satisfied: MarkupSafe>=2.0 in /root/.local/lib/python3.12/site-packages (from jinja2->torch>=1.13.0->peft<0.19,>=0.14) (3.0.3)
+Requirement already satisfied: charset_normalizer<4,>=2 in /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages (from requests->transformers<5,>=4.45) (3.5.1)
+Requirement already satisfied: idna<4,>=2.5 in /opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages (from requests->transformers<5,>=4.45) (3.19)
+Collecting urllib3<3,>=1.26 (from requests->transformers<5,>=4.45)
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests->transformers<5,>=4.45)
+  Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Downloading transformers-4.57.6-py3-none-any.whl (12.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 52.2 MB/s  0:00:00
+Downloading peft-0.18.1-py3-none-any.whl (556 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 557.0/557.0 kB 6.3 MB/s  0:00:00
+Downloading huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 3.6 MB/s  0:00:00
+Downloading tokenizers-0.22.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.3/3.3 MB 36.2 MB/s  0:00:00
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Installing collected packages: urllib3, certifi, requests, huggingface-hub, tokenizers, transformers, peft
+  Attempting uninstall: huggingface-hub
+    Found existing installation: huggingface_hub 2.2.0
+    Uninstalling huggingface_hub-2.2.0:
+      Successfully uninstalled huggingface_hub-2.2.0
+  WARNING: The scripts hf, huggingface-cli and tiny-agents are installed in '/root/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  Attempting uninstall: tokenizers
+    Found existing installation: tokenizers 0.23.3
+    Uninstalling tokenizers-0.23.3:
+      Successfully uninstalled tokenizers-0.23.3
+  Attempting uninstall: transformers
+    Found existing installation: transformers 5.19.0
+    Uninstalling transformers-5.19.0:
+      Successfully uninstalled transformers-5.19.0
+  WARNING: The scripts transformers and transformers-cli are installed in '/root/.local/bin' which is not on PATH.
+  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+  Attempting uninstall: peft
+    Found existing installation: peft 0.21.2
+    Uninstalling peft-0.21.2:
+      Successfully uninstalled peft-0.21.2
+
+Successfully installed certifi-2026.7.22 huggingface-hub-0.36.2 peft-0.18.1 requests-2.34.2 tokenizers-0.22.2 transformers-4.57.6 urllib3-2.8.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.

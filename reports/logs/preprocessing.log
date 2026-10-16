@@ -1,0 +1,37 @@
+{
+  "input_records": 12967,
+  "retained": 12545,
+  "discard_counts": {
+    "invalid_bash_syntax": 74,
+    "duplicate_pair": 348
+  },
+  "splits": {
+    "train": 10036,
+    "validation": 1255,
+    "test": 1254
+  },
+  "heuristic_risk_counts": {
+    "DANGEROUS": 6049,
+    "CAUTION": 2368,
+    "SAFE": 4128
+  },
+  "equivalence_groups": 9328,
+  "largest_group": 45,
+  "leakage": {
+    "instruction": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "command": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    },
+    "group_id": {
+      "train_validation": 0,
+      "train_test": 0,
+      "validation_test": 0
+    }
+  }
+}

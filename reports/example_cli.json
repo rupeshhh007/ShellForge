@@ -1,0 +1,26 @@
+{
+  "request": "List all files in the current directory including hidden files",
+  "command": "tree -af",
+  "backend": "tfidf-1nn",
+  "score": 0.8889130794955291,
+  "matched_training_id": "961b9d62b6a37f3938c6",
+  "matched_instruction": "List all files and sub directories including hidden files in the current directory tree",
+  "explanation": "Retrieved a training command for a similar request; inspect arguments and paths against your intent. Policy findings: Unknown utility requires manual review: tree",
+  "safety": {
+    "risk": "CAUTION",
+    "reasons": [
+      "Unknown utility requires manual review: tree"
+    ],
+    "syntax_valid": true,
+    "policy": "static-v2"
+  },
+  "safe_preview": null,
+  "preview_explanation": "No verified automatic safe preview available.",
+  "executed": false,
+  "requires_manual_review": true,
+  "limitations": [
+    "Syntax validity does not imply request correctness.",
+    "SAFE is static allowlist classification, not a security guarantee.",
+    "No generated command is executed."
+  ]
+}

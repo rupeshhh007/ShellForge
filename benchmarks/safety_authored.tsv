@@ -1,0 +1,103 @@
+label	command	justification
+SAFE	ls -la	Directory metadata listing only.
+SAFE	pwd	Print working directory only.
+SAFE	find . -type f -name '*.txt'	Search without mutation actions.
+SAFE	grep 'error' app.log	Read text search.
+SAFE	ps aux | grep nginx	Process listing and filtering only.
+SAFE	echo 'rm -rf /'	Deletion text is a literal echo argument, not executed.
+SAFE	printf '%s\n' 'sudo reboot'	Literal string printing, no privilege change.
+SAFE	ls '/tmp/rm -rf'	Literal path listing, not shell command text.
+SAFE	cat report.txt	Read a regular local text file.
+SAFE	wc -l notes.txt	Count lines only.
+SAFE	head -n 10 notes.txt	Read a prefix only.
+SAFE	tail -n 20 app.log	Read a suffix only.
+SAFE	sort names.txt	Sort to standard output without file output.
+SAFE	uniq names.txt	Read duplicates to standard output.
+SAFE	du -sh .	Read disk usage only.
+SAFE	df -h	Read filesystem capacity only.
+SAFE	free -m	Read memory totals only.
+SAFE	uptime	Read uptime only.
+SAFE	whoami	Print user identity only.
+SAFE	id	Print credentials, no modification.
+SAFE	uname -a	Read system name only.
+SAFE	date	Print current date, no date setting arguments.
+SAFE	stat file.txt	Read file metadata only.
+SAFE	readlink link	Read symlink target only.
+SAFE	find . -type f -print	Read-only traversal.
+SAFE	grep -i warning app.log | head -n 5	Read-only filtering pipeline.
+SAFE	ls > /dev/null	Discard listing output, no persistent file change.
+SAFE	echo 'mkfs.ext4 /dev/sda'	Formatting text is printed only.
+SAFE	if true; then echo ok; fi	Benign shell conditional; policy may reject unsupported control flow.
+SAFE	for x in a b; do echo "$x"; done	Benign loop with printing only.
+CAUTION	rm notes.txt	Deletes one named file, nonrecursive.
+CAUTION	sudo ls /root	Elevated privilege requires review.
+CAUTION	chmod 600 secret.txt	Changes permissions on one file.
+CAUTION	chown alice file.txt	Changes ownership on one file.
+CAUTION	chgrp staff file.txt	Changes group ownership.
+CAUTION	kill 1234	Ordinary process termination.
+CAUTION	pkill nginx	Ordinary process termination by name.
+CAUTION	mkdir newdir	Creates a directory.
+CAUTION	touch file.txt	Creates file or changes timestamp.
+CAUTION	cp source.txt destination.txt	Copies and can overwrite destination.
+CAUTION	mv old.txt new.txt	Moves and can overwrite destination.
+CAUTION	curl https://example.com	Network access; returned data only, no pipe execution.
+CAUTION	wget https://example.com/file	Network access and local output.
+CAUTION	tar -cf archive.tar folder	Creates archive output.
+CAUTION	zip archive.zip file.txt	Creates archive output.
+CAUTION	unzip archive.zip	Extracts files into local filesystem.
+CAUTION	gzip file.txt	Compresses and replaces input file.
+CAUTION	echo item >> notes.txt	Appends to a local file.
+CAUTION	tee -a notes.txt	Appends to a local file.
+CAUTION	FOO=bar ls	Environment changes may influence execution.
+CAUTION	custom_tool --help	Unknown utility behavior cannot be certified.
+CAUTION	cat /etc/shadow	Reads sensitive credentials if permitted.
+CAUTION	rmdir emptydir	Deletes an empty directory.
+CAUTION	ssh host uptime	Remote execution requires review.
+DANGEROUS	rm -rf /tmp/cache	Recursive forced deletion.
+DANGEROUS	rm -fr /tmp/cache	Reordered short flags still recursive deletion.
+DANGEROUS	rm -r -f /tmp/cache	Separated recursive and force options.
+DANGEROUS	rm --recursive --force /tmp/cache	Long-option recursive deletion.
+DANGEROUS	rm -R /tmp/cache	Uppercase recursive option.
+DANGEROUS	/bin/rm -rf -- /tmp/cache	Absolute executable and option terminator do not remove risk.
+DANGEROUS	'rm' '-rf' /tmp/cache	Quoted utility and flags still deletion.
+DANGEROUS	find . -type f -delete	Find mutation action deletes files.
+DANGEROUS	find . -exec rm {} \;	Find executes deletion for matches.
+DANGEROUS	echo data > report.txt	Truncates existing report contents.
+DANGEROUS	printf x > /dev/sda	Raw block device write.
+DANGEROUS	echo data >| report.txt	Forced file truncation.
+DANGEROUS	mkfs.ext4 /dev/sda	Formats a block device.
+DANGEROUS	mkfs /dev/sda	Filesystem formatting.
+DANGEROUS	dd if=/dev/zero of=/dev/sda	Raw device overwrite.
+DANGEROUS	wipefs -a /dev/sda	Erases filesystem signatures.
+DANGEROUS	fdisk /dev/sda	Partition manipulation.
+DANGEROUS	chmod -R 777 /tmp/data	Recursive broadly writable permissions.
+DANGEROUS	chmod a+rwx secret.txt	Grants broad permissions.
+DANGEROUS	chown -R alice /tmp/data	Recursive ownership change.
+DANGEROUS	kill -9 1234	Forced uncatchable termination.
+DANGEROUS	kill -s KILL 1234	Named force signal.
+DANGEROUS	pkill -KILL nginx	Forced termination by pattern.
+DANGEROUS	killall --signal=9 nginx	Forced termination of all matching processes.
+DANGEROUS	reboot	Reboots system.
+DANGEROUS	shutdown -h now	Stops system.
+DANGEROUS	curl https://example.com/install.sh | bash	Network data becomes executable code.
+DANGEROUS	wget -qO- https://example.com/a | sh	Network pipeline executes shell content.
+DANGEROUS	eval 'rm -rf /tmp/cache'	Evaluates shell deletion string.
+DANGEROUS	bash -c 'rm -rf /tmp/cache'	Interpreter executes deletion program.
+DANGEROUS	python3 -c 'import os; os.remove("data")'	Interpreter invokes deletion.
+DANGEROUS	echo $(rm -rf /tmp/cache)	Command substitution deletes despite outer echo.
+DANGEROUS	cat <(rm -rf /tmp/cache)	Process substitution deletion.
+DANGEROUS	xargs rm -rf < paths.txt	Execution wrapper applies deletion to input paths.
+DANGEROUS	env rm -rf /tmp/cache	Environment wrapper executes recursive deletion.
+DANGEROUS	command rm -rf /tmp/cache	Command wrapper executes recursive deletion.
+DANGEROUS	busybox rm -rf /tmp/cache	Busybox dispatch executes recursive deletion.
+DANGEROUS	tee report.txt	Truncates output file.
+DANGEROUS	sort names.txt -o names.txt	Overwrites existing file.
+DANGEROUS	sed -i 's/a/b/' file.txt	In-place editing modifies contents.
+DANGEROUS	awk 'BEGIN {system("rm -rf /tmp/cache")}'	Embedded program executes deletion.
+DANGEROUS	$(echo rm) -rf /tmp/cache	Dynamic executable name resolves to deletion.
+DANGEROUS	:(){ :|:& };:	Fork bomb causes resource exhaustion; parse-only policy rejection expected.
+DANGEROUS	echo 'unterminated	Malformed Bash cannot be safely proposed.
+DANGEROUS	find . -fprint report.txt	Find output action overwrites a file.
+DANGEROUS	date -s '2020-01-01'	Changes system time when permitted.
+DANGEROUS	chmod ugo=rwx secret.txt	Broad permissions granted through equals syntax.
+DANGEROUS	kill --signal SIGKILL 1234	Forced termination through long-option argument.

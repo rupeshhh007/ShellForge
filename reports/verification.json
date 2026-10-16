@@ -1,0 +1,23 @@
+{
+  "cloud_only": true,
+  "main_unchanged_sha": "ad24e3dc045fadacca75f796b99107b7072a60a6",
+  "pdf_pages": 4,
+  "pdf_page_size": "A4",
+  "all_four_pages_visually_inspected": true,
+  "tests": "37 passed in 16.56s",
+  "compile": "passed",
+  "focused_lint": "passed",
+  "diff_check": "passed",
+  "fine_tuning": "CPU LoRA completed: 20 optimizer steps, 128 prepared examples, 80 example presentations",
+  "no_qlora_run": true,
+  "generated_commands_executed": false,
+  "adapter_bytes": 2175168,
+  "manifest_verification": "All listed file blobs match after preserving raw CR characters in training logs",
+  "delivery_blockers": [],
+  "limitations": [
+    "No GPU available; tiny LoRA feasibility pilot only.",
+    "Tuned exact match decreased from 3/32 to 2/32.",
+    "Safety benchmark used during policy development; not an untouched generalization holdout.",
+    "Global semantic alignment and all paraphrase equivalences are not independently established."
+  ]
+}
