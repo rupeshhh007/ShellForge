@@ -126,6 +126,8 @@ else:
 
 testpath=REPORTS/'logs/full_data_tests.log'
 if not testpath.exists():testpath=REPORTS/'logs/tests.log'
+if report_args.experiment and (report_args.experiment/'logs/colab_verified_tests.log').exists():
+    testpath=report_args.experiment/'logs/colab_verified_tests.log'
 testlog=testpath.read_text();testsummary=next((l for l in reversed(testlog.splitlines()) if re.search(r'\d+ passed',l)),'See test logs; no passing summary found.')
 missing=stats['missing_optional_fields_before_dedup']
 comparison_text = (f' On the same {base["n"]} requests, Qwen base exact match was {pct(base["exact_match"])}, versus {pct(tuned["exact_match"])} for LoRA. The small fine-tuning run did not improve exact match; this subset is too small for a robust generalization claim.' if base and tuned else '')
@@ -185,7 +187,8 @@ def table(rows,widths):
     t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor(PALE)),('VALIGN',(0,0),(-1,-1),'TOP'),('LINEBELOW',(0,0),(-1,0),.7,colors.HexColor('#c7d4e7')),('LINEBELOW',(0,1),(-1,-1),.3,colors.HexColor('#e3e9f0')),('LEFTPADDING',(0,0),(-1,-1),8),('RIGHTPADDING',(0,0),(-1,-1),8),('TOPPADDING',(0,0),(-1,-1),6),('BOTTOMPADDING',(0,0),(-1,-1),5)]));story.append(t);story.append(Spacer(1,7))
 
 story.append(P('SHELLFORGE','TitleSF'));b('Review 2 | Safe natural-language Bash command proposals')
-story.append(P('CLOUD CPU EXPERIMENT  /  09 OCT 2026  /  NO COMMAND EXECUTION','SmallSF'))
+story.append(P('COMPLETED T4 GPU EXPERIMENT  /  16 OCT 2026  /  NO COMMAND EXECUTION','SmallSF') if new_comparison else P('ORIGINAL CPU PILOT  /  09 OCT 2026','SmallSF'))
+story.append(Paragraph('<b>GitHub: <link href="https://github.com/rupeshhh007/ShellForge" color="#2563eb">github.com/rupeshhh007/ShellForge</link></b>',styles['BodySF']))
 h('1. Dataset');b(sections['Dataset'])
 table([['Aligned corpus','Retained records','Train / Val / Test'],['12,607 pairs',f"{stats['retained']:,}",f"{stats['splits']['train']:,} / {stats['splits']['validation']:,} / {stats['splits']['test']:,}"]],[150,150,205])
 h('2. Dataset Preprocessing');b(sections['Dataset Preprocessing']);image('dataset.png')
@@ -204,7 +207,7 @@ h('5. What Went Wrong');b(sections['What Went Wrong'])
 h('6. Alternative Flow / Proposed Improvements');b(sections['Alternative Flow / Proposed Improvements'])
 h('Verification and reproducibility');b(testsummary)
 b('Original pilot: Linux x86_64, 9 CPUs, no CUDA. Full-data continuation runs in Colab; see selection.json and training_manifest.json for completion evidence. See README.md and notebooks/ShellForge_Colab.ipynb for exact commands. The 32 old test cases are disclosed separately from 1,222 unexposed cases.')
-table([['Evidence','Repository path'],['Source/data audit and counts','docs/review2_audit.md; data/review2/stats.json'],['Actual generation + safety predictions','reports/metrics/; reports/logs/'],['LoRA completion and model artifact','artifacts/qwen-lora/training_manifest.json'],['GPU continuation (future larger run)','notebooks/ShellForge_Colab.ipynb']],[210,295])
+table([['Evidence','Repository path'],['Source/data audit and counts','docs/review2_audit.md; data/review2/stats.json'],['Actual generation + safety predictions','reports/metrics/; reports/logs/'],['LoRA completion and model artifact','artifacts/qwen-lora/training_manifest.json'],['Resumable Colab GPU workflow','notebooks/ShellForge_Colab.ipynb']],[210,295])
 story.append(P('References: Lin et al., NL2Bash (2018), github.com/TellinaTool/nl2bash; Hu et al., LoRA (2021), arxiv.org/abs/2106.09685; Qwen2.5 model card, huggingface.co/Qwen/Qwen2.5-0.5B-Instruct. Corpus file alignment is positional evidence only; no renewed claim of independently verified labels.','SmallSF'))
 
 def footer(c,doc):
