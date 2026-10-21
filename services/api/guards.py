@@ -1,4 +1,5 @@
 """Bound incoming bytes and request rate before JSON parsing or Bash analysis."""
+
 import asyncio
 import time
 from collections import OrderedDict, deque
@@ -16,10 +17,10 @@ class RequestGuards:
         self.total = deque()
 
     async def __call__(self, scope, receive, send):
-        if scope['type'] != 'http' or scope['method'] not in {'POST', 'PUT', 'PATCH'}:
+        if scope["type"] != "http" or scope["method"] not in {"POST", "PUT", "PATCH"}:
             return await self.app(scope, receive, send)
         now = time.monotonic()
-        client = (scope.get('client') or ('unknown',))[0]
+        client = (scope.get("client") or ("unknown",))[0]
         # Use transport identity, never an untrusted X-Forwarded-For value.
         events = self.clients.pop(client, deque())
         self.clients[client] = events
@@ -29,8 +30,11 @@ class RequestGuards:
             while queue and queue[0] <= now - 60:
                 queue.popleft()
         if len(events) >= self.per_minute or len(self.total) >= self.total_per_minute:
-            return await JSONResponse({'detail': 'Request limit reached. Try again in a minute.'},
-                                      status_code=429, headers={'Retry-After': '60'})(scope, receive, send)
+            return await JSONResponse(
+                {"detail": "Request limit reached. Try again in a minute."},
+                status_code=429,
+                headers={"Retry-After": "60"},
+            )(scope, receive, send)
         events.append(now)
         self.total.append(now)
         body = bytearray()
@@ -38,18 +42,21 @@ class RequestGuards:
             async with asyncio.timeout(5):
                 while True:
                     message = await receive()
-                    if message['type'] == 'http.disconnect':
+                    if message["type"] == "http.disconnect":
                         return
-                    body.extend(message.get('body', b''))
+                    body.extend(message.get("body", b""))
                     if len(body) > self.max_bytes:
-                        return await JSONResponse({'detail': 'Request body exceeds 16 KiB.'},
-                                                  status_code=413)(scope, receive, send)
-                    if not message.get('more_body', False):
+                        return await JSONResponse(
+                            {"detail": "Request body exceeds 16 KiB."}, status_code=413
+                        )(scope, receive, send)
+                    if not message.get("more_body", False):
                         break
         except TimeoutError:
-            return await JSONResponse({'detail': 'Request body timed out.'}, status_code=408)(scope, receive, send)
+            return await JSONResponse(
+                {"detail": "Request body timed out."}, status_code=408
+            )(scope, receive, send)
 
         async def bounded_receive():
-            return {'type': 'http.request', 'body': bytes(body), 'more_body': False}
+            return {"type": "http.request", "body": bytes(body), "more_body": False}
 
         await self.app(scope, bounded_receive, send)

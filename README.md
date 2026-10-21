@@ -1,14 +1,86 @@
-# ShellForge
+# ShellForge — The Command Workshop
 
-Natural-language Bash command **proposals**, static safety review, explanations and narrowly verified read-only previews. Commands are never executed. A working CPU retrieval baseline, Qwen2.5 generator, real PEFT LoRA training entry point and measured cloud pilot are included.
+Describe the operation. Understand the command. Inspect the consequences.
 
-## Full-data GPU continuation
+A Next.js + FastAPI web product around the preserved Python research implementation.
+Commands are **proposals only**. ShellForge never executes them or connects to your
+filesystem. Bounded deterministic templates power supported operations; arbitrary
+requests abstain clearly when no model is configured.
 
-[Open the Colab GPU workflow](https://colab.research.google.com/github/rupeshhh007/ShellForge/blob/codex/review2-cloud/notebooks/ShellForge_Colab.ipynb). For a private repository, download `notebooks/ShellForge_Colab.ipynb` while signed into GitHub and open it with Colab **File > Upload notebook**. Download the ZIP of `codex/review2-cloud` with **Code > Download ZIP**, select T4 GPU, and press Run all. Upload that ZIP and authorize Drive when prompted; no GitHub token or code edits are needed. Reconnect with the same ZIP to resume saved Drive checkpoints and predictions. Installs, model weights, training, evaluation, and report generation stay in cloud storage.
+## Run the product locally
 
-The training-only audit excluded ten reviewed mismatches/unsupported tasks, leaving **10,026** examples before token-budget exclusions. The original splits and negative pilot remain preserved. New GPU training has **not executed**; no new adapter or improvement is claimed. The prepared runner uses validation to select checkpoints and trials before a single paired test evaluation, with the 32 pilot-exposed cases disclosed separately.
+Node.js 22+ and Python 3.12+ with `/bin/bash` are required. No model key, GPU,
+dataset, database or cloud account is needed for the default workbench.
 
-Current cloud verification: **48 tests passed**, compilation and focused lint passed; the updated report has four visually checked A4 pages. Evidence: [status](reports/full_data_status.json), [audit](reports/full_data_audit.json), [diagnosis](reports/pilot_diagnosis.json), [cloud checks](https://github.com/rupeshhh007/ShellForge/actions/runs/37930727240), and [protocol](docs/full_data_experiments.md). The original delivery manifest describes the archived pilot snapshot; this continuation has its own status and evidence.
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r services/api/requirements-dev.txt
+python -m uvicorn services.api.main:app --host 127.0.0.1 --port 8010 --no-proxy-headers
+```
+
+In a second terminal:
+
+```bash
+cd apps/web
+npm ci
+npm run dev
+```
+
+Open [the local workshop](http://127.0.0.1:3000).
+
+| Route | Working experience |
+| --- | --- |
+| `/` | Original artwork, editorial motion, interactive GNU find comparison, live API example |
+| `/forge` | Validated template proposal, structured intent, token anatomy, copy and review receipt |
+| `/xray` | Bash syntax-only checking and existing deterministic static AST policy |
+| `/manual` | 12 searchable, filterable recipes with editable, API-validated parameters |
+| `/bench` | Authentic generation results, separate authored safety evaluation and limits |
+
+For example: **Find files larger than 100 MiB in the current directory**.
+Try **Show disk space** or an exact language form from the Field Manual. The language
+parser deliberately matches entire supported forms; it does not silently discard
+extra qualifiers. Templates label OS assumptions and size semantics. The main
+workbench always uses the actual API. No generic chatbot or fake fallback results.
+
+The optional provider interface wraps existing Qwen/LoRA inference only when
+`SHELLFORGE_MODEL_ADAPTER` is explicitly configured with verified weights and the
+model dependencies/resources are installed. The final Drive binary was not available
+through the inspected connector listing; the rank-8 pilot is not substituted for it.
+
+Production frontend: `cd apps/web && npm run build && npm run start`. The server-only
+`SHELLFORGE_API_ORIGIN` defaults to `http://127.0.0.1:8010`; set it **before building**
+to proxy a hosted API. No credential belongs in a `NEXT_PUBLIC_` variable.
+
+- [Architecture, contracts and safeguards](docs/product/ARCHITECTURE.md)
+- [Design system and reference investigation](docs/product/DESIGN.md)
+- [Original artwork, prompts and license acknowledgments](docs/product/ASSETS-AND-CREDITS.md)
+- [Browser and visual QA evidence](docs/visual-qa/REPORT.md)
+- [Deployment instructions and status](docs/product/DEPLOYMENT.md)
+- [Resumable progress](docs/product/PROGRESS.md)
+
+## Completed research experiment
+
+Review 2 was merged into main in PR #1. The completed Colab T4 experiment selected
+the rank-16 adapter after training on **10,026** examples. Full validation: base
+36/1,255; trial 1 97/1,255; trial 2 98/1,255. Primary final test excludes the 32
+pilot-exposed cases: **base 28/1,222 (2.29%), tuned 84/1,222 (6.87%) strict exact match**.
+This measures command-byte agreement under the saved protocol, not semantic
+correctness, real-world task success or production reliability.
+
+The separate 102-case authored static safety benchmark scored macro F1 approximately
+0.9817. It was used during policy development and is not the model's generation
+accuracy. Read the [completed research report](reports/ShellForge_Review2.md).
+The final adapter and full run artifacts remain in Google Drive. The repository's
+`artifacts/qwen-lora` remains the historical negative CPU pilot. Original datasets,
+experiments, scores and reports are preserved. Some archived workflow/status files
+still describe preparation before the completed run; the completed report supersedes
+those status claims without rewriting historical artifacts.
+
+[Open the preserved Colab workflow](https://colab.research.google.com/github/rupeshhh007/ShellForge/blob/main/notebooks/ShellForge_Colab.ipynb).
+For a private repository, download the notebook while signed into GitHub, upload it
+to Colab, and supply a repository ZIP. Training/evaluation should run in the cloud;
+this product sprint does not initiate new training or provision GPUs.
 
 ## Review 2 submission
 
@@ -20,7 +92,7 @@ Current cloud verification: **48 tests passed**, compilation and focused lint pa
 - Small trained adapter and completion manifest: `artifacts/qwen-lora/`. Read its manifest before interpreting training scope.
 - GPU continuation: [notebooks/ShellForge_Colab.ipynb](notebooks/ShellForge_Colab.ipynb).
 
-The original measured pilot was performed in a cloud Linux CPU container. The full-data continuation is prepared for Colab; no new GPU training is claimed. Branch `codex/review2-cloud`; main was not merged or modified. Original datasets, original pilot splits and docs/review1.md are preserved.
+The original measured pilot was performed in a cloud Linux CPU container. The full-data T4 continuation is completed and Review 2 is merged. Historical pilot artifacts and original datasets/splits remain preserved; product work lives on `feat/shellforge-product-v2`.
 
 ## Measured results
 
@@ -29,6 +101,8 @@ The original measured pilot was performed in a cloud Linux CPU container. The fu
 | TF-IDF 1-NN baseline | 1,254 | 0.00% | 100.00% |
 | Qwen2.5 base | 32 | 9.38% (3/32) | 100.00% |
 | Qwen2.5 + LoRA pilot | same 32 | 6.25% (2/32) | 100.00% |
+| Final T4 base · unexposed | 1,222 | 2.29% (28/1,222) | 98.20% |
+| Final T4 rank-16 LoRA · unexposed | 1,222 | 6.87% (84/1,222) | 99.35% |
 
 The 20-step CPU LoRA pilot **completed but did not improve exact match**. It trained 540,672 parameters, using 128 prepared examples and 80 example presentations (0.625 epoch). Training loss was 1.4333; validation loss 1.3759 on 128 validation examples. This is not a full-data training claim. The final authored safety benchmark has 102 cases, macro F1 0.9817, zero dangerous false negatives and two benign compound-command false positives. It was used during policy development and does not prove general safety.
 
@@ -39,7 +113,7 @@ Full preprocessing retained 12,545 records from 12,967 ingested occurrences: 348
 Python 3.12 and `/bin/bash` are required. Do these steps in a cloud runtime, not on the user's PC.
 
 ```bash
-git clone --branch codex/review2-cloud https://github.com/rupeshhh007/ShellForge.git
+git clone --branch main https://github.com/rupeshhh007/ShellForge.git
 cd ShellForge
 python -m venv .venv
 source .venv/bin/activate
@@ -94,4 +168,29 @@ python -m ruff check --select E9,F63,F7,F82 src tests scripts
 git diff --check
 ```
 
-No frontend/build system or configured static type-checker exists. Python compilation, focused correctness lint, integration/unit tests, model runs, data integrity checks and rendered PDF inspection are the applicable checks. Exact environment versions and actual commands are recorded in `reports/compute.json` and `reports/logs/commands.txt`.
+Product checks:
+
+```bash
+python -m pytest tests/test_product_api.py tests/test_safety.py -q
+python -m ruff check --select E9,F63,F7,F82 services tests/test_product_api.py
+cd apps/web
+npm run lint
+npm run typecheck
+npm run build
+npx playwright install chromium
+npm run test:e2e
+```
+
+Run the API and frontend before the browser suite. Set `PLAYWRIGHT_BASE_URL` to test a
+production server on another port. The suite saves actual screenshots under
+`docs/visual-qa/screenshots`. The full research suite also needs the existing research
+requirements, notebook test dependencies (nbformat, pypdf, IPython), and immutable
+splits restored via `src.experiment_data.restore_splits()`. Model integration tests
+skip when optional torch/Transformers/PEFT dependencies are absent; no new training
+is claimed. Historical compute logs remain under `reports/`.
+
+Known limits: narrow grammar, curated token coverage, incomplete static policy,
+per-process in-memory rate limits, no runtime environment access, no persistent
+history, and no configured production inference. See the architecture and QA report
+for practical boundaries. The runtime npm audit is clean at delivery; development
+lint tooling reports the unpatched braces advisory GHSA-vfj7-8cjw-p6xm.

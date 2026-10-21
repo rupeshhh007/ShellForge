@@ -1,0 +1,68 @@
+# Deployment
+
+The default product is CPU-only and non-executing. No paid plan or GPU is required.
+Production builds have a real FastAPI dependency; publishing the frontend alone
+without its API origin does not make a functional workbench.
+
+## Backend on Render (free web service)
+
+Use the feature branch `feat/shellforge-product-v2` until the PR is approved. Do not
+merge main just to deploy. Create only the API service; no database, disk, worker,
+cache or model inference resource is needed.
+
+- Source: the existing GitHub ShellForge repository, feature branch.
+- Runtime: Python 3.12; repository root stays at the repository root so `src` imports work.
+- Build: `pip install -r services/api/requirements.txt`.
+- Start: `python -m services.api.serve` (binds `0.0.0.0` and validated `$PORT`).
+- Health path: `/api/health`.
+- Plan: explicitly **free**; do not accept a paid fallback.
+- Set `SHELLFORGE_CORS_ORIGINS` to the exact intended frontend origin(s), comma-separated.
+- Leave `SHELLFORGE_MODEL_ADAPTER` unset. No model weights are needed or bundled.
+- With auto deploy enabled, feature-branch updates build automatically. Do not
+  enable production-main release or merge without approval.
+
+If native Python hosting is unsuitable, the root build context supports
+`docker build -f services/api/Dockerfile -t shellforge-api .` and
+`docker run --rm -p 8010:8010 shellforge-api`. The Docker image runs as a non-root
+user and includes only the product service plus the unchanged static validator.
+The Docker build is a prepared alternative; it is not claimed tested without a
+Docker engine. Optional Qwen serving requires a separate image/dependency and
+resource decision, not simply setting an adapter path in this slim image.
+
+## Frontend on Vercel
+
+- Root Directory: `apps/web`.
+- Framework: Next.js; Node.js 22.x.
+- Install: `npm ci`; build: `npm run build`.
+- Set server-only `SHELLFORGE_API_ORIGIN` to the verified Render HTTPS **origin**,
+  with no credentials, path or query. This is read during build for the rewrite.
+- Deploy a preview of `feat/shellforge-product-v2`; verify it before a production
+  release. No API secret belongs in client variables.
+
+The app uses same-origin `/api/*` requests. Its rewrite forwards to FastAPI, avoiding
+cross-origin client configuration and keeping provider secrets server-side. CORS
+is restricted for clients that access the API directly. An HTTPS origin is required
+for reliable Clipboard API operation outside localhost.
+
+## Verification after any deployment
+
+1. Confirm `/api/health` directly and through the frontend; `execution_enabled` is false.
+2. Submit a supported proposal and inspect actual output; try an unsupported request.
+3. Analyze `rm -rf /tmp/cache` and an unclosed quote; inspect policy/syntax differences.
+4. Exercise token selection, clipboard, Field Manual parameter editing, mobile menu
+   and mobile inspector. Check browser console and rendered screenshots.
+5. Monitor build/runtime errors and verify the deployed commit matches the tested commit.
+
+The in-process rate limits are appropriate for this small single-process release:
+30 POSTs/minute per transport client, 120 total, 4 analysis slots. A Vercel proxy may
+share a conservative budget. Scaling needs a trusted gateway/shared rate limiter;
+do not simply trust arbitrary forwarded addresses. A free backend can sleep and
+take time to wake; the UI reports real timeout/error states and supports retry.
+
+## Provisioning status
+
+Deployment is pending the connected Render workspace selection. Read-only discovery
+found a workspace but no selected context; no backend was created without that
+selection. Vercel is connected and no existing ShellForge project was found. No
+deployment URL is fabricated. Update this section with verified resources and live
+HTTP/browser results if provisioning completes.
