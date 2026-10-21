@@ -176,7 +176,7 @@ export function Workbench({
   }
 
   return (
-    <main id="main" className="page-shell workbench-page">
+    <main id="main" className="page-shell workbench-page" data-mode={mode}>
       <div className="workbench-heading">
         <div>
           <span className="section-number mono">
@@ -185,98 +185,117 @@ export function Workbench({
               : "Command X-Ray / Bash → Understanding"}
           </span>
           <h1>
-            {isForge ? (
-              <>
-                Put intent <em>to work.</em>
-              </>
-            ) : (
-              <>
-                Look <em>under the shell.</em>
-              </>
-            )}
+            {isForge ? "The Forge" : "Command X-Ray"}
+            <span className="workspace-heading-mark" aria-hidden="true">
+              {isForge ? " ↗" : " +"}
+            </span>
           </h1>
         </div>
         <p>
           {isForge
-            ? "A proposal, never an execution."
-            : "Bring a command. Inspect its consequences."}
+            ? "Describe the operation. Understand the command."
+            : "Read the structure. Inspect the consequences."}
         </p>
       </div>
-      <form className="workbench-form" onSubmit={submit}>
-        <label className="input-label mono" htmlFor="operation">
-          01 / {isForge ? "Describe the operation" : "Paste your Bash command"}
-        </label>
-        <div className="request-row">
-          <textarea
-            id="operation"
-            ref={inputRef}
-            value={input}
-            onChange={(e) => edit(e.target.value)}
-            placeholder={
-              isForge
-                ? "Find files larger than 100 MiB in the current directory"
-                : "find . -type f -size +100M"
-            }
-            maxLength={isForge ? 2000 : 4000}
-            required
-            rows={2}
-            spellCheck={false}
-            aria-describedby="input-help"
-          />
-          <div className="profile-field">
-            <label htmlFor="profile" className="mono">
-              Environment
-            </label>
-            <select
-              id="profile"
-              value={profile}
-              onChange={(e) => {
-                invalidate();
-                setProfile(e.target.value as Profile);
-              }}
+      <div className="workbench-input-grid">
+        <form className="workbench-form" onSubmit={submit}>
+          <label className="input-label mono" htmlFor="operation">
+            01 /{" "}
+            {isForge ? "Describe the operation" : "Paste your Bash command"}
+          </label>
+          <div className="request-row">
+            <textarea
+              id="operation"
+              ref={inputRef}
+              value={input}
+              onChange={(e) => edit(e.target.value)}
+              placeholder={
+                isForge
+                  ? "Find files larger than 100 MiB in the current directory"
+                  : "find . -type f -size +100M"
+              }
+              maxLength={isForge ? 2000 : 4000}
+              required
+              rows={2}
+              spellCheck={false}
+              aria-describedby="input-help"
+            />
+            <div className="profile-field">
+              <label htmlFor="profile" className="mono">
+                Environment
+              </label>
+              <select
+                id="profile"
+                value={profile}
+                onChange={(e) => {
+                  invalidate();
+                  setProfile(e.target.value as Profile);
+                }}
+              >
+                <option value="linux">GNU/Linux · Bash</option>
+                <option value="macos">macOS · Bash</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              className="button submit-button"
+              disabled={busy || !input.trim()}
             >
-              <option value="linux">GNU/Linux · Bash</option>
-              <option value="macos">macOS · Bash</option>
-            </select>
+              {busy
+                ? isForge
+                  ? "Preparing proposal…"
+                  : "Inspecting command…"
+                : isForge
+                  ? "Forge command"
+                  : "Inspect command"}
+              <span aria-hidden="true">↗</span>
+            </button>
           </div>
-          <button
-            type="submit"
-            className="button submit-button"
-            disabled={busy || !input.trim()}
-          >
-            {busy
-              ? isForge
-                ? "Preparing proposal…"
-                : "Inspecting command…"
-              : isForge
-                ? "Forge command"
-                : "Inspect command"}
-            <span aria-hidden="true">↗</span>
-          </button>
-        </div>
-        <div id="input-help" className="input-help">
-          <span>
-            {isForge
-              ? "Bounded templates first. Unsupported requests ask for clarification."
-              : "Bash syntax + static AST policy. No runtime or intent guarantee."}
-          </span>
-          <span className="mono">
-            {input.length} / {isForge ? "2000" : "4000"}
-          </span>
-        </div>
-        {recipe && (
-          <div className="recipe-summary">
-            <span className="mono">RECIPE / {recipe}</span>
+          <div id="input-help" className="input-help">
             <span>
-              Explicit parameters:{" "}
-              {Object.entries(parameters)
-                .map(([k, v]) => `${k} = ${v}`)
-                .join(" · ") || "Recipe defaults"}
-              . Editing the request switches to the language grammar.
+              {isForge
+                ? "Bounded templates first. Unsupported requests ask for clarification."
+                : "Bash syntax + static AST policy. No runtime or intent guarantee."}
+            </span>
+            <span className="mono">
+              {input.length} / {isForge ? "2000" : "4000"}
             </span>
           </div>
-        )}
-      </form>
+          {recipe && (
+            <div className="recipe-summary">
+              <span className="mono">RECIPE / {recipe}</span>
+              <span>
+                Explicit parameters:{" "}
+                {Object.entries(parameters)
+                  .map(([k, v]) => `${k} = ${v}`)
+                  .join(" · ") || "Recipe defaults"}
+                . Editing the request switches to the language grammar.
+              </span>
+            </div>
+          )}
+        </form>
+        <aside className="input-companion">
+          <div className="companion-mark" aria-hidden="true">
+            <motion.span
+              initial={reduce ? false : { rotate: -90, scale: 0.3, opacity: 0 }}
+              animate={{ rotate: 0, scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 110, damping: 14 }}
+            >
+              {isForge ? "↗" : "+"}
+            </motion.span>
+          </div>
+          <div>
+            <h2>
+              {isForge ? "Intent, made explicit." : "Every token has a job."}
+            </h2>
+            <p>
+              {isForge
+                ? "A bounded proposal you can take apart. Paths, units and assumptions stay visible."
+                : "Inspect the parts, then review the whole. Syntax and static policy are separate checks."}
+            </p>
+          </div>
+        </aside>
+      </div>
       {isForge && !receipt && !busy && (
         <div className="example-requests">
           <span className="mono">TRY AN OPERATION</span>
@@ -371,11 +390,16 @@ export function Workbench({
         ) : receipt?.command ? (
           <motion.div
             key="receipt"
+            transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
             ref={resultRef}
             tabIndex={-1}
             className="receipt"
-            initial={reduce ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={
+              reduce
+                ? false
+                : { opacity: 0, y: 35, clipPath: "inset(0 0 100% 0)" }
+            }
+            animate={{ opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" }}
           >
             <div className="receipt-bar mono">
               <span>
@@ -465,14 +489,16 @@ export function Workbench({
                                     {space}
                                     <motion.button
                                       initial={
-                                        reduce ? false : { opacity: 0, y: 8 }
+                                        reduce
+                                          ? false
+                                          : { opacity: 0, y: 35, rotateX: -65 }
                                       }
-                                      animate={{ opacity: 1, y: 0 }}
+                                      animate={{ opacity: 1, y: 0, rotateX: 0 }}
                                       transition={{
                                         delay: reduce
                                           ? 0
-                                          : Math.min(i * 0.035, 0.35),
-                                        duration: 0.3,
+                                          : Math.min(i * 0.07, 0.6),
+                                        duration: 0.6,
                                       }}
                                       className={
                                         selected === i
@@ -485,6 +511,21 @@ export function Workbench({
                                       aria-label={`Inspect ${t.text}: ${t.role}`}
                                       aria-controls="token-explanation"
                                     >
+                                      {selected === i && (
+                                        <motion.span
+                                          className="token-selection"
+                                          layoutId={`token-selection-${mode}`}
+                                          transition={
+                                            reduce
+                                              ? { duration: 0 }
+                                              : {
+                                                  type: "spring",
+                                                  stiffness: 330,
+                                                  damping: 30,
+                                                }
+                                          }
+                                        />
+                                      )}
                                       {t.text}
                                     </motion.button>
                                   </span>
@@ -510,6 +551,30 @@ export function Workbench({
                     </button>
                   )}
                 </div>
+                {receipt.tokens.length > 0 && (
+                  <div
+                    className="token-sequence"
+                    aria-label="Token sequence"
+                    role="list"
+                  >
+                    {receipt.tokens.map((part, i) => (
+                      <motion.div
+                        role="listitem"
+                        key={`${part.start}-sequence`}
+                        className={`sequence-node ${selected === i ? "active" : ""}`}
+                        initial={reduce ? false : { opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: reduce ? 0 : i * 0.055,
+                          duration: 0.5,
+                        }}
+                      >
+                        <span>{part.text}</span>
+                        <small>{part.role}</small>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
                 {receipt.intent ? (
                   <dl className="intent-grid">
                     <div>
@@ -613,10 +678,14 @@ export function Workbench({
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={selected}
-                      initial={reduce ? false : { opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.12 }}
+                      initial={
+                        reduce
+                          ? false
+                          : { opacity: 0, x: 24, filter: "blur(4px)" }
+                      }
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, x: -12 }}
+                      transition={{ duration: 0.2 }}
                     >
                       {token ? (
                         <>
@@ -726,9 +795,15 @@ export function Workbench({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <div className="empty-glyph" aria-hidden="true">
+            <motion.div
+              className="empty-glyph"
+              aria-hidden="true"
+              initial={reduce ? false : { x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 100, damping: 15 }}
+            >
               {isForge ? ">_" : "[ ]"}
-            </div>
+            </motion.div>
             <div>
               <span className="mono">YOUR WORKBENCH, READY</span>
               <h2>

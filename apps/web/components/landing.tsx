@@ -2,10 +2,10 @@
 
 import { useMotionPreference } from "@/lib/use-motion-preference";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion } from "motion/react";
+import { KineticCommand } from "./kinetic-command";
 import { isReceipt, readApi, type Receipt } from "@/lib/contracts";
 import { ChapterRail } from "./chapter-rail";
 
@@ -19,9 +19,10 @@ function Reveal({
   const reduce = useMotionPreference();
   return (
     <motion.div
-      className={className}
-      initial={reduce ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      className={`reveal ${className}`}
+      initial={reduce ? false : { opacity: 0, y: 64, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
       viewport={{ once: true, amount: 0.15 }}
     >
       {children}
@@ -31,10 +32,6 @@ function Reveal({
 
 export function Landing() {
   const reduce = useMotionPreference();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useSpring(y, { stiffness: 90, damping: 22 });
-  const rotateY = useSpring(x, { stiffness: 90, damping: 22 });
   const [greater, setGreater] = useState(true);
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [busy, setBusy] = useState(false);
@@ -67,39 +64,10 @@ export function Landing() {
 
   return (
     <main id="main" className="landing">
-      <section
-        className="hero page-shell"
-        aria-labelledby="hero-title"
-        onPointerMove={(e) => {
-          if (reduce || e.pointerType !== "mouse") return;
-          const rect = e.currentTarget.getBoundingClientRect();
-          x.set(((e.clientX - rect.left) / rect.width - 0.5) * 7);
-          y.set(-((e.clientY - rect.top) / rect.height - 0.5) * 5);
-        }}
-        onPointerLeave={() => {
-          x.set(0);
-          y.set(0);
-        }}
-      >
-        <motion.div
-          className="hero-art"
-          style={reduce ? {} : { rotateX, rotateY }}
-          initial={reduce ? false : { opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.1 }}
-        >
-          <Image
-            src="/artwork/command-sculpture.webp"
-            alt="An original copper command bracket and brushed silver slash, crafted as a precision sculpture"
-            width={1000}
-            height={1000}
-            priority
-            sizes="(max-width: 600px) 90vw, 50vw"
-          />
-          <span className="art-label mono">
-            Fig. 01 — Intent, made tangible.
-          </span>
-        </motion.div>
+      <section className="hero page-shell" aria-labelledby="hero-title">
+        <div className="hero-art">
+          <KineticCommand />
+        </div>
         <motion.div
           className="hero-copy"
           initial={reduce ? false : { opacity: 0, y: 18 }}
@@ -107,42 +75,52 @@ export function Landing() {
           transition={{ delay: 0.1, duration: 0.8 }}
         >
           <h1 id="hero-title">
-            Less guesswork.
-            <br />
-            <em>More command.</em>
+            <span className="title-line">
+              <motion.span
+                initial={reduce ? false : { y: "110%", rotate: 3 }}
+                animate={{ y: 0, rotate: 0 }}
+                transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                Know what
+              </motion.span>
+            </span>
+            <span className="title-line">
+              <motion.span
+                initial={reduce ? false : { y: "110%", rotate: 3 }}
+                animate={{ y: 0, rotate: 0 }}
+                transition={{
+                  duration: 1.1,
+                  delay: 0.12,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+              >
+                you’re running.
+              </motion.span>
+            </span>
           </h1>
           <p className="hero-description">
-            Describe the operation.
+            Turn an intention into Bash.
             <br />
-            Understand the command.
+            Take every command apart.
             <br />
-            Inspect the consequences.
+            Decide what happens next.
           </p>
-          <Link href="/forge" className="button hero-cta">
-            Enter the Forge <span aria-hidden="true">↗</span>
-          </Link>
-          <p className="hero-note mono">
-            A thoughtful tool for a powerful shell.
-          </p>
+          <div className="hero-actions">
+            <Link href="/forge" className="button hero-cta">
+              Enter the Forge <span aria-hidden="true">↗</span>
+            </Link>
+            <Link href="/xray" className="text-link">
+              Inspect a command ↗
+            </Link>
+          </div>
         </motion.div>
-        <div className="hero-command">
-          <span className="mono hero-command-label">
-            A proposal, never an execution
-          </span>
-          <Link
-            href="/forge?example=large-files"
-            aria-label="Try the find large files example in the Forge"
-          >
-            <span className="prompt-symbol" aria-hidden="true">
-              $
-            </span>
-            <code>
-              find . -type f -size <span>+100M</span>
-            </code>
-            <span className="command-arrow" aria-hidden="true">
-              ↗
-            </span>
-          </Link>
+        <div className="hero-command mono">
+          <span>INTENT</span>
+          <span aria-hidden="true">→</span>
+          <span>COMMAND</span>
+          <span aria-hidden="true">→</span>
+          <span>UNDERSTANDING</span>
+          <span className="hero-execution">Never executed.</span>
         </div>
       </section>
 

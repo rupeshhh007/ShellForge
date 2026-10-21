@@ -50,3 +50,21 @@ All three used the built-in `image_gen.imagegen` tool; no API key or CLI fallbac
   Their SIL Open Font License notices are retained under `apps/web/licenses/`.
 
 See `DESIGN.md` for reference behavior actually inspected and original adaptations.
+
+## Revision 3 assets
+
+The user requested replacement of the first visual direction. Built-in ImageGen
+produced three fresh, separately readable screen/section concepts, retained as
+`concepts/landing-v3.webp`, `concepts/workbench-v3.webp`, and `concepts/precision-v3.webp`.
+They specify graphite/acid kinetic typography, the command instrument and the
+precision/transformation chapters. The prompts explicitly required native HTML
+controls, the existing five-route information architecture, real GNU find semantics,
+no invented metrics, no fake generation, and no generic card grids or glow effects.
+
+The new production asset is `apps/web/public/artwork/graphite-material.webp`, generated
+with the built-in tool, then resized/encoded locally. It is mapped onto independently
+animated native command plates; no UI text is rasterized. The earlier sculpture is
+retained as an unused historical asset.
+
+Material prompt:
+> Use case stylized-concept. Production texture asset for ShellForge kinetic command plates. Orthographic straight-on completely flat seamless surface sample of dark graphite anodized machined aluminum. Entire image filled with near-black #1c211c brushed aluminum, very fine horizontal machining grain, subtle realistic fine etched hairline scratches and metal microtexture, light catches irregular brushed grain at low contrast. Uniform neutral overhead lighting, no perspective, NO objects, NO borders, NO screws, NO text, NO logo, NO gradients, NO vignette, no strong speckles. This will be mapped onto separate CSS 3D typographic slabs, so make a tileable neutral material, sophisticated high fidelity industrial material texture, dark and restrained enough for white text overlay. Square1024x1024.

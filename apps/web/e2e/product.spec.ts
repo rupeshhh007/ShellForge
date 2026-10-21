@@ -309,6 +309,68 @@ test("research claims remain separated and actual landing example works", async 
   await expect(page.locator(".demo-output code")).toHaveText(command);
 });
 
+test("normal motion visibly assembles the command and keeps token study interactive", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1536, height: 1024 });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const first = page.getByRole("button", {
+    name: "find: Utility",
+    exact: true,
+  });
+  const last = page.getByRole("button", {
+    name: "+100M: Size constraint",
+    exact: true,
+  });
+  await expect(first).toBeVisible();
+  // Wait for the entrance to settle, then measure the consequence of user input.
+  await page.waitForTimeout(1600);
+  const before = await first.boundingBox();
+  await page.getByRole("button", { name: "Assemble", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Pull apart", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect
+    .poll(async () => {
+      const after = await first.boundingBox();
+      return before && after
+        ? Math.hypot(after.x - before.x, after.y - before.y)
+        : 0;
+    })
+    .toBeGreaterThan(20);
+  await first.hover();
+  await expect(page.locator(".assembly-caption")).toContainText(
+    "Walk a directory tree.",
+  );
+  await last.focus();
+  await expect(page.locator(".assembly-caption")).toContainText(
+    "larger than 100 MiB",
+  );
+  await page.screenshot({
+    path: path.join(evidence, "landing-normal-motion-1536x1024.png"),
+  });
+});
+
+test("reduced motion leaves the kinetic controls and page content immediately readable", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator(".route-shutter")).not.toBeVisible();
+  await page.getByRole("button", { name: "Assemble", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Pull apart", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "find: Utility", exact: true })
+    .focus();
+  await expect(page.locator(".assembly-caption")).toContainText(
+    "Walk a directory tree.",
+  );
+});
+
 for (const [width, height] of [
   [390, 844],
   [768, 1024],
@@ -340,7 +402,8 @@ for (const [width, height] of [
       await page.evaluate(() => document.fonts.ready);
       await expect(page.locator("h1")).toBeVisible();
       if (name === "landing") {
-        await expect(page.locator(".hero-art img")).toBeVisible();
+        await expect(page.locator(".assembly-plate")).toHaveCount(6);
+        await expect(page.locator(".assembly-plate").last()).toBeVisible();
         await page.locator("#invitation").scrollIntoViewIfNeeded();
         await page.evaluate(() => window.scrollTo(0, 0));
       }

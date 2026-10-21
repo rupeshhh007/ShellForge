@@ -61,8 +61,13 @@ take time to wake; the UI reports real timeout/error states and supports retry.
 
 ## Provisioning status
 
-Deployment is pending the connected Render workspace selection. Read-only discovery
-found a workspace but no selected context; no backend was created without that
-selection. Vercel is connected and no existing ShellForge project was found. No
-deployment URL is fabricated. Update this section with verified resources and live
-HTTP/browser results if provisioning completes.
+- Render: `shellforge-workshop-api`, `srv-dbc60prncjis738g89r0`, free Python service
+  in the user-selected My Workspace. URL: https://shellforge-workshop-api.onrender.com.
+  Feature-branch auto-deploy is enabled. The running Python version is 3.13.5.
+- Vercel: `shellforge-workshop`, `prj_Ijg9VbckN3kTrFD96cVMQE8ofzwK`, existing free
+  Hobby team. URL: https://shellforge-workshop.vercel.app. Root `apps/web`, Next.js,
+  Node 22.x, server-only API origin configured for preview and production.
+- The team's existing Vercel authentication protection remains enabled. No paid
+  service, model inference, database, disk or GPU was provisioned.
+- Cloud build succeeded. Final HTTP verification encountered a Render free-service
+  cold start; consult the current QA report for the exact verification limit.

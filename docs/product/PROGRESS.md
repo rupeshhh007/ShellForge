@@ -5,13 +5,13 @@ Branch: `feat/shellforge-product-v2`, based on merged main `b508789`.
 - [x] Audit research architecture and preserved artifacts.
 - [x] Inspect creative references; record component licensing limits.
 - [x] Discover full-data experiment in connected Drive (no inference provisioned).
-- [ ] Foundation: Next.js + FastAPI and validated, non-executing contracts.
-- [ ] Deterministic intent templates, existing static policy, token anatomy.
-- [ ] Original artwork and responsive editorial landing.
-- [ ] Forge, X-Ray, searchable Field Manual, authentic Bench.
-- [ ] API regression tests and existing research checks.
-- [ ] Browser flows, responsive screenshots, reduced motion and keyboard QA.
-- [ ] Production build, delivery docs, milestone commits and pull request.
+- [x] Foundation: Next.js + FastAPI and validated, non-executing contracts.
+- [x] Deterministic intent templates, existing static policy, token anatomy.
+- [x] Original artwork and responsive editorial landing.
+- [x] Forge, X-Ray, searchable Field Manual, authentic Bench.
+- [x] API regression tests and existing research checks.
+- [x] Browser flows, responsive screenshots, reduced motion and keyboard QA.
+- [x] Production build, delivery docs, milestone commits and pull request.
 
 ## Implementation order
 
@@ -30,3 +30,11 @@ The rank-8 pilot on disk is not the final rank-16 adapter. The final Drive run w
 found under ShellForge/full-data-v1. No GPU or paid hosting is authorized. All
 commands are proposals; Bash is invoked only with `-n`, with command text on stdin.
 Syntax and static classification are never semantic or runtime guarantees.
+
+## Visual revision
+
+The first bone/copper UI was rejected by the user. The active design uses graphite,
+acid signal color, readable Manrope controls, a native 3D command assembly and
+state-driven token motion. See DESIGN.md and the current visual QA report.
+
+PR: https://github.com/rupeshhh007/ShellForge/pull/2 (not merged).

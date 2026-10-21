@@ -1,3 +1,56 @@
+# Revision 3 — current redesign verification
+
+The first visual direction was rejected. The active UI uses graphite, acid signal
+color, larger Manrope controls, selected Instrument Serif editorial phrases and a
+native six-plate command assembly with original generated material.
+
+Production build, strict TypeScript and ESLint pass. All 16 browser scenarios have
+passed: 14 passed in the main production run; two viewport checks timed out in the
+browser and passed on their targeted rerun. Coverage includes the real API,
+unsupported requests, destructive-command and syntax findings, inert HTML/Unicode,
+cancellation, editable recipes, keyboard controls, copy, mobile navigation and
+inspector, normal-motion assembly movement and reduced motion. Five viewport
+sizes span 390×844 through 1920×1080. No test was removed or assertion weakened.
+The prior commit's complete GitHub product/research workflow is green.
+
+IAB was attempted first for this revision but timed out twice. The explicitly
+requested Playwright Chromium workflow supplied repeatable screenshots. Fresh
+native-size views are `screenshots/landing-viewport-1536x1024.png` and
+`screenshots/xray-viewport-1536x1024.png`. `screenshots/motion-demo.webm` records actual
+assembly, hover, scroll and precision-control interactions. Screenshots are real
+browser captures; concepts are separately stored under `docs/product/concepts/`.
+
+## Fidelity review
+
+Both revision-3 concepts and rendered browser images were opened with view_image.
+Comparison checked: headline/action copy, dark/acid palette, bold sans/mono scale,
+open rule-based composition, independently animated metal plates, input/inspector
+hierarchy, token selection, mobile stacking, and reduced-motion content visibility.
+The generated concept's fake account/theme controls and assumed AST tree were
+intentionally omitted; the existing native environment select and truthful static
+policy labels are retained. The material is generated, while command text and
+plates are native accessible controls. These adaptations are recorded in DESIGN.md.
+No unrecorded first-viewport copy additions were accepted. The implementation was
+verified against this revised design direction, including the intentional deviations.
+
+The final CSS fix gives every reduced-motion reveal a common visible class, and
+preserves the Bench diagram's aspect ratio. Historical review sheets, crops and
+performance measurements below predate the redesign; current full-page PNGs and
+native-size views are the active evidence. No new performance score is claimed.
+
+## Hosting status
+
+Vercel built the redesigned frontend on the existing free Hobby project at
+https://shellforge-workshop.vercel.app. The team's existing Vercel authentication
+protection remains enabled. Render is on the explicitly authorized free plan in
+My Workspace. A live HTTP check encountered the free API cold start (502); logs
+confirmed a subsequent successful startup. Hosted end-to-end behavior is not
+claimed verified until the final HTTP check succeeds. Local API flows are verified.
+
+---
+
+## Historical verification of the superseded first design
+
 # ShellForge v2 verification — 21 October 2026
 
 ## Product result
