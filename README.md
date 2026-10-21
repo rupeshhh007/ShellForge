@@ -2,7 +2,8 @@
 
 Describe the operation. Understand the command. Inspect the consequences.
 
-A Next.js + FastAPI web product around the preserved Python research implementation.
+An Operating Systems demonstration with a pure in-memory virtual filesystem, plus
+a Next.js + FastAPI workbench around the preserved Python research implementation.
 Commands are **proposals only**. ShellForge never executes them or connects to your
 filesystem. Bounded deterministic templates power supported operations; arbitrary
 requests abstain clearly when no model is configured.
@@ -32,10 +33,19 @@ Open [the local workshop](http://127.0.0.1:3000).
 | Route | Working experience |
 | --- | --- |
 | `/` | Original artwork, editorial motion, interactive GNU find comparison, live API example |
+| `/lab` | Command Impact Lab: live find matches, predicate traces, Unix permissions, atomic virtual mutations and undo |
 | `/forge` | Validated template proposal, structured intent, token anatomy, copy and review receipt |
 | `/xray` | Bash syntax-only checking and existing deterministic static AST policy |
 | `/manual` | 12 searchable, filterable recipes with editable, API-validated parameters |
-| `/bench` | Authentic generation results, separate authored safety evaluation and limits |
+| `/bench` | All 32 saved pilot base/tuned prediction pairs with source hashes; separate final metrics and safety evaluation |
+
+Start in **[the Impact Lab](http://127.0.0.1:3000/lab)**. Compare `find ./data -type f
+-size 100M`, `-size +100M` and `-size 104857600c` on boundary-case files. Try recursive
+virtual removal, chmod search permissions, the sticky directory, then preview/apply
+and undo. No command is executed. The browser interprets only the documented strict
+grammar on synthetic metadata; it does not emulate a complete shell or kernel.
+Run its tests with `cd apps/web && npm run test:unit`. Read the
+[grammar, limitations, review and OS lab walkthrough](docs/product/IMPACT-LAB.md).
 
 For example: **Find files larger than 100 MiB in the current directory**.
 Try **Show disk space** or an exact language form from the Field Manual. The language

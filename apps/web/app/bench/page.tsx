@@ -1,3 +1,4 @@
+import { ResearchComparison } from "@/components/research-comparison";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
@@ -64,6 +65,7 @@ export default function Bench() {
           </a>
         </div>
       </section>
+      <ResearchComparison />
       <section className="bench-section">
         <div className="bench-section-heading">
           <span className="mono">01 / THE EXPERIMENT RECORD</span>

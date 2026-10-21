@@ -266,6 +266,10 @@ export function parse(command: string): Program {
   };
   if (utility === "find") {
     p.path = argument();
+    if (p.path.startsWith("-") || ["!", "(", ")"].includes(p.path))
+      fail(
+        "An option-like starting path requires ./ or an absolute /lab path. Global find options are not modeled.",
+      );
     normalizePath(p.path);
     tokens[1].role = "Traversal root";
     tokens[1].explanation =
@@ -374,6 +378,10 @@ export function parse(command: string): Program {
     if (words[i].startsWith("-"))
       fail("A dash-prefixed operand requires -- and a path such as ./-name.");
     p.path = argument();
+    if (p.path.startsWith("-") || ["!", "(", ")"].includes(p.path))
+      fail(
+        "An option-like starting path requires ./ or an absolute /lab path. Global find options are not modeled.",
+      );
     normalizePath(p.path);
     tokens[i - 1].role = "Target path";
     tokens[i - 1].explanation =

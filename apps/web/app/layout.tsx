@@ -4,8 +4,10 @@ import "@fontsource/instrument-serif/latin-400-italic.css";
 import "@fontsource-variable/manrope";
 import "@fontsource/ibm-plex-mono/latin-400.css";
 import "./globals.css";
+import "./impact.css";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import { ImpactSessionProvider } from "@/components/impact-session";
 import { MotionProvider } from "@/components/motion-provider";
 
 export const metadata: Metadata = {
@@ -28,7 +30,7 @@ export default function RootLayout({
             Skip to content
           </a>
           <Navigation />
-          {children}
+          <ImpactSessionProvider>{children}</ImpactSessionProvider>
           <Footer />
         </MotionProvider>
       </body>

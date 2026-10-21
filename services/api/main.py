@@ -86,6 +86,7 @@ def create_app(provider: ModelProvider | None = None, per_minute=30) -> FastAPI:
         return {
             "status": "ok",
             "version": "2.0.0",
+            "build_commit": os.getenv("RENDER_GIT_COMMIT", "local"),
             "model_configured": api.state.provider is not None,
             "generation": "deterministic-templates",
             "execution_enabled": False,

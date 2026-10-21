@@ -71,3 +71,23 @@ take time to wake; the UI reports real timeout/error states and supports retry.
   service, model inference, database, disk or GPU was provisioned.
 - Cloud build succeeded. Final HTTP verification encountered a Render free-service
   cold start; consult the current QA report for the exact verification limit.
+
+## Impact Lab revision reconciliation
+
+The earlier production upload carried stale Git metadata and a dirty-tree marker.
+The lab release must be uploaded from a clean committed feature-branch checkout,
+with its exact SHA supplied as build-time SHELLFORGE_BUILD_COMMIT. Next.js exposes
+this non-secret build identity at `/api/version`; it is prerendered at build time.
+Render exposes its platform-provided RENDER_GIT_COMMIT through `/api/health`.
+
+After deployment, compare PR head, Vercel deployment metadata, `/api/version.commit`
+and both direct/proxied `/api/health.build_commit`. Check anonymous HTTP separately
+from authenticated CLI requests: configured protection on an immutable deployment
+URL does not establish whether its production alias is publicly reachable. Never
+disable protection merely to pass QA. The Impact Lab simulates locally even if the
+static-analyzer API is temporarily cold or unavailable; it reports API errors
+separately and never substitutes a fabricated risk result.
+
+Repeat browser QA with PLAYWRIGHT_BASE_URL set to the actual hosted alias. Set
+PLAYWRIGHT_EVIDENCE_DIR to an external directory when checking a clean deployed
+revision so screenshot writes cannot make deployment provenance dirty.

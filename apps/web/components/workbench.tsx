@@ -176,7 +176,11 @@ export function Workbench({
   }
 
   return (
-    <main id="main" className="page-shell workbench-page" data-mode={mode}>
+    <main
+      id="main"
+      className="page-shell workbench-page focused-workbench"
+      data-mode={mode}
+    >
       <div className="workbench-heading">
         <div>
           <span className="section-number mono">
@@ -274,27 +278,6 @@ export function Workbench({
             </div>
           )}
         </form>
-        <aside className="input-companion">
-          <div className="companion-mark" aria-hidden="true">
-            <motion.span
-              initial={reduce ? false : { rotate: -90, scale: 0.3, opacity: 0 }}
-              animate={{ rotate: 0, scale: 1, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 110, damping: 14 }}
-            >
-              {isForge ? "↗" : "+"}
-            </motion.span>
-          </div>
-          <div>
-            <h2>
-              {isForge ? "Intent, made explicit." : "Every token has a job."}
-            </h2>
-            <p>
-              {isForge
-                ? "A bounded proposal you can take apart. Paths, units and assumptions stay visible."
-                : "Inspect the parts, then review the whole. Syntax and static policy are separate checks."}
-            </p>
-          </div>
-        </aside>
       </div>
       {isForge && !receipt && !busy && (
         <div className="example-requests">
@@ -537,6 +520,22 @@ export function Workbench({
                         })()
                       : receipt.command}
                   </code>
+                </div>
+                <div className="workbench-lab-link">
+                  <Link
+                    className="text-link"
+                    href={`/lab?command=${encodeURIComponent(receipt.command)}`}
+                  >
+                    Preview in Impact Lab →
+                  </Link>
+                  {isForge && (
+                    <Link
+                      className="text-link"
+                      href={`/xray?command=${encodeURIComponent(receipt.command)}`}
+                    >
+                      Open in X-Ray →
+                    </Link>
+                  )}
                 </div>
                 <p className="token-hint mono">
                   {receipt.tokens.length
@@ -789,41 +788,23 @@ export function Workbench({
             </details>
           </motion.div>
         ) : (
-          <motion.div
-            className="workbench-empty"
-            key="empty"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <motion.div
-              className="empty-glyph"
-              aria-hidden="true"
-              initial={reduce ? false : { x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 100, damping: 15 }}
-            >
-              {isForge ? ">_" : "[ ]"}
-            </motion.div>
+          <div className="workbench-empty compact-empty" key="empty">
             <div>
-              <span className="mono">YOUR WORKBENCH, READY</span>
               <h2>
                 {isForge
-                  ? "Start with an intention."
-                  : "Every command has a story."}
+                  ? "Propose a command."
+                  : "Inspect static syntax and risk."}
               </h2>
               <p>
                 {isForge
-                  ? "Describe a supported operation above, or open a recipe. We’ll make the parameters explicit, then let you inspect the command."
-                  : "Paste Bash above to inspect its syntax, static policy findings and curated token explanations. No command will run."}
+                  ? "This Forge supports 12 bounded templates. The trained LoRA model is not connected."
+                  : "X-Ray analyzes Bash text without execution. Use the Impact Lab to observe supported effects on synthetic files."}
               </p>
             </div>
-            <Link href={isForge ? "/manual" : "/forge"} className="text-link">
-              {isForge
-                ? "Explore the Field Manual"
-                : "Create a proposal in the Forge"}{" "}
-              ↗
+            <Link className="text-link" href="/lab">
+              Open the Command Impact Lab →
             </Link>
-          </motion.div>
+          </div>
         )}
       </AnimatePresence>
       <button

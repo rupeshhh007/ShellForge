@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
-const evidence = path.resolve(
+const evidence = process.env.PLAYWRIGHT_EVIDENCE_DIR ?? path.resolve(
   process.cwd(),
   "../../docs/visual-qa/screenshots",
 );

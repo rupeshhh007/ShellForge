@@ -23,6 +23,14 @@ def test_health_and_catalog(client):
     assert len(client.get("/api/recipes").json()) == len(RECIPES)
 
 
+def test_health_exposes_deployed_revision_without_enabling_execution(client, monkeypatch):
+    monkeypatch.setenv("RENDER_GIT_COMMIT", "a" * 40)
+    health = client.get("/api/health").json()
+    assert health["build_commit"] == "a" * 40
+    assert health["model_configured"] is False
+    assert health["execution_enabled"] is False
+
+
 @pytest.mark.parametrize("r", RECIPES, ids=lambda r: r.id)
 def test_every_recipe_has_a_real_valid_template(client, r):
     response = client.post("/api/commands/propose", json={"request": r.request})

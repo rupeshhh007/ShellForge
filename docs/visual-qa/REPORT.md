@@ -1,3 +1,24 @@
+# Current feature: Command Impact Lab
+
+See [the implementation and verification report](../product/IMPACT-LAB.md) for the
+active OS demonstration, strict simulation boundary and honest research provenance.
+
+96 unit/research tests, 82 API/safety tests, and all 27 production Chromium browser
+scenarios pass. TypeScript, ESLint, focused Python lint/compilation and production
+build pass. Active lab screenshots are in `impact/` (390×844 and 1440×1000, find
+and virtual deletion-preview states). The browser plugin was unavailable, so the
+existing Playwright suite supplied real browser interaction and screenshots.
+
+Review checked tree contents, exact-byte properties, predicate and traversal state,
+selection correspondence, before/after changes, accessible control names, mobile
+stacking, overflow, console health and reduced motion. No screenshot substitutes
+for simulator data. Existing page captures were refreshed for simplified Forge and
+X-Ray, the primary Lab handoff and the saved research comparison.
+
+---
+
+## Historical product design verification
+
 # Revision 3 — current redesign verification
 
 The first visual direction was rejected. The active UI uses graphite, acid signal

@@ -378,3 +378,14 @@ test("implicit AND short circuits; a skipped predicate cannot introduce an extra
   assert.deepEqual(r.matches, []);
   assert.equal(r.traces["/lab/private"][1].passed, null);
 });
+
+test("option-like existing paths cannot turn unsupported find syntax into success", () => {
+  let state = seed;
+  for (const name of ["-L", "!", "("]) {
+    const created = run(`touch './${name}'`, state);
+    assert.equal(created.status, "ok");
+    state = created.after;
+    assert.equal(run(`find '${name}'`, state).status, "unsupported");
+    assert.equal(run(`find './${name}'`, state).status, "ok");
+  }
+});

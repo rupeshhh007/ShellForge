@@ -18,7 +18,9 @@ export default async function Forge({
     ? `Use the ${recipe} recipe with the explicit parameters below`
     : query.example === "large-files"
       ? "Find files larger than 100 MiB in the current directory"
-      : "";
+      : typeof query.request === "string"
+        ? query.request.slice(0, 2000)
+        : "";
   return (
     <Workbench
       key={`${recipe}-${JSON.stringify(parameters)}`}

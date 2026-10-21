@@ -106,11 +106,11 @@ export function Landing() {
             Decide what happens next.
           </p>
           <div className="hero-actions">
-            <Link href="/forge" className="button hero-cta">
-              Enter the Forge <span aria-hidden="true">↗</span>
+            <Link href="/lab" className="button hero-cta">
+              Open Impact Lab <span aria-hidden="true">↗</span>
             </Link>
-            <Link href="/xray" className="text-link">
-              Inspect a command ↗
+            <Link href="/forge" className="text-link">
+              Enter the Forge
             </Link>
           </div>
         </motion.div>

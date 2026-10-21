@@ -38,3 +38,11 @@ acid signal color, readable Manrope controls, a native 3D command assembly and
 state-driven token motion. See DESIGN.md and the current visual QA report.
 
 PR: https://github.com/rupeshhh007/ShellForge/pull/2 (not merged).
+
+## Operating Systems Impact Lab
+
+Strict in-memory interpreter, immutable fixture, predicate trace, permission-aware
+mutation previews, apply/undo, cross-route session and saved pilot comparison are
+implemented. 96 unit/research tests, 82 API/safety tests and 27 production browser
+tests pass. See IMPACT-LAB.md for grammar, limitations, review and demonstration.
+Deployment reconciliation is performed from a clean committed revision.
