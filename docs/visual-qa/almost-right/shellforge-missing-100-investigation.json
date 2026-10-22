@@ -1,0 +1,1907 @@
+{
+  "schema": "shellforge-investigation-v1",
+  "createdAt": "2026-10-22T13:10:38.628Z",
+  "sourceCommit": "local",
+  "caseId": "missing-100",
+  "caseRevision": 1,
+  "evaluator": "shellforge-learning-v1",
+  "firstPrediction": {
+    "paths": [
+      "/lab/evidence/exact.bin"
+    ],
+    "status": "ok"
+  },
+  "firstCorrect": false,
+  "attempts": [
+    {
+      "prediction": {
+        "paths": [
+          "/lab/evidence/exact.bin"
+        ],
+        "status": "ok"
+      },
+      "correct": false
+    },
+    {
+      "prediction": {
+        "paths": [
+          "/lab/evidence/almost.bin",
+          "/lab/evidence/exact.bin"
+        ],
+        "status": "ok"
+      },
+      "correct": true
+    }
+  ],
+  "hintsUsed": [],
+  "concepts": [
+    "GNU size rounding",
+    "predicate inequalities"
+  ],
+  "fixture": {
+    "revision": 0,
+    "entries": [
+      {
+        "path": "/lab",
+        "kind": "directory",
+        "size": 4096,
+        "mode": 493,
+        "uid": 1000,
+        "gid": 1000,
+        "modified": 0
+      },
+      {
+        "path": "/lab/evidence",
+        "kind": "directory",
+        "size": 4096,
+        "mode": 493,
+        "uid": 1000,
+        "gid": 1000,
+        "modified": 0
+      },
+      {
+        "path": "/lab/evidence/almost.bin",
+        "kind": "file",
+        "size": 103809025,
+        "mode": 420,
+        "uid": 1000,
+        "gid": 1000,
+        "modified": 0
+      },
+      {
+        "path": "/lab/evidence/exact.bin",
+        "kind": "file",
+        "size": 104857600,
+        "mode": 420,
+        "uid": 1000,
+        "gid": 1000,
+        "modified": 0
+      },
+      {
+        "path": "/lab/evidence/over.bin",
+        "kind": "file",
+        "size": 104857601,
+        "mode": 420,
+        "uid": 1000,
+        "gid": 1000,
+        "modified": 0
+      },
+      {
+        "path": "/lab/evidence/tiny.bin",
+        "kind": "file",
+        "size": 0,
+        "mode": 420,
+        "uid": 1000,
+        "gid": 1000,
+        "modified": 0
+      }
+    ]
+  },
+  "commands": {
+    "a": {
+      "command": "find ./evidence -type f -size 100M"
+    },
+    "b": {
+      "command": "find ./evidence -type f -size +100M"
+    }
+  },
+  "actual": {
+    "a": {
+      "events": [
+        {
+          "stage": "parse",
+          "detail": "Parsed find: 6 literal tokens; no shell expansion."
+        },
+        {
+          "stage": "resolve",
+          "path": "/lab/evidence",
+          "detail": "Resolved ./evidence inside synthetic /lab."
+        },
+        {
+          "stage": "permission",
+          "path": "/lab",
+          "detail": "student uid 1000: require x; mode 0755 → granted."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence",
+          "detail": "Visit depth 0: directory, 4096 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence",
+          "token": 2,
+          "detail": "type: fail. Entry is a directory."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence",
+          "token": 4,
+          "detail": "size: skip. Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+        },
+        {
+          "stage": "permission",
+          "path": "/lab/evidence",
+          "detail": "student uid 1000: require rx; mode 0755 → granted."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence/almost.bin",
+          "detail": "Visit depth 1: file, 103809025 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/almost.bin",
+          "token": 2,
+          "detail": "type: pass. Entry is a file."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/almost.bin",
+          "token": 4,
+          "detail": "size: pass. 103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare = 100."
+        },
+        {
+          "stage": "match",
+          "path": "/lab/evidence/almost.bin",
+          "detail": "All evaluated predicates passed; include this entry."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence/exact.bin",
+          "detail": "Visit depth 1: file, 104857600 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/exact.bin",
+          "token": 2,
+          "detail": "type: pass. Entry is a file."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/exact.bin",
+          "token": 4,
+          "detail": "size: pass. 104,857,600 bytes → ceil(bytes / 1,048,576) = 100; compare = 100."
+        },
+        {
+          "stage": "match",
+          "path": "/lab/evidence/exact.bin",
+          "detail": "All evaluated predicates passed; include this entry."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence/over.bin",
+          "detail": "Visit depth 1: file, 104857601 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/over.bin",
+          "token": 2,
+          "detail": "type: pass. Entry is a file."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/over.bin",
+          "token": 4,
+          "detail": "size: fail. 104,857,601 bytes → ceil(bytes / 1,048,576) = 101; compare = 100."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence/tiny.bin",
+          "detail": "Visit depth 1: file, 0 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/tiny.bin",
+          "token": 2,
+          "detail": "type: pass. Entry is a file."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/tiny.bin",
+          "token": 4,
+          "detail": "size: fail. 0 bytes → ceil(bytes / 1,048,576) = 0; compare = 100."
+        },
+        {
+          "stage": "complete",
+          "detail": "2 matches among 5 visited entries."
+        }
+      ],
+      "status": "ok",
+      "message": "2 matches among 5 visited entries.",
+      "program": {
+        "utility": "find",
+        "path": "./evidence",
+        "predicates": [
+          {
+            "kind": "type",
+            "value": "f",
+            "token": 2
+          },
+          {
+            "kind": "size",
+            "value": "100M",
+            "token": 4
+          }
+        ],
+        "minDepth": 0,
+        "maxDepth": 16,
+        "recursive": false,
+        "force": false,
+        "tokens": [
+          {
+            "text": "find",
+            "value": "find",
+            "start": 0,
+            "end": 4,
+            "role": "Operation",
+            "explanation": "Traverse synthetic directory entries and combine predicates with AND."
+          },
+          {
+            "text": "./evidence",
+            "value": "./evidence",
+            "start": 5,
+            "end": 15,
+            "role": "Traversal root",
+            "explanation": "Start here; depth zero is the selected entry itself. Hidden names are included."
+          },
+          {
+            "text": "-type",
+            "value": "-type",
+            "start": 16,
+            "end": 21,
+            "role": "Predicate",
+            "explanation": "Match file or directory metadata; do not inspect contents."
+          },
+          {
+            "text": "f",
+            "value": "f",
+            "start": 22,
+            "end": 23,
+            "role": "Constraint",
+            "explanation": "Match file or directory metadata; do not inspect contents."
+          },
+          {
+            "text": "-size",
+            "value": "-size",
+            "start": 24,
+            "end": 29,
+            "role": "Predicate",
+            "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+          },
+          {
+            "text": "100M",
+            "value": "100M",
+            "start": 30,
+            "end": 34,
+            "role": "Constraint",
+            "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+          }
+        ]
+      },
+      "matches": [
+        "/lab/evidence/almost.bin",
+        "/lab/evidence/exact.bin"
+      ],
+      "visited": [
+        "/lab/evidence",
+        "/lab/evidence/almost.bin",
+        "/lab/evidence/exact.bin",
+        "/lab/evidence/over.bin",
+        "/lab/evidence/tiny.bin"
+      ],
+      "errors": [],
+      "traces": {
+        "/lab/evidence": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": false,
+            "detail": "Entry is a directory."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": null,
+            "detail": "Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+          }
+        ],
+        "/lab/evidence/almost.bin": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": true,
+            "detail": "Entry is a file."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": true,
+            "detail": "103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare = 100."
+          }
+        ],
+        "/lab/evidence/exact.bin": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": true,
+            "detail": "Entry is a file."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": true,
+            "detail": "104,857,600 bytes → ceil(bytes / 1,048,576) = 100; compare = 100."
+          }
+        ],
+        "/lab/evidence/over.bin": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": true,
+            "detail": "Entry is a file."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": false,
+            "detail": "104,857,601 bytes → ceil(bytes / 1,048,576) = 101; compare = 100."
+          }
+        ],
+        "/lab/evidence/tiny.bin": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": true,
+            "detail": "Entry is a file."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": false,
+            "detail": "0 bytes → ceil(bytes / 1,048,576) = 0; compare = 100."
+          }
+        ]
+      },
+      "after": {
+        "revision": 0,
+        "entries": [
+          {
+            "path": "/lab",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/almost.bin",
+            "kind": "file",
+            "size": 103809025,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/exact.bin",
+            "kind": "file",
+            "size": 104857600,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/over.bin",
+            "kind": "file",
+            "size": 104857601,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/tiny.bin",
+            "kind": "file",
+            "size": 0,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          }
+        ]
+      },
+      "changes": [],
+      "hostExecuted": false
+    },
+    "b": {
+      "events": [
+        {
+          "stage": "parse",
+          "detail": "Parsed find: 6 literal tokens; no shell expansion."
+        },
+        {
+          "stage": "resolve",
+          "path": "/lab/evidence",
+          "detail": "Resolved ./evidence inside synthetic /lab."
+        },
+        {
+          "stage": "permission",
+          "path": "/lab",
+          "detail": "student uid 1000: require x; mode 0755 → granted."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence",
+          "detail": "Visit depth 0: directory, 4096 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence",
+          "token": 2,
+          "detail": "type: fail. Entry is a directory."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence",
+          "token": 4,
+          "detail": "size: skip. Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+        },
+        {
+          "stage": "permission",
+          "path": "/lab/evidence",
+          "detail": "student uid 1000: require rx; mode 0755 → granted."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence/almost.bin",
+          "detail": "Visit depth 1: file, 103809025 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/almost.bin",
+          "token": 2,
+          "detail": "type: pass. Entry is a file."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/almost.bin",
+          "token": 4,
+          "detail": "size: fail. 103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare > 100."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence/exact.bin",
+          "detail": "Visit depth 1: file, 104857600 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/exact.bin",
+          "token": 2,
+          "detail": "type: pass. Entry is a file."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/exact.bin",
+          "token": 4,
+          "detail": "size: fail. 104,857,600 bytes → ceil(bytes / 1,048,576) = 100; compare > 100."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence/over.bin",
+          "detail": "Visit depth 1: file, 104857601 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/over.bin",
+          "token": 2,
+          "detail": "type: pass. Entry is a file."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/over.bin",
+          "token": 4,
+          "detail": "size: pass. 104,857,601 bytes → ceil(bytes / 1,048,576) = 101; compare > 100."
+        },
+        {
+          "stage": "match",
+          "path": "/lab/evidence/over.bin",
+          "detail": "All evaluated predicates passed; include this entry."
+        },
+        {
+          "stage": "visit",
+          "path": "/lab/evidence/tiny.bin",
+          "detail": "Visit depth 1: file, 0 logical bytes."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/tiny.bin",
+          "token": 2,
+          "detail": "type: pass. Entry is a file."
+        },
+        {
+          "stage": "predicate",
+          "path": "/lab/evidence/tiny.bin",
+          "token": 4,
+          "detail": "size: fail. 0 bytes → ceil(bytes / 1,048,576) = 0; compare > 100."
+        },
+        {
+          "stage": "complete",
+          "detail": "1 match among 5 visited entries."
+        }
+      ],
+      "status": "ok",
+      "message": "1 match among 5 visited entries.",
+      "program": {
+        "utility": "find",
+        "path": "./evidence",
+        "predicates": [
+          {
+            "kind": "type",
+            "value": "f",
+            "token": 2
+          },
+          {
+            "kind": "size",
+            "value": "+100M",
+            "token": 4
+          }
+        ],
+        "minDepth": 0,
+        "maxDepth": 16,
+        "recursive": false,
+        "force": false,
+        "tokens": [
+          {
+            "text": "find",
+            "value": "find",
+            "start": 0,
+            "end": 4,
+            "role": "Operation",
+            "explanation": "Traverse synthetic directory entries and combine predicates with AND."
+          },
+          {
+            "text": "./evidence",
+            "value": "./evidence",
+            "start": 5,
+            "end": 15,
+            "role": "Traversal root",
+            "explanation": "Start here; depth zero is the selected entry itself. Hidden names are included."
+          },
+          {
+            "text": "-type",
+            "value": "-type",
+            "start": 16,
+            "end": 21,
+            "role": "Predicate",
+            "explanation": "Match file or directory metadata; do not inspect contents."
+          },
+          {
+            "text": "f",
+            "value": "f",
+            "start": 22,
+            "end": 23,
+            "role": "Constraint",
+            "explanation": "Match file or directory metadata; do not inspect contents."
+          },
+          {
+            "text": "-size",
+            "value": "-size",
+            "start": 24,
+            "end": 29,
+            "role": "Predicate",
+            "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+          },
+          {
+            "text": "+100M",
+            "value": "+100M",
+            "start": 30,
+            "end": 35,
+            "role": "Constraint",
+            "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+          }
+        ]
+      },
+      "matches": [
+        "/lab/evidence/over.bin"
+      ],
+      "visited": [
+        "/lab/evidence",
+        "/lab/evidence/almost.bin",
+        "/lab/evidence/exact.bin",
+        "/lab/evidence/over.bin",
+        "/lab/evidence/tiny.bin"
+      ],
+      "errors": [],
+      "traces": {
+        "/lab/evidence": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": false,
+            "detail": "Entry is a directory."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": null,
+            "detail": "Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+          }
+        ],
+        "/lab/evidence/almost.bin": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": true,
+            "detail": "Entry is a file."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": false,
+            "detail": "103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare > 100."
+          }
+        ],
+        "/lab/evidence/exact.bin": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": true,
+            "detail": "Entry is a file."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": false,
+            "detail": "104,857,600 bytes → ceil(bytes / 1,048,576) = 100; compare > 100."
+          }
+        ],
+        "/lab/evidence/over.bin": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": true,
+            "detail": "Entry is a file."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": true,
+            "detail": "104,857,601 bytes → ceil(bytes / 1,048,576) = 101; compare > 100."
+          }
+        ],
+        "/lab/evidence/tiny.bin": [
+          {
+            "token": 2,
+            "label": "type",
+            "passed": true,
+            "detail": "Entry is a file."
+          },
+          {
+            "token": 4,
+            "label": "size",
+            "passed": false,
+            "detail": "0 bytes → ceil(bytes / 1,048,576) = 0; compare > 100."
+          }
+        ]
+      },
+      "after": {
+        "revision": 0,
+        "entries": [
+          {
+            "path": "/lab",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/almost.bin",
+            "kind": "file",
+            "size": 103809025,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/exact.bin",
+            "kind": "file",
+            "size": 104857600,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/over.bin",
+            "kind": "file",
+            "size": 104857601,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/tiny.bin",
+            "kind": "file",
+            "size": 0,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          }
+        ]
+      },
+      "changes": [],
+      "hostExecuted": false
+    },
+    "difference": {
+      "onlyA": [
+        "/lab/evidence/almost.bin",
+        "/lab/evidence/exact.bin"
+      ],
+      "onlyB": [
+        "/lab/evidence/over.bin"
+      ],
+      "changedPaths": [],
+      "statusDiffers": false,
+      "errorsDiffer": false
+    },
+    "distinct": true
+  },
+  "counterexample": {
+    "version": "bounded-witness-v1",
+    "status": "found",
+    "message": "A distinguishing witness was computed and independently replayed for both scenarios.",
+    "commands": {
+      "a": {
+        "command": "find ./evidence -type f -size 100M"
+      },
+      "b": {
+        "command": "find ./evidence -type f -size +100M"
+      }
+    },
+    "observables": "status, sorted reported paths, error messages, and final entry metadata (including logical modification counters); traversal order and snapshot revision are excluded",
+    "bounds": {
+      "fixtures": 4096,
+      "evaluations": 4096,
+      "entries": 12,
+      "bytes": 1099511627776,
+      "sizes": 32,
+      "names": 4
+    },
+    "domain": "Required path skeletons, optionally one probe entry; command-derived size boundaries ±1 byte; literal/glob-derived names; file/directory kinds; nine explicit mode/ownership profiles. Construction capped at 4,096 unique fixtures.",
+    "candidateCount": 211,
+    "evaluated": 10,
+    "exhausted": false,
+    "fixture": {
+      "entries": [
+        {
+          "path": "/lab",
+          "kind": "directory",
+          "size": 4096,
+          "mode": 493,
+          "uid": 1000,
+          "gid": 1000,
+          "modified": 0
+        },
+        {
+          "path": "/lab/evidence",
+          "kind": "file",
+          "size": 103809025,
+          "mode": 420,
+          "uid": 1000,
+          "gid": 1000,
+          "modified": 0
+        }
+      ],
+      "revision": 0
+    },
+    "comparison": {
+      "a": {
+        "events": [
+          {
+            "stage": "parse",
+            "detail": "Parsed find: 6 literal tokens; no shell expansion."
+          },
+          {
+            "stage": "resolve",
+            "path": "/lab/evidence",
+            "detail": "Resolved ./evidence inside synthetic /lab."
+          },
+          {
+            "stage": "permission",
+            "path": "/lab",
+            "detail": "student uid 1000: require x; mode 0755 → granted."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence",
+            "detail": "Visit depth 0: file, 103809025 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence",
+            "token": 2,
+            "detail": "type: pass. Entry is a file."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence",
+            "token": 4,
+            "detail": "size: pass. 103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare = 100."
+          },
+          {
+            "stage": "match",
+            "path": "/lab/evidence",
+            "detail": "All evaluated predicates passed; include this entry."
+          },
+          {
+            "stage": "complete",
+            "detail": "1 match among 1 visited entries."
+          }
+        ],
+        "status": "ok",
+        "message": "1 match among 1 visited entries.",
+        "program": {
+          "utility": "find",
+          "path": "./evidence",
+          "predicates": [
+            {
+              "kind": "type",
+              "value": "f",
+              "token": 2
+            },
+            {
+              "kind": "size",
+              "value": "100M",
+              "token": 4
+            }
+          ],
+          "minDepth": 0,
+          "maxDepth": 16,
+          "recursive": false,
+          "force": false,
+          "tokens": [
+            {
+              "text": "find",
+              "value": "find",
+              "start": 0,
+              "end": 4,
+              "role": "Operation",
+              "explanation": "Traverse synthetic directory entries and combine predicates with AND."
+            },
+            {
+              "text": "./evidence",
+              "value": "./evidence",
+              "start": 5,
+              "end": 15,
+              "role": "Traversal root",
+              "explanation": "Start here; depth zero is the selected entry itself. Hidden names are included."
+            },
+            {
+              "text": "-type",
+              "value": "-type",
+              "start": 16,
+              "end": 21,
+              "role": "Predicate",
+              "explanation": "Match file or directory metadata; do not inspect contents."
+            },
+            {
+              "text": "f",
+              "value": "f",
+              "start": 22,
+              "end": 23,
+              "role": "Constraint",
+              "explanation": "Match file or directory metadata; do not inspect contents."
+            },
+            {
+              "text": "-size",
+              "value": "-size",
+              "start": 24,
+              "end": 29,
+              "role": "Predicate",
+              "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+            },
+            {
+              "text": "100M",
+              "value": "100M",
+              "start": 30,
+              "end": 34,
+              "role": "Constraint",
+              "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+            }
+          ]
+        },
+        "matches": [
+          "/lab/evidence"
+        ],
+        "visited": [
+          "/lab/evidence"
+        ],
+        "errors": [],
+        "traces": {
+          "/lab/evidence": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": true,
+              "detail": "Entry is a file."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": true,
+              "detail": "103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare = 100."
+            }
+          ]
+        },
+        "after": {
+          "entries": [
+            {
+              "path": "/lab",
+              "kind": "directory",
+              "size": 4096,
+              "mode": 493,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence",
+              "kind": "file",
+              "size": 103809025,
+              "mode": 420,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            }
+          ],
+          "revision": 0
+        },
+        "changes": [],
+        "hostExecuted": false
+      },
+      "b": {
+        "events": [
+          {
+            "stage": "parse",
+            "detail": "Parsed find: 6 literal tokens; no shell expansion."
+          },
+          {
+            "stage": "resolve",
+            "path": "/lab/evidence",
+            "detail": "Resolved ./evidence inside synthetic /lab."
+          },
+          {
+            "stage": "permission",
+            "path": "/lab",
+            "detail": "student uid 1000: require x; mode 0755 → granted."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence",
+            "detail": "Visit depth 0: file, 103809025 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence",
+            "token": 2,
+            "detail": "type: pass. Entry is a file."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence",
+            "token": 4,
+            "detail": "size: fail. 103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare > 100."
+          },
+          {
+            "stage": "complete",
+            "detail": "0 matches among 1 visited entries."
+          }
+        ],
+        "status": "ok",
+        "message": "0 matches among 1 visited entries.",
+        "program": {
+          "utility": "find",
+          "path": "./evidence",
+          "predicates": [
+            {
+              "kind": "type",
+              "value": "f",
+              "token": 2
+            },
+            {
+              "kind": "size",
+              "value": "+100M",
+              "token": 4
+            }
+          ],
+          "minDepth": 0,
+          "maxDepth": 16,
+          "recursive": false,
+          "force": false,
+          "tokens": [
+            {
+              "text": "find",
+              "value": "find",
+              "start": 0,
+              "end": 4,
+              "role": "Operation",
+              "explanation": "Traverse synthetic directory entries and combine predicates with AND."
+            },
+            {
+              "text": "./evidence",
+              "value": "./evidence",
+              "start": 5,
+              "end": 15,
+              "role": "Traversal root",
+              "explanation": "Start here; depth zero is the selected entry itself. Hidden names are included."
+            },
+            {
+              "text": "-type",
+              "value": "-type",
+              "start": 16,
+              "end": 21,
+              "role": "Predicate",
+              "explanation": "Match file or directory metadata; do not inspect contents."
+            },
+            {
+              "text": "f",
+              "value": "f",
+              "start": 22,
+              "end": 23,
+              "role": "Constraint",
+              "explanation": "Match file or directory metadata; do not inspect contents."
+            },
+            {
+              "text": "-size",
+              "value": "-size",
+              "start": 24,
+              "end": 29,
+              "role": "Predicate",
+              "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+            },
+            {
+              "text": "+100M",
+              "value": "+100M",
+              "start": 30,
+              "end": 35,
+              "role": "Constraint",
+              "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+            }
+          ]
+        },
+        "matches": [],
+        "visited": [
+          "/lab/evidence"
+        ],
+        "errors": [],
+        "traces": {
+          "/lab/evidence": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": true,
+              "detail": "Entry is a file."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": false,
+              "detail": "103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare > 100."
+            }
+          ]
+        },
+        "after": {
+          "entries": [
+            {
+              "path": "/lab",
+              "kind": "directory",
+              "size": 4096,
+              "mode": 493,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence",
+              "kind": "file",
+              "size": 103809025,
+              "mode": 420,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            }
+          ],
+          "revision": 0
+        },
+        "changes": [],
+        "hostExecuted": false
+      },
+      "difference": {
+        "onlyA": [
+          "/lab/evidence"
+        ],
+        "onlyB": [],
+        "changedPaths": [],
+        "statusDiffers": false,
+        "errorsDiffer": false
+      },
+      "distinct": true
+    },
+    "cost": [
+      2,
+      1,
+      0,
+      103813121
+    ],
+    "minimality": "First witness in the fully sorted constructed candidate domain: entry count, total path depth, nondefault mode/owner count, total logical bytes, canonical JSON tie-break. Minimal within this finite constructed domain only."
+  },
+  "correctedExplanation": "-size NM tests ceil(bytes / 1,048,576) = N. +NM tests a rounded count greater than N. A c suffix uses exact one-byte units. A positive-byte file smaller than 1 MiB can still match 1M.",
+  "transfer": {
+    "problem": {
+      "fixture": {
+        "revision": 0,
+        "entries": [
+          {
+            "path": "/lab",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/grain.bin",
+            "kind": "file",
+            "size": 1,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/edge.bin",
+            "kind": "file",
+            "size": 1048576,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/overflow.bin",
+            "kind": "file",
+            "size": 1048577,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          }
+        ]
+      },
+      "a": {
+        "command": "find ./evidence -type f -size 1M"
+      },
+      "b": {
+        "command": "find ./evidence -type f -size 1048576c"
+      },
+      "question": "New boundary: which files match command A, the 1M rounded bucket?"
+    },
+    "outcome": {
+      "prediction": {
+        "paths": [
+          "/lab/evidence/grain.bin",
+          "/lab/evidence/edge.bin"
+        ],
+        "status": "ok"
+      },
+      "correct": true
+    },
+    "actual": {
+      "a": {
+        "events": [
+          {
+            "stage": "parse",
+            "detail": "Parsed find: 6 literal tokens; no shell expansion."
+          },
+          {
+            "stage": "resolve",
+            "path": "/lab/evidence",
+            "detail": "Resolved ./evidence inside synthetic /lab."
+          },
+          {
+            "stage": "permission",
+            "path": "/lab",
+            "detail": "student uid 1000: require x; mode 0755 → granted."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence",
+            "detail": "Visit depth 0: directory, 4096 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence",
+            "token": 2,
+            "detail": "type: fail. Entry is a directory."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence",
+            "token": 4,
+            "detail": "size: skip. Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+          },
+          {
+            "stage": "permission",
+            "path": "/lab/evidence",
+            "detail": "student uid 1000: require rx; mode 0755 → granted."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence/edge.bin",
+            "detail": "Visit depth 1: file, 1048576 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/edge.bin",
+            "token": 2,
+            "detail": "type: pass. Entry is a file."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/edge.bin",
+            "token": 4,
+            "detail": "size: pass. 1,048,576 bytes → ceil(bytes / 1,048,576) = 1; compare = 1."
+          },
+          {
+            "stage": "match",
+            "path": "/lab/evidence/edge.bin",
+            "detail": "All evaluated predicates passed; include this entry."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence/grain.bin",
+            "detail": "Visit depth 1: file, 1 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/grain.bin",
+            "token": 2,
+            "detail": "type: pass. Entry is a file."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/grain.bin",
+            "token": 4,
+            "detail": "size: pass. 1 bytes → ceil(bytes / 1,048,576) = 1; compare = 1."
+          },
+          {
+            "stage": "match",
+            "path": "/lab/evidence/grain.bin",
+            "detail": "All evaluated predicates passed; include this entry."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence/overflow.bin",
+            "detail": "Visit depth 1: file, 1048577 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/overflow.bin",
+            "token": 2,
+            "detail": "type: pass. Entry is a file."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/overflow.bin",
+            "token": 4,
+            "detail": "size: fail. 1,048,577 bytes → ceil(bytes / 1,048,576) = 2; compare = 1."
+          },
+          {
+            "stage": "complete",
+            "detail": "2 matches among 4 visited entries."
+          }
+        ],
+        "status": "ok",
+        "message": "2 matches among 4 visited entries.",
+        "program": {
+          "utility": "find",
+          "path": "./evidence",
+          "predicates": [
+            {
+              "kind": "type",
+              "value": "f",
+              "token": 2
+            },
+            {
+              "kind": "size",
+              "value": "1M",
+              "token": 4
+            }
+          ],
+          "minDepth": 0,
+          "maxDepth": 16,
+          "recursive": false,
+          "force": false,
+          "tokens": [
+            {
+              "text": "find",
+              "value": "find",
+              "start": 0,
+              "end": 4,
+              "role": "Operation",
+              "explanation": "Traverse synthetic directory entries and combine predicates with AND."
+            },
+            {
+              "text": "./evidence",
+              "value": "./evidence",
+              "start": 5,
+              "end": 15,
+              "role": "Traversal root",
+              "explanation": "Start here; depth zero is the selected entry itself. Hidden names are included."
+            },
+            {
+              "text": "-type",
+              "value": "-type",
+              "start": 16,
+              "end": 21,
+              "role": "Predicate",
+              "explanation": "Match file or directory metadata; do not inspect contents."
+            },
+            {
+              "text": "f",
+              "value": "f",
+              "start": 22,
+              "end": 23,
+              "role": "Constraint",
+              "explanation": "Match file or directory metadata; do not inspect contents."
+            },
+            {
+              "text": "-size",
+              "value": "-size",
+              "start": 24,
+              "end": 29,
+              "role": "Predicate",
+              "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+            },
+            {
+              "text": "1M",
+              "value": "1M",
+              "start": 30,
+              "end": 32,
+              "role": "Constraint",
+              "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+            }
+          ]
+        },
+        "matches": [
+          "/lab/evidence/edge.bin",
+          "/lab/evidence/grain.bin"
+        ],
+        "visited": [
+          "/lab/evidence",
+          "/lab/evidence/edge.bin",
+          "/lab/evidence/grain.bin",
+          "/lab/evidence/overflow.bin"
+        ],
+        "errors": [],
+        "traces": {
+          "/lab/evidence": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": false,
+              "detail": "Entry is a directory."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": null,
+              "detail": "Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+            }
+          ],
+          "/lab/evidence/edge.bin": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": true,
+              "detail": "Entry is a file."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": true,
+              "detail": "1,048,576 bytes → ceil(bytes / 1,048,576) = 1; compare = 1."
+            }
+          ],
+          "/lab/evidence/grain.bin": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": true,
+              "detail": "Entry is a file."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": true,
+              "detail": "1 bytes → ceil(bytes / 1,048,576) = 1; compare = 1."
+            }
+          ],
+          "/lab/evidence/overflow.bin": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": true,
+              "detail": "Entry is a file."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": false,
+              "detail": "1,048,577 bytes → ceil(bytes / 1,048,576) = 2; compare = 1."
+            }
+          ]
+        },
+        "after": {
+          "revision": 0,
+          "entries": [
+            {
+              "path": "/lab",
+              "kind": "directory",
+              "size": 4096,
+              "mode": 493,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence",
+              "kind": "directory",
+              "size": 4096,
+              "mode": 493,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence/grain.bin",
+              "kind": "file",
+              "size": 1,
+              "mode": 420,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence/edge.bin",
+              "kind": "file",
+              "size": 1048576,
+              "mode": 420,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence/overflow.bin",
+              "kind": "file",
+              "size": 1048577,
+              "mode": 420,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            }
+          ]
+        },
+        "changes": [],
+        "hostExecuted": false
+      },
+      "b": {
+        "events": [
+          {
+            "stage": "parse",
+            "detail": "Parsed find: 6 literal tokens; no shell expansion."
+          },
+          {
+            "stage": "resolve",
+            "path": "/lab/evidence",
+            "detail": "Resolved ./evidence inside synthetic /lab."
+          },
+          {
+            "stage": "permission",
+            "path": "/lab",
+            "detail": "student uid 1000: require x; mode 0755 → granted."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence",
+            "detail": "Visit depth 0: directory, 4096 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence",
+            "token": 2,
+            "detail": "type: fail. Entry is a directory."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence",
+            "token": 4,
+            "detail": "size: skip. Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+          },
+          {
+            "stage": "permission",
+            "path": "/lab/evidence",
+            "detail": "student uid 1000: require rx; mode 0755 → granted."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence/edge.bin",
+            "detail": "Visit depth 1: file, 1048576 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/edge.bin",
+            "token": 2,
+            "detail": "type: pass. Entry is a file."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/edge.bin",
+            "token": 4,
+            "detail": "size: pass. 1,048,576 bytes → ceil(bytes / 1) = 1048576; compare = 1048576."
+          },
+          {
+            "stage": "match",
+            "path": "/lab/evidence/edge.bin",
+            "detail": "All evaluated predicates passed; include this entry."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence/grain.bin",
+            "detail": "Visit depth 1: file, 1 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/grain.bin",
+            "token": 2,
+            "detail": "type: pass. Entry is a file."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/grain.bin",
+            "token": 4,
+            "detail": "size: fail. 1 bytes → ceil(bytes / 1) = 1; compare = 1048576."
+          },
+          {
+            "stage": "visit",
+            "path": "/lab/evidence/overflow.bin",
+            "detail": "Visit depth 1: file, 1048577 logical bytes."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/overflow.bin",
+            "token": 2,
+            "detail": "type: pass. Entry is a file."
+          },
+          {
+            "stage": "predicate",
+            "path": "/lab/evidence/overflow.bin",
+            "token": 4,
+            "detail": "size: fail. 1,048,577 bytes → ceil(bytes / 1) = 1048577; compare = 1048576."
+          },
+          {
+            "stage": "complete",
+            "detail": "1 match among 4 visited entries."
+          }
+        ],
+        "status": "ok",
+        "message": "1 match among 4 visited entries.",
+        "program": {
+          "utility": "find",
+          "path": "./evidence",
+          "predicates": [
+            {
+              "kind": "type",
+              "value": "f",
+              "token": 2
+            },
+            {
+              "kind": "size",
+              "value": "1048576c",
+              "token": 4
+            }
+          ],
+          "minDepth": 0,
+          "maxDepth": 16,
+          "recursive": false,
+          "force": false,
+          "tokens": [
+            {
+              "text": "find",
+              "value": "find",
+              "start": 0,
+              "end": 4,
+              "role": "Operation",
+              "explanation": "Traverse synthetic directory entries and combine predicates with AND."
+            },
+            {
+              "text": "./evidence",
+              "value": "./evidence",
+              "start": 5,
+              "end": 15,
+              "role": "Traversal root",
+              "explanation": "Start here; depth zero is the selected entry itself. Hidden names are included."
+            },
+            {
+              "text": "-type",
+              "value": "-type",
+              "start": 16,
+              "end": 21,
+              "role": "Predicate",
+              "explanation": "Match file or directory metadata; do not inspect contents."
+            },
+            {
+              "text": "f",
+              "value": "f",
+              "start": 22,
+              "end": 23,
+              "role": "Constraint",
+              "explanation": "Match file or directory metadata; do not inspect contents."
+            },
+            {
+              "text": "-size",
+              "value": "-size",
+              "start": 24,
+              "end": 29,
+              "role": "Predicate",
+              "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+            },
+            {
+              "text": "1048576c",
+              "value": "1048576c",
+              "start": 30,
+              "end": 38,
+              "role": "Constraint",
+              "explanation": "GNU find rounds logical bytes UP to whole units before comparing. No sign = equal; + = greater; - = less. c=bytes, M=1,048,576 bytes."
+            }
+          ]
+        },
+        "matches": [
+          "/lab/evidence/edge.bin"
+        ],
+        "visited": [
+          "/lab/evidence",
+          "/lab/evidence/edge.bin",
+          "/lab/evidence/grain.bin",
+          "/lab/evidence/overflow.bin"
+        ],
+        "errors": [],
+        "traces": {
+          "/lab/evidence": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": false,
+              "detail": "Entry is a directory."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": null,
+              "detail": "Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+            }
+          ],
+          "/lab/evidence/edge.bin": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": true,
+              "detail": "Entry is a file."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": true,
+              "detail": "1,048,576 bytes → ceil(bytes / 1) = 1048576; compare = 1048576."
+            }
+          ],
+          "/lab/evidence/grain.bin": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": true,
+              "detail": "Entry is a file."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": false,
+              "detail": "1 bytes → ceil(bytes / 1) = 1; compare = 1048576."
+            }
+          ],
+          "/lab/evidence/overflow.bin": [
+            {
+              "token": 2,
+              "label": "type",
+              "passed": true,
+              "detail": "Entry is a file."
+            },
+            {
+              "token": 4,
+              "label": "size",
+              "passed": false,
+              "detail": "1,048,577 bytes → ceil(bytes / 1) = 1048577; compare = 1048576."
+            }
+          ]
+        },
+        "after": {
+          "revision": 0,
+          "entries": [
+            {
+              "path": "/lab",
+              "kind": "directory",
+              "size": 4096,
+              "mode": 493,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence",
+              "kind": "directory",
+              "size": 4096,
+              "mode": 493,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence/grain.bin",
+              "kind": "file",
+              "size": 1,
+              "mode": 420,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence/edge.bin",
+              "kind": "file",
+              "size": 1048576,
+              "mode": 420,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            },
+            {
+              "path": "/lab/evidence/overflow.bin",
+              "kind": "file",
+              "size": 1048577,
+              "mode": 420,
+              "uid": 1000,
+              "gid": 1000,
+              "modified": 0
+            }
+          ]
+        },
+        "changes": [],
+        "hostExecuted": false
+      },
+      "difference": {
+        "onlyA": [
+          "/lab/evidence/grain.bin"
+        ],
+        "onlyB": [],
+        "changedPaths": [],
+        "statusDiffers": false,
+        "errorsDiffer": false
+      },
+      "distinct": true
+    }
+  },
+  "model": null,
+  "actions": [
+    {
+      "type": "begin"
+    },
+    {
+      "type": "lock",
+      "prediction": {
+        "paths": [
+          "/lab/evidence/exact.bin"
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "type": "run"
+    },
+    {
+      "type": "dissect"
+    },
+    {
+      "type": "revise",
+      "prediction": {
+        "paths": [
+          "/lab/evidence/almost.bin",
+          "/lab/evidence/exact.bin"
+        ],
+        "status": "ok"
+      }
+    },
+    {
+      "type": "transfer"
+    },
+    {
+      "type": "answer-transfer",
+      "prediction": {
+        "paths": [
+          "/lab/evidence/grain.bin",
+          "/lab/evidence/edge.bin"
+        ],
+        "status": "ok"
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic metadata; no shell execution.",
+    "A bounded witness search does not establish global equivalence.",
+    "First and transfer answers are local practice evidence, not measured learning gains."
+  ]
+}

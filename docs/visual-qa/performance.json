@@ -1,0 +1,12 @@
+{
+  "context": "Fresh Chromium context, production localhost, 1440x900, no network/CPU throttle. Observational only; not a field performance or 60 FPS guarantee.",
+  "domContentLoadedMs": 408,
+  "loadMs": 647,
+  "transferBytes": 345213,
+  "scriptTransferBytes": 215359,
+  "imageTransferBytes": 20570,
+  "frameSamples": 90,
+  "frameIntervalMedianMs": 16.7,
+  "frameIntervalP95Ms": 16.8,
+  "maxFrameIntervalMs": 16.8
+}

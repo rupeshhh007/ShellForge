@@ -1,0 +1,66 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+
+const links = [
+  ["/", "Case Files"],
+  ["/forge", "The Forge"],
+  ["/lab", "The Lab"],
+  ["/studio", "Model Studio"],
+  ["/bench", "Research"],
+];
+
+export function Navigation() {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  return (
+    <header className="site-header">
+      <Link
+        className="wordmark"
+        href="/"
+        onClick={() => setOpen(false)}
+        aria-label="ShellForge home"
+      >
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="m5 7 12 9L5 25M19 25h9" />
+        </svg>
+        ShellForge
+      </Link>
+      <span className="brand-caption">The Almost Right Lab</span>
+      <button
+        className="menu-button"
+        type="button"
+        aria-expanded={open}
+        aria-controls="main-navigation"
+        onClick={() => setOpen(!open)}
+      >
+        {open ? "Close −" : "Menu +"}
+      </button>
+      <nav
+        id="main-navigation"
+        className={open ? "main-nav open" : "main-nav"}
+        aria-label="Main navigation"
+      >
+        {links.map(([href, label]) => (
+          <Link
+            key={href}
+            href={href}
+            aria-current={
+              pathname === href ||
+              (href === "/" &&
+                (pathname.startsWith("/cases/") || pathname === "/beat"))
+                ? "page"
+                : undefined
+            }
+            onClick={() => setOpen(false)}
+          >
+            {label}
+            <span aria-hidden="true">↗</span>
+          </Link>
+        ))}
+      </nav>
+    </header>
+  );
+}

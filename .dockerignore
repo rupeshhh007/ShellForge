@@ -1,0 +1,16 @@
+.git
+.venv
+**/__pycache__
+**/.pytest_cache
+apps
+data
+artifacts
+reports
+notebooks
+review2-cloud
+cloud_runs
+**/.env*
+!**/.env.example
+.aws
+.codex
+.agents

@@ -7,3 +7,13 @@ tmp/
 data/review2/*.jsonl
 data/quality/
 cloud_runs/
+node_modules/
+.next/
+*.tsbuildinfo
+.env*
+!.env.example
+playwright-report/
+test-results/
+.DS_Store
+.vercel/
+.vercel

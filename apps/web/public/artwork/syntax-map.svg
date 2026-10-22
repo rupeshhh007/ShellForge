@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="480" viewBox="0 0 760 480" fill="none">
+<g stroke="#a14f32" stroke-width="1"><path d="M75 240H230L350 110H655M230 240L350 240H655M230 240L350 370H655"/><circle cx="230" cy="240" r="8" fill="#eeeae2"/><circle cx="350" cy="110" r="5" fill="#eeeae2"/><circle cx="350" cy="240" r="5" fill="#eeeae2"/><circle cx="350" cy="370" r="5" fill="#eeeae2"/><path d="M75 215v50M655 85v50m0 80v50m0 80v50"/></g>
+<g fill="#252723" font-family="monospace" font-size="19"><text x="75" y="205">find</text><text x="365" y="90">. / START</text><text x="365" y="220">-type f / REGULAR FILES</text><text x="365" y="350">-size +100M / THRESHOLD</text></g>
+<g stroke="#252723" stroke-opacity=".2" stroke-dasharray="2 5"><path d="M30 40h700v400H30zM230 40v400M30 240h700"/></g>
+</svg>

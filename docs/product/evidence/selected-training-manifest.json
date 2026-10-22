@@ -1,0 +1,78 @@
+{
+  "completed": true,
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "arguments": {
+    "model": "Qwen/Qwen2.5-0.5B-Instruct",
+    "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "train": "/content/drive/MyDrive/ShellForge/full-data-v1/quality/train.jsonl",
+    "validation": "data/review2/validation.jsonl",
+    "output": "/content/drive/MyDrive/ShellForge/full-data-v1/trial-2",
+    "epochs": 3.0,
+    "max_steps": -1,
+    "max_length": 512,
+    "limit": null,
+    "learning_rate": 5e-05,
+    "batch_size": 2,
+    "accumulation": 8,
+    "rank": 16,
+    "target_modules": "q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj",
+    "eval_steps": 100,
+    "seed": 42,
+    "require_cuda": true,
+    "resume": true,
+    "qlora": false
+  },
+  "train_sha256": "98817bb4b0cb7d28a256b475d5bc04eb7f8f047eb83d0ae38e688606f29d0d57",
+  "validation_sha256": "c069b7a1bdad92262c65f1943fe34586f653f41a4fca814ded34a6eafddcf49d",
+  "train_stats": {
+    "selected": 10026,
+    "used": 10026,
+    "too_long": 0,
+    "too_long_ids": [],
+    "max_encoded_length": 348,
+    "mean_encoded_length": 73.5979453421105
+  },
+  "validation_stats": {
+    "selected": 1255,
+    "used": 1255,
+    "too_long": 0,
+    "too_long_ids": [],
+    "max_encoded_length": 184,
+    "mean_encoded_length": 74.37211155378486
+  },
+  "trainable_parameters": 8798208,
+  "device": "cuda:0",
+  "precision": "torch.bfloat16",
+  "seed": 42,
+  "initial_validation_metrics": {
+    "eval_loss": 1.6635853052139282,
+    "eval_model_preparation_time": 0.0199,
+    "eval_runtime": 86.0507,
+    "eval_samples_per_second": 14.584,
+    "eval_steps_per_second": 7.298
+  },
+  "actual_optimizer_steps": 1500,
+  "completed_epochs": 2.392579293836026,
+  "best_checkpoint": "/content/drive/MyDrive/ShellForge/full-data-v1/trial-2/checkpoints/checkpoint-1200",
+  "best_validation_loss": 0.9902902245521545,
+  "train_metrics": {
+    "train_runtime": 2271.851,
+    "train_samples_per_second": 13.239,
+    "train_steps_per_second": 0.828,
+    "total_flos": 4348141217602560.0,
+    "train_loss": 0.25823924732208253,
+    "epoch": 2.392579293836026
+  },
+  "validation_metrics": {
+    "eval_loss": 0.9902902245521545,
+    "eval_runtime": 89.2079,
+    "eval_samples_per_second": 14.068,
+    "eval_steps_per_second": 7.04,
+    "epoch": 2.392579293836026
+  },
+  "adapter": "/content/drive/MyDrive/ShellForge/full-data-v1/trial-2/adapter",
+  "adapter_sha256": "afff8a917b26c0443053a45b04fff6328cf351e2eb455e3b3195b3af2512c8fc",
+  "train_loss_scope": "Trainer invocation loss; after resume this is not a full-run mean.",
+  "resumed_from": "/content/drive/MyDrive/ShellForge/full-data-v1/trial-2/checkpoints/checkpoint-1000"
+}
