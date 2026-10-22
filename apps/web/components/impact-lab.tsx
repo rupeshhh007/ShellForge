@@ -2,6 +2,7 @@
 import Link from "next/link";
 import {
   useMemo,
+  useCallback,
   useRef,
   useState,
   useEffect,
@@ -20,6 +21,8 @@ import {
 } from "@/lib/impact/engine";
 import { readApi, isReceipt, type Receipt } from "@/lib/contracts";
 import { useImpactSession } from "./impact-session";
+import { TracePlayer } from "./trace-player";
+import { PermissionEditor } from "./permission-editor";
 import { VirtualTree } from "./virtual-tree";
 import { useMotionPreference } from "@/lib/use-motion-preference";
 const subscribeHydration = () => () => {};
@@ -152,6 +155,10 @@ export function ImpactLab({ initialCommand }: { initialCommand?: string }) {
     session.setApplied(null);
     setShowAfter(false);
   }
+  const focusEvent = useCallback((path: string, nextToken?: number) => {
+    setSelected(path);
+    if (nextToken !== undefined) setToken(nextToken);
+  }, []);
   const differences = result.changes.length
     ? result.changes
     : (applied?.changes ?? []);
@@ -164,7 +171,7 @@ export function ImpactLab({ initialCommand }: { initialCommand?: string }) {
       >
         <div className="impact-heading">
           <div>
-            <h1>Command Impact Lab</h1>
+            <h2>Command Impact Lab</h2>
             <p>
               Explore traversal, predicates and Unix permissions on a synthetic
               filesystem.
@@ -388,6 +395,11 @@ export function ImpactLab({ initialCommand }: { initialCommand?: string }) {
             ))}
           </ul>
         )}
+        <TracePlayer
+          key={`${command}-${snapshot.revision}`}
+          events={result.events}
+          onFocus={focusEvent}
+        />
         <div className="impact-columns">
           <section className="lab-tree-panel" aria-label="Virtual filesystem">
             <div className="lab-panel-title">
@@ -445,6 +457,14 @@ export function ImpactLab({ initialCommand }: { initialCommand?: string }) {
                     <dd>{entry.kind}</dd>
                   </div>
                   <div>
+                    <dt>Hidden name</dt>
+                    <dd>
+                      {entry.path.split("/").at(-1)?.startsWith(".")
+                        ? "Yes (leading dot)"
+                        : "No"}
+                    </dd>
+                  </div>
+                  <div>
                     <dt>Logical bytes</dt>
                     <dd>{entry.size.toLocaleString("en-US")}</dd>
                   </div>
@@ -477,6 +497,16 @@ export function ImpactLab({ initialCommand }: { initialCommand?: string }) {
                     </dd>
                   </div>
                 </dl>
+                <PermissionEditor
+                  entry={entry}
+                  previewMode={
+                    p?.utility === "chmod" &&
+                    normalizePath(p.path) === entry.path
+                      ? p.mode
+                      : undefined
+                  }
+                  onCommand={edit}
+                />
                 <div className="predicate-traces">
                   {traces.length ? (
                     traces.map((trace, i) => (
@@ -485,10 +515,10 @@ export function ImpactLab({ initialCommand }: { initialCommand?: string }) {
                         animate={{
                           backgroundColor:
                             trace.passed === null
-                              ? "#1e231b"
+                              ? "#ede8dd"
                               : trace.passed
-                                ? "#24341c"
-                                : "#261e18",
+                                ? "#d9ebd8"
+                                : "#f4dfd6",
                         }}
                         transition={{ duration: reduce ? 0 : 0.25 }}
                         className={

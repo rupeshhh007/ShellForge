@@ -19,7 +19,7 @@ test("landing → actual API proposal → anatomy → copy → reset", async ({
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/");
-  await expect(page).toHaveTitle("ShellForge — The Command Workshop");
+  await expect(page).toHaveTitle("ShellForge — The Interactive Command Laboratory");
   await page
     .getByRole("link", { name: "Enter the Forge", exact: true })
     .first()

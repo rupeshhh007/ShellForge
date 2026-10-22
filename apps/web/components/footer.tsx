@@ -4,11 +4,11 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <Link href="/" className="footer-brand">
-        ShellForge<span> / A more deliberate shell.</span>
+        ShellForge<span> / The interactive command laboratory.</span>
       </Link>
       <div>
         <span>Made to understand. Never to execute.</span>
-        <a href="https://rareui.com">Interactions adapted from Rare UI ↗</a>
+        <Link href="/manual" aria-label="Field Manual">Field Manual ↗</Link><Link href="/xray">X-Ray ↗</Link>
       </div>
       <a href="https://github.com/rupeshhh007/ShellForge">
         Source & research ↗

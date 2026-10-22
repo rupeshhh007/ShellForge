@@ -248,7 +248,7 @@ test("normal-motion match transitions follow predicate state; adversarial text s
   await expect(row).toHaveAttribute("data-match", "false");
   await page.getByLabel("Size predicate", { exact: true }).selectOption("100M");
   await expect(row).toHaveAttribute("data-match", "true");
-  await expect(row).toHaveCSS("background-color", "rgb(41, 55, 27)");
+  await expect(row).toHaveCSS("background-color", "rgb(217, 235, 216)");
   await page
     .getByLabel(commandLabel, { exact: true })
     .fill("touch './tmp/<img onerror=alert(1)>'");

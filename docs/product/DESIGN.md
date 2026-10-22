@@ -1,3 +1,25 @@
+# Active direction — Interactive Command Laboratory
+
+The 2026-10-22 redesign uses the supplied Scribo images as primary art direction:
+cream #F5EFE4, evergreen #073F34, forest #096447, yellow #F8CA39, pink #F277AD,
+cobalt #7399F3 and ink #102A29. Manrope handles readable expressive headings and
+controls, Instrument Serif occasional italic emphasis, IBM Plex Mono technical text.
+The three main experiences are Forge, Lab and Model Studio; Research retains the
+formal record. X-Ray and Field Manual remain direct tools, not more primary tabs.
+
+State-driven motion includes actual matches/diffs, interpreter event playback,
+shared-layout focus dialogs, process chips, token focus and actual saved prediction
+comparisons. A restrained fine-pointer ring is disabled on touch, reduced motion
+and text controls. Native dialog provides focus trapping, Escape, scroll locking
+and focus restoration; mobile dialogs fill the screen.
+
+Original generated terminal artwork is optimized to WebP with alpha. Tool controls,
+values, permission bits and scheduling remain native code. Concept images contain
+illustrative values that are deliberately replaced with real fixture and artifact
+data. See ASSETS-AND-CREDITS.md for generation and fidelity notes.
+
+## Historical design investigation (superseded)
+
 # The Command Workshop
 
 ## Active visual specification — revision 3

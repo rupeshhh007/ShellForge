@@ -3,12 +3,13 @@ export const dynamic = "force-static";
 export function GET() {
   return Response.json({
     product: "ShellForge",
-    feature: "command-impact-lab-v1",
+    feature: "interactive-command-laboratory-v2",
     commit:
       process.env.SHELLFORGE_BUILD_COMMIT ??
       process.env.VERCEL_GIT_COMMIT_SHA ??
       "local",
     simulation: "synthetic-memory-only",
-    model_connected: false,
+    model_status_endpoint: "/api/model/status",
+    model_weights_bundled: false,
   });
 }

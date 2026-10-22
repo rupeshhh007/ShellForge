@@ -1,366 +1,278 @@
 "use client";
-
-import { useMotionPreference } from "@/lib/use-motion-preference";
-
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { motion } from "motion/react";
+import { useMemo, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { KineticCommand } from "./kinetic-command";
+import { simulate, seedFilesystem } from "@/lib/impact/engine";
 import { isReceipt, readApi, type Receipt } from "@/lib/contracts";
-import { ChapterRail } from "./chapter-rail";
-
-function Reveal({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  const reduce = useMotionPreference();
-  return (
-    <motion.div
-      className={`reveal ${className}`}
-      initial={reduce ? false : { opacity: 0, y: 64, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      viewport={{ once: true, amount: 0.15 }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
+import { useMotionPreference } from "@/lib/use-motion-preference";
 export function Landing() {
-  const reduce = useMotionPreference();
-  const [greater, setGreater] = useState(true);
-  const [receipt, setReceipt] = useState<Receipt | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-
+  const [size, setSize] = useState("+100M"),
+    [receipt, setReceipt] = useState<Receipt | null>(null),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState("");
+  const result = useMemo(
+    () => simulate(`find ./data -type f -size ${size}`, seedFilesystem()),
+    [size],
+  );
+  const hero = useRef<HTMLElement>(null),
+    reduce = useMotionPreference();
+  const { scrollYProgress } = useScroll({
+      target: hero,
+      offset: ["start start", "end start"],
+    }),
+    rotate = useTransform(scrollYProgress, [0, 1], [0, 12]),
+    y = useTransform(scrollYProgress, [0, 1], [0, 70]);
   async function demonstrate() {
     setBusy(true);
     setError("");
-    setReceipt(null);
     try {
-      const result = await readApi("/api/commands/propose", {
+      const v = await readApi("/api/commands/propose", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           request: "Find files larger than 100 MiB in the current directory",
           profile: "linux",
         }),
+        signal: AbortSignal.timeout(60000),
       });
-      if (!isReceipt(result))
-        throw new Error(
-          "The API response did not match the expected contract.",
-        );
-      setReceipt(result);
+      if (!isReceipt(v)) throw Error("Unexpected response");
+      setReceipt(v);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not reach the API.");
+      setError(String(e));
     } finally {
       setBusy(false);
     }
   }
-
   return (
-    <main id="main" className="landing">
-      <section className="hero page-shell" aria-labelledby="hero-title">
-        <div className="hero-art">
-          <KineticCommand />
-        </div>
-        <motion.div
-          className="hero-copy"
-          initial={reduce ? false : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.8 }}
-        >
-          <h1 id="hero-title">
-            <span className="title-line">
-              <motion.span
-                initial={reduce ? false : { y: "110%", rotate: 3 }}
-                animate={{ y: 0, rotate: 0 }}
-                transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-              >
-                Know what
-              </motion.span>
-            </span>
-            <span className="title-line">
-              <motion.span
-                initial={reduce ? false : { y: "110%", rotate: 3 }}
-                animate={{ y: 0, rotate: 0 }}
-                transition={{
-                  duration: 1.1,
-                  delay: 0.12,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-              >
-                you’re running.
-              </motion.span>
-            </span>
+    <main id="main" className="studio-landing">
+      <section className="studio-hero page-shell" ref={hero}>
+        <div className="hero-copy">
+          <h1>
+            Understand the command before it <span>changes</span> anything.
           </h1>
-          <p className="hero-description">
-            Turn an intention into Bash.
-            <br />
-            Take every command apart.
-            <br />
-            Decide what happens next.
+          <p className="hero-standfirst">The interactive command laboratory.</p>
+          <p>
+            Explore operating systems and machine learning through commands you
+            can take apart. Every result has a boundary. Every experiment has
+            evidence.
           </p>
           <div className="hero-actions">
-            <Link href="/lab" className="button hero-cta">
-              Open Impact Lab <span aria-hidden="true">↗</span>
+            <Link className="button" href="/lab" data-cursor="Explore">
+              Open the Lab ↗
             </Link>
-            <Link href="/forge" className="text-link">
-              Enter the Forge
+            <Link className="text-link" href="/studio">
+              Explore Model Studio →
             </Link>
           </div>
-        </motion.div>
-        <div className="hero-command mono">
-          <span>INTENT</span>
-          <span aria-hidden="true">→</span>
-          <span>COMMAND</span>
-          <span aria-hidden="true">→</span>
-          <span>UNDERSTANDING</span>
-          <span className="hero-execution">Never executed.</span>
         </div>
-      </section>
-
-      <div className="page-shell">
-        <ChapterRail />
-      </div>
-
-      <section
-        id="precision"
-        className="story-section precision-section page-shell"
-      >
-        <Reveal className="section-intro">
-          <span className="section-number mono">01 / Precision matters</span>
-          <h2>
-            One character.
-            <br />
-            <em>A different consequence.</em>
-          </h2>
-          <p>
-            The shell takes you literally. That tiny plus sign changes which
-            files you find. Understand the difference before it becomes a
-            decision.
-          </p>
-        </Reveal>
-        <Reveal className="comparison-instrument">
-          <div className="instrument-heading mono">
-            <span>GNU FIND / SIZE STUDY</span>
-            <span>1 MiB = 1,048,576 bytes</span>
+        <motion.div
+          className="hero-art"
+          style={reduce ? {} : { rotate, y }}
+          data-cursor="Inspect"
+        >
+          <Image
+            src="/artwork/terminal-studio.webp"
+            width={1100}
+            height={733}
+            priority
+            alt="Original evergreen terminal sculpture with pink and yellow folders on a cobalt paper orbit"
+          />
+          <span className="art-note">Take a command apart.</span>
+        </motion.div>
+        <div className="hero-preview">
+          <div>
+            <code>find ./data -type f -size {size}</code>
+            <span>{result.matches.length} matched virtual files</span>
           </div>
           <div
-            className="compare-controls"
+            className="preview-options"
             role="group"
-            aria-label="Choose the size comparison"
+            aria-label="Compare size predicates"
           >
-            <button onClick={() => setGreater(false)} aria-pressed={!greater}>
+            <button
+              aria-pressed={size === "100M"}
+              onClick={() => setSize("100M")}
+            >
               Rounded size
             </button>
-            <button onClick={() => setGreater(true)} aria-pressed={greater}>
-              Greater than
+            <button
+              aria-pressed={size === "+100M"}
+              onClick={() => setSize("+100M")}
+            >
+              Larger than 100 MiB
+            </button>
+            <button
+              aria-pressed={size === "104857600c"}
+              onClick={() => setSize("104857600c")}
+            >
+              Exact bytes
             </button>
           </div>
-          <div className="comparison-command">
-            <code>
-              find . -size{" "}
-              <motion.span
-                key={String(greater)}
-                initial={reduce ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                {greater ? "+100M" : "100M"}
-              </motion.span>
-            </code>
-          </div>
-          <div className="size-diagram" aria-hidden="true">
-            <div className={greater ? "size-block" : "size-block selected"} />
-            <div className={greater ? "size-block selected" : "size-block"} />
-            <div className={greater ? "size-block selected" : "size-block"} />
-            <div className="size-tick left">99 MiB</div>
-            <div className="size-tick middle">100 MiB</div>
-            <div className="size-tick right">101 MiB →</div>
-          </div>
-          <div className="comparison-explanation" aria-live="polite">
-            <h3>
-              {greater
-                ? "Beyond the threshold."
-                : "A rounded bucket, not exact bytes."}
-            </h3>
-            <p>
-              {greater
-                ? "+100M matches files strictly larger than 100 MiB. GNU find rounds size upward in 1 MiB units before comparing."
-                : "100M matches files larger than 99 MiB and up to 100 MiB inclusive. For exactly 104,857,600 bytes, use -size 104857600c."}
-            </p>
-          </div>
-          <a
-            className="text-link"
-            href="https://www.gnu.org/software/findutils/manual/html_node/find_html/Size.html"
-          >
-            Read the GNU find size semantics ↗
-          </a>
-        </Reveal>
-      </section>
-
-      <section id="transformation" className="transformation-section">
-        <div className="page-shell">
-          <Reveal className="transformation-intro">
-            <span className="section-number mono">
-              02 / From language to logic
-            </span>
-            <h2>
-              Say what you mean.
-              <br />
-              <em>See what it means.</em>
-            </h2>
-            <p>
-              For supported operations, a bounded template turns your request
-              into explicit constraints. Every proposal comes apart for
-              inspection.
-            </p>
-          </Reveal>
-          <div className="live-demonstration">
-            <div className="demo-request">
-              <span className="mono">YOUR INTENT</span>
-              <p>
-                “Find files larger than 100 MiB
-                <br />
-                in the current directory.”
-              </p>
-              <button
-                className="button light"
-                disabled={busy}
-                onClick={demonstrate}
-              >
-                {busy
-                  ? "Requesting proposal…"
-                  : receipt
-                    ? "Try it again"
-                    : "Try the real example"}
-                <span aria-hidden="true">↗</span>
-              </button>
-              <span className="demo-caption mono">
-                Live API · deterministic template
-              </span>
-            </div>
-            <div className="demo-output" aria-live="polite" aria-busy={busy}>
-              {error ? (
-                <p role="alert" className="error-message">
-                  {error}
-                </p>
-              ) : receipt?.command ? (
-                <motion.div
-                  initial={reduce ? false : { opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  <span className="mono">PROPOSED BASH</span>
-                  <code>{receipt.command}</code>
-                  <dl>
-                    <div>
-                      <dt>Target</dt>
-                      <dd>Regular files</dd>
-                    </div>
-                    <div>
-                      <dt>Condition</dt>
-                      <dd>More than 100 MiB</dd>
-                    </div>
-                    <div>
-                      <dt>Scope</dt>
-                      <dd>Recursive</dd>
-                    </div>
-                  </dl>
-                  <Link href="/forge?example=large-files" className="text-link">
-                    Inspect every token in the Forge ↗
-                  </Link>
-                </motion.div>
-              ) : (
-                <div className="demo-empty">
-                  <span aria-hidden="true">→</span>
-                  <p>
-                    {busy
-                      ? "Waiting for the actual API response."
-                      : "Your command will appear here."}
-                  </p>
-                  <span className="mono">
-                    Nothing runs. Nothing is simulated.
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="verification" className="verification-section page-shell">
-        <Reveal>
-          <span className="section-number mono">
-            03 / Understand the limits
-          </span>
-          <div className="verification-heading">
-            <h2>
-              Confidence comes
-              <br />
-              from <em>looking closer.</em>
-            </h2>
-            <p>
-              A command can parse perfectly and still be wrong for your task.
-              Our checks are a starting point for your judgment.
-            </p>
-          </div>
-        </Reveal>
-        <div className="verification-steps">
-          {[
-            [
-              "01",
-              "Syntax",
-              "Does Bash parse it?",
-              "A syntax-only check catches malformed shell structure. It does not prove the command will work.",
-            ],
-            [
-              "02",
-              "Static policy",
-              "What deserves attention?",
-              "AST rules flag recognized deletion, writes, wrappers and other risks. Unknown behavior needs review.",
-            ],
-            [
-              "03",
-              "Your review",
-              "Does it match your intent?",
-              "You know the environment. Check the paths, units, permissions and consequences before running anything.",
-            ],
-          ].map(([number, title, subtitle, body]) => (
-            <Reveal key={title} className="verification-step">
-              <span className="mono">{number} /</span>
-              <h3>{title}</h3>
-              <strong>{subtitle}</strong>
-              <p>{body}</p>
-            </Reveal>
-          ))}
-        </div>
-        <Link href="/xray" className="text-link">
-          Bring your own command to X-Ray ↗
-        </Link>
-      </section>
-
-      <section id="invitation" className="invitation-section page-shell">
-        <span className="section-number mono">04 / The workshop is open</span>
-        <h2>
-          Make your next
-          <br />
-          command <em>considered.</em>
-        </h2>
-        <div>
-          <p>
-            Start with a supported operation.
-            <br />
-            Leave with a command you understand.
+          <p className="comparison-explanation">
+            {size === "100M"
+              ? "GNU find rounds upward: larger than 99 MiB and at most 100 MiB match this bucket."
+              : size === "+100M"
+                ? "Logical size strictly greater than 104,857,600 bytes."
+                : "Only a logical size of exactly 104,857,600 bytes matches."}
           </p>
-          <Link href="/forge" className="button">
-            Enter the Forge <span aria-hidden="true">↗</span>
+          <ul>
+            {result.matches.map((path) => (
+              <motion.li
+                layout
+                key={path}
+                initial={false}
+                animate={{ opacity: 1 }}
+              >
+                <code>{path}</code>
+              </motion.li>
+            ))}
+          </ul>
+          <Link
+            href={`/lab?command=${encodeURIComponent(`find ./data -type f -size ${size}`)}`}
+          >
+            Follow these matches in the Lab →
           </Link>
-          <Link href="/manual" className="text-link">
-            Or open the Field Manual ↗
+        </div>
+      </section>
+      <section className="three-worlds page-shell">
+        <h2>
+          Three ways to
+          <br />
+          <em>get your hands on it.</em>
+        </h2>
+        <div className="world-collage">
+          <Link
+            href="/forge"
+            className="world-forge"
+            aria-label="Enter the Forge"
+            data-cursor="Open"
+          >
+            <span className="world-symbol" aria-hidden="true">
+              &gt;_
+            </span>
+            <h3>The Forge</h3>
+            <p>
+              Turn a supported request into a command. Inspect every token
+              before taking it further.
+            </p>
+            <span>Enter the Forge →</span>
+          </Link>
+          <Link href="/lab" className="world-lab" data-cursor="Explore">
+            <span className="world-symbol" aria-hidden="true">
+              r<span>w</span>x
+            </span>
+            <h3>The Lab</h3>
+            <p>
+              Walk a synthetic filesystem, flip permission bits, and see who
+              gets the CPU.
+            </p>
+            <span>Open an experiment →</span>
+          </Link>
+          <Link href="/studio" className="world-model" data-cursor="Inspect">
+            <span className="world-symbol" aria-hidden="true">
+              ↳ ↱
+            </span>
+            <h3>Model Studio</h3>
+            <p>
+              Compare actual base and tuned predictions. Keep improvements and
+              failures in the same frame.
+            </p>
+            <span>Read the evidence →</span>
+          </Link>
+        </div>
+      </section>
+      <section className="command-story">
+        <div className="page-shell">
+          <div className="story-heading">
+            <h2>
+              A command is
+              <br />a chain of <em>decisions.</em>
+            </h2>
+            <p>
+              Focus a token. Assemble its parts. Then follow its actual effects
+              in the virtual filesystem.
+            </p>
+          </div>
+          <KineticCommand />
+          <Link
+            className="button"
+            href="/lab?command=find%20.%20-type%20f%20-size%20%2B100M"
+          >
+            Trace this command →
+          </Link>
+        </div>
+      </section>
+      <section className="workflow-story page-shell">
+        <h2>
+          Proposal. Inspection.
+          <br />
+          <span>Virtual consequence.</span>
+        </h2>
+        <ol>
+          <li>
+            <strong>Describe</strong>
+            <p>
+              Twelve strict templates handle supported requests. A separate live
+              model runtime is available only when connected.
+            </p>
+          </li>
+          <li>
+            <strong>Inspect</strong>
+            <p>
+              Bash syntax checking and the static safety policy explain
+              findings. They do not establish semantic correctness.
+            </p>
+          </li>
+          <li>
+            <strong>Experiment</strong>
+            <p>
+              The bounded interpreter touches synthetic data structures only.
+              Preview a change, apply it in memory, then undo.
+            </p>
+          </li>
+        </ol>
+        <button className="button" onClick={demonstrate} disabled={busy}>
+          {busy ? "Waiting for the API…" : "Try the real example"}
+        </button>
+        {receipt && (
+          <div className="demo-output">
+            <code>{receipt.command}</code>
+            <p>
+              {receipt.backend} · {receipt.safety?.risk} · executed: false
+            </p>
+          </div>
+        )}
+        {error && <p role="alert">{error}</p>}
+      </section>
+      <section id="invitation" className="research-invitation">
+        <div className="page-shell">
+          <h2>
+            Better is measurable.
+            <br />
+            <em>Reliable is a higher bar.</em>
+          </h2>
+          <div className="honest-numbers">
+            <div>
+              <strong>2.29%</strong>
+              <span>Base strict exact match · 28 / 1,222</span>
+            </div>
+            <div>
+              <strong>6.87%</strong>
+              <span>Selected rank-16 · 84 / 1,222</span>
+            </div>
+          </div>
+          <p>
+            A real improvement with a low absolute score. These are primary
+            held-out results, excluding the exposed CPU pilot. Static safety has
+            a separate benchmark.
+          </p>
+          <Link className="button" href="/studio">
+            Explore the actual predictions ↗
+          </Link>
+          <Link className="text-link" href="/bench">
+            Research, methods & limitations →
           </Link>
         </div>
       </section>

@@ -36,16 +36,16 @@
 }
 @layer base {
   :root {
-    color-scheme: dark;
-    --paper: #111311;
-    --ink: #f1f2e9;
-    --surface: #191c19;
-    --copper: #d5fb5a;
-    --copper-light: #e5faac;
-    --muted: #a5aba0;
-    --line: #373c34;
-    --sage: #d5fb5a;
-    --danger: #ff927e;
+    color-scheme: light;
+    --paper: #f5efe4;
+    --ink: #102a29;
+    --surface: #fffbf3;
+    --copper: #096447;
+    --copper-light: #073f34;
+    --muted: #50645b;
+    --line: #c8cec0;
+    --sage: #096447;
+    --danger: #a33724;
     --serif: "Instrument Serif", Georgia, serif;
     --sans: "Manrope Variable", Arial, sans-serif;
     --mono: "IBM Plex Mono", monospace;
@@ -65,7 +65,7 @@
   }
   ::selection {
     background: var(--copper);
-    color: #111311;
+    color: #f5efe4;
   }
   h1,
   h2,
@@ -154,7 +154,7 @@
     left: 10px;
     z-index: 100;
     background: var(--copper);
-    color: #111311;
+    color: #f5efe4;
     padding: 12px 20px;
     transform: translateY(-150%);
   }
@@ -249,7 +249,7 @@
     align-items: center;
     gap: 30px;
     background: var(--copper);
-    color: #111311;
+    color: #f5efe4;
     padding: 18px 25px;
     min-height: 58px;
     font-size: 15px;
@@ -261,7 +261,7 @@
     position: relative;
   }
   .button:hover:not(:disabled) {
-    background: #e5ff99;
+    background: #0c7855;
     transform: translateY(-3px);
     box-shadow: 0 6px 0 #5c6b2a;
   }
@@ -620,7 +620,7 @@
   }
   .compare-controls button[aria-pressed="true"] {
     background: var(--copper);
-    color: #111311;
+    color: #f5efe4;
     border-color: var(--copper);
   }
   .comparison-command {
@@ -736,7 +736,7 @@
     font-size: 11px;
   }
   .demo-output {
-    background: #191c19;
+    background: #fffbf3;
     color: #f1f2e9;
     padding: 38px;
     min-height: 380px;
@@ -746,7 +746,7 @@
     display: block;
     font-size: clamp(20px, 2.1vw, 32px);
     line-height: 1.5;
-    color: #d5fb5a;
+    color: #096447;
     margin-block: 42px;
   }
   .demo-output dl {
@@ -776,7 +776,7 @@
   }
   .demo-empty > span:first-child {
     font-size: 60px;
-    color: #d5fb5a;
+    color: #096447;
   }
   .demo-empty p {
     font-size: 20px;
@@ -882,7 +882,7 @@
   }
   .workbench-form {
     border: 1px solid var(--line);
-    background: #161916;
+    background: #ede9df;
     padding: 24px;
   }
   .input-label {
@@ -926,7 +926,7 @@
   }
   .profile-field select {
     border: 1px solid var(--line);
-    background: #1b2019;
+    background: #ebe7dc;
     padding: 11px 30px 11px 12px;
     font-size: 13px;
     max-width: 100%;
@@ -1054,7 +1054,7 @@
     min-height: 425px;
   }
   .command-panel {
-    background: #161a14;
+    background: #fffbf3;
     padding: 24px;
     min-width: 0;
   }
@@ -1076,7 +1076,7 @@
   }
   .copy-button:hover {
     background: var(--copper);
-    color: #111311;
+    color: #f5efe4;
     border-color: var(--copper);
   }
   .command-code {
@@ -1171,7 +1171,7 @@
   .panel-divider {
     cursor: col-resize;
     touch-action: none;
-    background: #262c22;
+    background: #d7dfd1;
     display: grid;
     place-items: center;
     position: relative;
@@ -1341,7 +1341,7 @@
     align-items: center;
     gap: 40px;
     padding-block: 30px;
-    background: #141812;
+    background: #fffbf3;
   }
   .empty-glyph {
     font: 74px/1 var(--mono);
@@ -1485,7 +1485,7 @@
     padding: 12px 0;
   }
   .manual-category select {
-    background: #1b2019;
+    background: #ebe7dc;
     padding: 13px;
     border: 1px solid var(--line);
     font-size: 14px;
@@ -1569,7 +1569,7 @@
   }
   .recipe-parameters input {
     display: block;
-    background: #191e16;
+    background: #ede8dd;
     border: 1px solid var(--line);
     padding: 12px;
     width: 100%;
@@ -1687,7 +1687,7 @@
     font-weight: 500;
   }
   .primary-result {
-    background: #242c18;
+    background: #d9ebd8;
     color: var(--copper);
   }
   .table-note {
@@ -1874,7 +1874,7 @@
       left: 0;
       right: 0;
       background: var(--copper);
-      color: #111311;
+      color: #f5efe4;
       padding: 15px var(--gutter) 25px;
       border-bottom: 1px solid var(--line);
     }
@@ -1893,7 +1893,7 @@
       justify-content: space-between;
     }
     .main-nav a[aria-current] {
-      color: #111311;
+      color: #f5efe4;
       font-weight: 750;
     }
     .main-nav a span {
@@ -2070,7 +2070,7 @@
     .mobile-inspector-tabs button[aria-selected="true"] {
       color: var(--copper);
       border-bottom-color: var(--copper);
-      background: #242c18;
+      background: #d9ebd8;
     }
     .selected-token-mobile {
       display: block;

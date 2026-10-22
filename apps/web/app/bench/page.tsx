@@ -140,6 +140,7 @@ export default function Bench() {
         <figure>
           <Image
             src="/artwork/syntax-map.svg"
+            loading="eager"
             alt="Original branching diagram separating a find utility into its starting path, regular-file predicate and size threshold"
             width={760}
             height={480}

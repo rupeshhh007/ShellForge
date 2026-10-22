@@ -54,7 +54,7 @@
 .lab-command-section {
   padding: 22px;
   border: 1px solid var(--line);
-  background: #171b15;
+  background: #fffbf3;
 }
 .lab-command-top {
   display: flex;
@@ -74,8 +74,8 @@
 .lab-command-top select,
 .find-builder select,
 .find-builder input {
-  background: #20261b;
-  border: 1px solid #48503d;
+  background: #f5efe4;
+  border: 1px solid #9cae9e;
   padding: 10px;
   color: var(--ink);
   font-size: 13px;
@@ -99,7 +99,7 @@
   margin-bottom: 10px;
 }
 #lab-command {
-  background: #11170e;
+  background: #f5efe4;
   border: 1px solid var(--line);
   width: 100%;
   padding: 15px;
@@ -130,7 +130,7 @@
 .lab-token-strip button.active {
   background: var(--copper);
   border-color: var(--copper);
-  color: #111311;
+  color: #f5efe4;
 }
 .lab-token-detail {
   display: flex;
@@ -184,10 +184,10 @@
   border-color: #8a793c;
 }
 .lab-summary.partial strong {
-  color: #e9ce8e;
+  color: #785800;
 }
 .lab-errors {
-  color: #f0b7a2;
+  color: #a33724;
   font-size: 12px;
   padding: 0 20px 18px;
 }
@@ -200,7 +200,7 @@
 .lab-tree-panel,
 .lab-properties {
   border: 1px solid var(--line);
-  background: #141812;
+  background: #fffbf3;
   min-width: 0;
 }
 .lab-panel-title {
@@ -265,7 +265,7 @@
 }
 .vfs-row.predicate-pass .vfs-name {
   text-decoration: underline;
-  text-decoration-color: #d5fb5a60;
+  text-decoration-color: #09644760;
   text-underline-offset: 5px;
 }
 .vfs-disclosure,
@@ -293,7 +293,7 @@
   color: var(--ink);
 }
 .vfs-name > span {
-  color: #a3af90;
+  color: #50645b;
   margin-right: 4px;
 }
 .vfs-row.matched .vfs-name,
@@ -317,7 +317,7 @@
   width: 15px;
   text-align: right;
   flex-shrink: 0;
-  color: #7f8e6c;
+  color: #50645b;
 }
 .lab-fixture-note {
   font-size: 11px;
@@ -414,7 +414,7 @@
   color: var(--danger);
 }
 .change-modified {
-  color: #e9ce8e;
+  color: #785800;
 }
 .lab-differences li > span {
   margin-left: auto;
@@ -539,7 +539,7 @@
   width: 100%;
   max-width: 900px;
   padding: 12px;
-  background: #1b2118;
+  background: #ede8dd;
   border: 1px solid var(--line);
   font-size: 13px;
   margin-top: 12px;

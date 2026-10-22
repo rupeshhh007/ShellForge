@@ -1,3 +1,23 @@
+# Current additions
+
+The original architecture below remains, with these verified extensions:
+
+- `services/inference/`: separately provisioned, authenticated runtime; validates
+  the selected rank-16 artifact hash before model loading. Never installed by the
+  lightweight Render API requirements.
+- `services/api/remote_model.py`: bounded HTTPS connection, no redirects, private
+  token, separate status/configuration and no saved fallback on failure.
+- `/studio`: authentic primary/pilot evidence, actual local inference evidence,
+  templates and live mode only when runtime reachability is established.
+- Pure `lib/impact/engine.ts` emits events during real interpretation; playback
+  replays observations without applying snapshots. `scheduler.ts` computes bounded
+  integer-time CPU schedules and final metrics independently from animation.
+- Native focused dialogs retain the shared in-memory filesystem session.
+
+See [inference contracts](INFERENCE.md) and the [boundary diagram](FACULTY-DEMO.md).
+
+## Preserved foundation
+
 # Product architecture and API contract
 
 `apps/web` is a strict TypeScript Next.js App Router application. `/` tells the

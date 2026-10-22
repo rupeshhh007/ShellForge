@@ -124,3 +124,50 @@ def test_runtime_authentication_strict_inputs_and_nonexecution(tmp_path):
 def test_runtime_requires_strong_token():
     with pytest.raises(ValueError):
         inference_app(FakeRuntime(), "weak")
+
+
+def test_status_checks_are_cached_and_runtime_errors_do_not_poison_generation_slot():
+    class CountingRemote(Remote):
+        count = 0
+        fail = True
+
+        def call(self, path, payload=None):
+            if path == "/status":
+                self.count += 1
+                return {"reachable": True, "identity": FakeRuntime.identity}
+            if self.fail:
+                raise TimeoutError("private transport detail must not leak")
+            return super().call(path, payload)
+
+    remote = CountingRemote()
+    with TestClient(create_app(remote_provider=remote)) as c:
+        assert c.get("/api/model/status").json()["reachable"] is True
+        assert c.get("/api/model/status").json()["reachable"] is True
+        assert remote.count == 1
+        failed = c.post("/api/model/generate", json={"request": "x", "model": "tuned"})
+        assert failed.status_code == 503 and "private transport" not in failed.text
+        remote.fail = False
+        assert (
+            c.post(
+                "/api/model/generate", json={"request": "x", "model": "tuned"}
+            ).status_code
+            == 200
+        )
+
+
+def test_runtime_rate_limit_is_bounded():
+    with TestClient(inference_app(FakeRuntime(), TOKEN)) as c:
+        headers = {"Authorization": "Bearer " + TOKEN}
+        for _ in range(6):
+            assert (
+                c.post(
+                    "/generate", headers=headers, json={"request": "x", "model": "base"}
+                ).status_code
+                == 200
+            )
+        assert (
+            c.post(
+                "/generate", headers=headers, json={"request": "x", "model": "base"}
+            ).status_code
+            == 429
+        )

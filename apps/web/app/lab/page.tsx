@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { LabWorlds } from "@/components/lab-worlds";
 import { ImpactLab } from "@/components/impact-lab";
 export const metadata: Metadata = { title: "Command Impact Lab" };
 export default async function Lab({
@@ -11,5 +12,12 @@ export default async function Lab({
     typeof query.command === "string"
       ? query.command.slice(0, 2001)
       : undefined;
-  return <ImpactLab key={command ?? "session"} initialCommand={command} />;
+  return (
+    <>
+      <LabWorlds />
+      <div id="filesystem">
+        <ImpactLab key={command ?? "session"} initialCommand={command} />
+      </div>
+    </>
+  );
 }

@@ -1,3 +1,22 @@
+# Current sprint checkpoint — 2026-10-22
+
+- Selected rank-16 adapter weights and manifest validated; SHA-256 identical.
+- Genuine CPU base/tuned smoke and real browser → API → model → analysis verified.
+- Separate authenticated, rate-limited inference service implemented. Public
+  always-on serving remains unavailable; free Render does not load weights.
+- Real final exports recovered: 1,254 raw rows; 1,222 primary pairs excluding the
+  32 pilot-exposed IDs; 28 base and 84 tuned strict matches verified from raw data.
+- Real interpreter event playback, bitwise permissions, state diffs and five
+  deterministic CPU scheduling policies implemented and tested.
+- Cream/evergreen creative studio replaces the rejected graphite/lime direction.
+- 123 frontend unit, 100 focused Python and 33 production browser tests pass.
+- New desktop/mobile captures, actual browser recording, inference provenance,
+  Colab serving path and faculty demonstration guide included.
+- PR #2 remains open and unmerged; deployment revisions are reconciled at release.
+
+The following is the preserved earlier implementation log; its earlier design
+and model-access statements are superseded by this checkpoint and INFERENCE.md.
+
 # ShellForge product v2
 
 Branch: `feat/shellforge-product-v2`, based on merged main `b508789`.

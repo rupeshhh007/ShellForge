@@ -1,4 +1,4 @@
-# ShellForge — The Command Workshop
+# ShellForge — The Interactive Command Laboratory
 
 Describe the operation. Understand the command. Inspect the consequences.
 
@@ -33,7 +33,8 @@ Open [the local workshop](http://127.0.0.1:3000).
 | Route | Working experience |
 | --- | --- |
 | `/` | Original artwork, editorial motion, interactive GNU find comparison, live API example |
-| `/lab` | Command Impact Lab: live find matches, predicate traces, Unix permissions, atomic virtual mutations and undo |
+| `/lab` | Real interpreter trace playback, permissions, virtual state diffs/undo, and five deterministic CPU scheduling policies |
+| `/studio` | 1,222 genuine primary base/tuned pairs, separate 32-case pilot, real inference smoke evidence, authenticated live runtime mode when reachable |
 | `/forge` | Validated template proposal, structured intent, token anatomy, copy and review receipt |
 | `/xray` | Bash syntax-only checking and existing deterministic static AST policy |
 | `/manual` | 12 searchable, filterable recipes with editable, API-validated parameters |
@@ -53,15 +54,24 @@ parser deliberately matches entire supported forms; it does not silently discard
 extra qualifiers. Templates label OS assumptions and size semantics. The main
 workbench always uses the actual API. No generic chatbot or fake fallback results.
 
-The optional provider interface wraps existing Qwen/LoRA inference only when
-`SHELLFORGE_MODEL_ADAPTER` is explicitly configured with verified weights and the
-model dependencies/resources are installed. The final Drive binary was not available
-through the inspected connector listing; the rank-8 pilot is not substituted for it.
+The selected final rank-16 Drive adapter is now downloaded, hash-validated and
+verified by genuine CPU inference and a browser → API → authenticated model flow.
+The evidence is saved; it is not an always-on public model deployment. The public
+site defaults to **Saved Evaluation**, with no replay labelled live. A separate
+bounded runtime supports live base/tuned generation when configured and reachable.
+The free Render API never loads model weights. See [real inference evidence and
+serving instructions](docs/product/INFERENCE.md). No paid compute was provisioned.
+
+The lab's scheduling simulator computes FCFS, non-preemptive SJF, SRTF, Round Robin
+and non-preemptive Priority from editable process data. Read the explicit tie,
+quantum-boundary and context-switch policies in the interface. All simulations
+operate on synthetic structures. Page replacement is deliberately deferred.
 
 Production frontend: `cd apps/web && npm run build && npm run start`. The server-only
 `SHELLFORGE_API_ORIGIN` defaults to `http://127.0.0.1:8010`; set it **before building**
 to proxy a hosted API. No credential belongs in a `NEXT_PUBLIC_` variable.
 
+- [Six-minute faculty demo, architecture diagram and viva questions](docs/product/FACULTY-DEMO.md)
 - [Architecture, contracts and safeguards](docs/product/ARCHITECTURE.md)
 - [Design system and reference investigation](docs/product/DESIGN.md)
 - [Original artwork, prompts and license acknowledgments](docs/product/ASSETS-AND-CREDITS.md)

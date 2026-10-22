@@ -68,3 +68,43 @@ retained as an unused historical asset.
 
 Material prompt:
 > Use case stylized-concept. Production texture asset for ShellForge kinetic command plates. Orthographic straight-on completely flat seamless surface sample of dark graphite anodized machined aluminum. Entire image filled with near-black #1c211c brushed aluminum, very fine horizontal machining grain, subtle realistic fine etched hairline scratches and metal microtexture, light catches irregular brushed grain at low contrast. Uniform neutral overhead lighting, no perspective, NO objects, NO borders, NO screws, NO text, NO logo, NO gradients, NO vignette, no strong speckles. This will be mapped onto separate CSS 3D typographic slabs, so make a tileable neutral material, sophisticated high fidelity industrial material texture, dark and restrained enough for white text overlay. Square1024x1024.
+
+## Interactive laboratory studio direction (2026-10-22)
+
+The user's Scribo screenshots were inspected as composition/palette references.
+No Scribo photography, logo, illustration, HTML or source was copied.
+
+Built-in ImageGen generated these original assets (no stock provider):
+
+- `public/artwork/terminal-studio.webp`: transparent evergreen terminal sculpture,
+  pink/yellow folders, cobalt paper orbit, ink loop and orange asterisk. Prompt:
+  “Original ShellForge production artwork, transparent background. A beautiful
+  tactile paper/ceramic 3D dark evergreen terminal sculpture with an inset >_
+  glyph, behind it one pink and one golden yellow file folder, composition on a
+  soft cobalt irregular oval paper cutout. Thin ink hand drawn orbital loop and
+  small orange asterisk integrated. Sophisticated creative developer studio style,
+  warm analogue grain, soft studio lighting, generous transparent margin, three
+  quarter view, consistent palette #073F34 #096447 #F8CA39 #F277AD #7399F3. No
+  keyboards, robot, human, logos or words; only >_ glyph.” Converted from RGBA PNG
+  to 1100×733 WebP, approximately 114 KiB; alpha preserved.
+- `concepts/studio-direction.webp`: complete landing and lab design study.
+- `concepts/model-lab-direction.webp`: complete Model Studio, lab entrance and
+  mobile focus study. Concepts are visual references, not research evidence.
+  Their illustrative outputs and invented file trees were deliberately excluded.
+- Favicon, file-token collage, permission-bit graphic, Gantt illustration and
+  command fragments are original code-native graphics. Their interactive versions
+  use real state. The fonts retain the existing OFL licensing.
+
+Interaction research: Apple’s focused visual hierarchy, Francesca Marconi’s
+editorial pacing, Rare UI’s spring-based hierarchy, and Bencho’s explicit
+press/drag state changes informed original components. No new third-party code
+or artwork was copied. The Onlines URL failed the current web fetch; earlier
+inspection notes are retained. Existing Rare UI license notices remain for the
+historical ChapterRail component, which is no longer rendered in the new landing.
+
+Fidelity review checked cream/evergreen color, expressive heading/mono pairing,
+terminal material and crop, asymmetric three-world composition, and native tool
+readability. Intentional deviations from generated concepts: actual fixture
+paths and counts, actual saved predictions, no “run with confidence” claims,
+exact permission semantics, and a full 0–100% accuracy scale. Browser renders,
+not the concept images, are the implementation evidence.

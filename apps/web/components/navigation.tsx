@@ -5,11 +5,10 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const links = [
-  ["/lab", "Impact Lab"],
   ["/forge", "The Forge"],
-  ["/xray", "X-Ray"],
-  ["/manual", "Field Manual"],
-  ["/bench", "The Bench"],
+  ["/lab", "The Lab"],
+  ["/studio", "Model Studio"],
+  ["/bench", "Research"],
 ];
 
 export function Navigation() {
@@ -26,9 +25,9 @@ export function Navigation() {
         <svg viewBox="0 0 32 32" aria-hidden="true">
           <path d="m5 7 12 9L5 25M19 25h9" />
         </svg>
-        ShellForge<span className="wordmark-dot">2.0</span>
+        ShellForge
       </Link>
-      <span className="brand-caption">The command workshop</span>
+      <span className="brand-caption">The interactive command laboratory</span>
       <button
         className="menu-button"
         type="button"

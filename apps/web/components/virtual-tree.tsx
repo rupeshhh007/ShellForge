@@ -45,6 +45,7 @@ export function VirtualTree({
     const trace = result.traces[entry.path]?.find(
       (t) => t.token === token || t.token === token - 1,
     );
+    const denied = result.errors.some((error) => error.endsWith(entry.path));
     const changed = result.changes.find((c) => c.path === entry.path);
     return (
       <motion.li
@@ -57,10 +58,11 @@ export function VirtualTree({
         <motion.div
           className={`vfs-row ${selected === entry.path ? "selected" : ""} ${match ? "matched" : ""} ${trace?.passed ? "predicate-pass" : ""}`}
           data-path={entry.path}
+          data-denied={denied}
           data-match={match}
           data-visited={visited}
           layout={!reduce}
-          animate={{ backgroundColor: match ? "#29371b" : "#141812" }}
+          animate={{ backgroundColor: match ? "#d9ebd8" : "#f5efe4" }}
           transition={{ duration: reduce ? 0 : 0.25 }}
           style={{ paddingLeft: 12 + depth * 16 }}
         >
@@ -113,15 +115,17 @@ export function VirtualTree({
                   : "Not visited"
             }
           >
-            {changed
-              ? showAfter
-                ? "+"
-                : "Δ"
-              : match
-                ? "●"
-                : visited
-                  ? "○"
-                  : "·"}
+            {denied
+              ? "!"
+              : changed
+                ? showAfter
+                  ? "+"
+                  : "Δ"
+                : match
+                  ? "●"
+                  : visited
+                    ? "○"
+                    : "·"}
           </span>
         </motion.div>
         {entry.kind === "directory" && (

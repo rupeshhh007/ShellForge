@@ -588,8 +588,12 @@ export function simulate(command: string, snapshot: Snapshot): Result {
       const traces: Trace[] = [];
       const recordTrace = (trace: Trace) => {
         traces.push(trace);
-        base.events.push({stage: "predicate", path: e.path, token: trace.token,
-          detail: `${trace.label}: ${trace.passed === null ? "skip" : trace.passed ? "pass" : "fail"}. ${trace.detail}`});
+        base.events.push({
+          stage: "predicate",
+          path: e.path,
+          token: trace.token,
+          detail: `${trace.label}: ${trace.passed === null ? "skip" : trace.passed ? "pass" : "fail"}. ${trace.detail}`,
+        });
       };
       let match = depth >= p.minDepth;
       if (depth < p.minDepth)
@@ -700,7 +704,7 @@ export function simulate(command: string, snapshot: Snapshot): Result {
     if (!entry) {
       if (p.force) {
         base.message = "Missing virtual entry ignored by -f. No changes.";
-        base.events.push({stage: "complete", detail: base.message});
+        base.events.push({ stage: "complete", detail: base.message });
         return base;
       }
       return bad(`Path does not exist: ${target}`);
@@ -724,7 +728,11 @@ export function simulate(command: string, snapshot: Snapshot): Result {
     }
   } else if (p.utility === "chmod") {
     if (!entry) return bad(`Path does not exist: ${target}`);
-    base.events.push({stage: "permission", path: entry.path, detail: `chmod requires ownership: entry uid ${entry.uid}, student uid ${IDENTITY.uid} → ${entry.uid === IDENTITY.uid ? "granted" : "denied"}.`});
+    base.events.push({
+      stage: "permission",
+      path: entry.path,
+      detail: `chmod requires ownership: entry uid ${entry.uid}, student uid ${IDENTITY.uid} → ${entry.uid === IDENTITY.uid ? "granted" : "denied"}.`,
+    });
     if (entry.uid !== IDENTITY.uid)
       return bad(
         "Only the virtual owner may chmod this entry. No root elevation is modeled.",
