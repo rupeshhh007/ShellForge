@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test:e2e": "playwright test",
-    "test:unit": "node --experimental-strip-types --test lib/impact/*.test.mjs"
+    "test:unit": "node --experimental-strip-types --test lib/impact/*.test.mjs lib/counterexamples/*.test.mjs lib/learning/*.test.mjs && node --experimental-strip-types lib/learning/export-tutor.mjs --check"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",

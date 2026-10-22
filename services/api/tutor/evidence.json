@@ -1,0 +1,417 @@
+{
+  "schema": 1,
+  "evaluator": "shellforge-learning-v1",
+  "cases": {
+    "missing-100": {
+      "revision": 1,
+      "fixture": {
+        "revision": 0,
+        "entries": [
+          {
+            "path": "/lab",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/almost.bin",
+            "kind": "file",
+            "size": 103809025,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/exact.bin",
+            "kind": "file",
+            "size": 104857600,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/over.bin",
+            "kind": "file",
+            "size": 104857601,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/evidence/tiny.bin",
+            "kind": "file",
+            "size": 0,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          }
+        ]
+      },
+      "commands": {
+        "a": {
+          "command": "find ./evidence -type f -size 100M"
+        },
+        "b": {
+          "command": "find ./evidence -type f -size +100M"
+        }
+      },
+      "actual": {
+        "a": {
+          "matches": [
+            "/lab/evidence/almost.bin",
+            "/lab/evidence/exact.bin"
+          ],
+          "status": "ok",
+          "traces": {
+            "/lab/evidence": [
+              {
+                "token": 2,
+                "label": "type",
+                "passed": false,
+                "detail": "Entry is a directory."
+              },
+              {
+                "token": 4,
+                "label": "size",
+                "passed": null,
+                "detail": "Skipped: implicit AND short-circuited after an earlier false predicate or minimum depth exclusion."
+              }
+            ],
+            "/lab/evidence/almost.bin": [
+              {
+                "token": 2,
+                "label": "type",
+                "passed": true,
+                "detail": "Entry is a file."
+              },
+              {
+                "token": 4,
+                "label": "size",
+                "passed": true,
+                "detail": "103,809,025 bytes → ceil(bytes / 1,048,576) = 100; compare = 100."
+              }
+            ],
+            "/lab/evidence/exact.bin": [
+              {
+                "token": 2,
+                "label": "type",
+                "passed": true,
+                "detail": "Entry is a file."
+              },
+              {
+                "token": 4,
+                "label": "size",
+                "passed": true,
+                "detail": "104,857,600 bytes → ceil(bytes / 1,048,576) = 100; compare = 100."
+              }
+            ],
+            "/lab/evidence/over.bin": [
+              {
+                "token": 2,
+                "label": "type",
+                "passed": true,
+                "detail": "Entry is a file."
+              },
+              {
+                "token": 4,
+                "label": "size",
+                "passed": false,
+                "detail": "104,857,601 bytes → ceil(bytes / 1,048,576) = 101; compare = 100."
+              }
+            ],
+            "/lab/evidence/tiny.bin": [
+              {
+                "token": 2,
+                "label": "type",
+                "passed": true,
+                "detail": "Entry is a file."
+              },
+              {
+                "token": 4,
+                "label": "size",
+                "passed": false,
+                "detail": "0 bytes → ceil(bytes / 1,048,576) = 0; compare = 100."
+              }
+            ]
+          },
+          "errors": []
+        },
+        "b": {
+          "matches": [
+            "/lab/evidence/over.bin"
+          ],
+          "status": "ok"
+        }
+      },
+      "rule": "-size NM tests ceil(bytes / 1,048,576) = N. +NM tests a rounded count greater than N. A c suffix uses exact one-byte units. A positive-byte file smaller than 1 MiB can still match 1M.",
+      "questions": [
+        "What happens when you round 99 MiB plus one byte up to whole MiB?",
+        "Which interval of byte sizes rounds to exactly 100 units?",
+        "Does adding + change the unit size, or the comparison operator?"
+      ]
+    },
+    "locked-room": {
+      "revision": 1,
+      "fixture": {
+        "revision": 0,
+        "entries": [
+          {
+            "path": "/lab",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/room",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 384,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/room/clue.txt",
+            "kind": "file",
+            "size": 512,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          }
+        ]
+      },
+      "commands": {
+        "a": {
+          "prepare": "chmod 600 ./room",
+          "command": "find ./room -type f"
+        },
+        "b": {
+          "prepare": "chmod 700 ./room",
+          "command": "find ./room -type f"
+        }
+      },
+      "actual": {
+        "a": {
+          "matches": [],
+          "status": "partial",
+          "traces": {
+            "/lab/room": [
+              {
+                "token": 2,
+                "label": "type",
+                "passed": false,
+                "detail": "Entry is a directory."
+              }
+            ]
+          },
+          "errors": [
+            "Traversal requires read + search (r+x): /lab/room"
+          ]
+        },
+        "b": {
+          "matches": [
+            "/lab/room/clue.txt"
+          ],
+          "status": "ok"
+        }
+      },
+      "rule": "Directory search (x) and reading names (r) are distinct. This bounded walker requires both to descend. chmod requires ownership; no root elevation or ACLs are modeled.",
+      "questions": [
+        "Which owner bit is missing from mode 0600 when the object is a directory?",
+        "How does reading a directory’s names differ from searching for a known child?",
+        "Why can an execute-only directory allow a known pathname but prevent enumeration?"
+      ]
+    },
+    "sticky-file": {
+      "revision": 1,
+      "fixture": {
+        "revision": 0,
+        "entries": [
+          {
+            "path": "/lab",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/drop",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 1023,
+            "uid": 0,
+            "gid": 0,
+            "modified": 0
+          },
+          {
+            "path": "/lab/drop/report.txt",
+            "kind": "file",
+            "size": 256,
+            "mode": 438,
+            "uid": 0,
+            "gid": 0,
+            "modified": 0
+          }
+        ]
+      },
+      "commands": {
+        "a": {
+          "command": "rm ./drop/report.txt"
+        },
+        "b": {
+          "command": "rm -f ./drop/report.txt"
+        }
+      },
+      "actual": {
+        "a": {
+          "matches": [],
+          "status": "error",
+          "traces": {},
+          "errors": [
+            "Sticky directory forbids removing another owner's entry: /lab/drop/report.txt"
+          ]
+        },
+        "b": {
+          "matches": [],
+          "status": "error"
+        }
+      },
+      "rule": "Unlink needs parent w+x. In this sticky model the student must own the entry or the directory. A read-only student-owned file can be removed from a writable/searchable sticky directory. -f does not bypass permissions.",
+      "questions": [
+        "Who owns the parent directory, and who owns the entry you want to unlink?",
+        "Which permissions belong to the directory rather than the file?",
+        "Does -f bypass sticky ownership, or only change the treatment of missing operands?"
+      ]
+    },
+    "beat-model": {
+      "revision": 1,
+      "fixture": {
+        "revision": 0,
+        "entries": [
+          {
+            "path": "/lab",
+            "kind": "directory",
+            "size": 4096,
+            "mode": 493,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/almost.bin",
+            "kind": "file",
+            "size": 9437185,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/exact.bin",
+            "kind": "file",
+            "size": 10485760,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          },
+          {
+            "path": "/lab/over.bin",
+            "kind": "file",
+            "size": 10485761,
+            "mode": 420,
+            "uid": 1000,
+            "gid": 1000,
+            "modified": 0
+          }
+        ]
+      },
+      "commands": {
+        "a": {
+          "command": "find . -size +10M"
+        },
+        "b": {
+          "command": "find . -size 10M"
+        }
+      },
+      "actual": {
+        "a": {
+          "matches": [
+            "/lab/over.bin"
+          ],
+          "status": "ok",
+          "traces": {
+            "/lab": [
+              {
+                "token": 2,
+                "label": "size",
+                "passed": false,
+                "detail": "4,096 bytes → ceil(bytes / 1,048,576) = 1; compare > 10."
+              }
+            ],
+            "/lab/almost.bin": [
+              {
+                "token": 2,
+                "label": "size",
+                "passed": false,
+                "detail": "9,437,185 bytes → ceil(bytes / 1,048,576) = 10; compare > 10."
+              }
+            ],
+            "/lab/exact.bin": [
+              {
+                "token": 2,
+                "label": "size",
+                "passed": false,
+                "detail": "10,485,760 bytes → ceil(bytes / 1,048,576) = 10; compare > 10."
+              }
+            ],
+            "/lab/over.bin": [
+              {
+                "token": 2,
+                "label": "size",
+                "passed": true,
+                "detail": "10,485,761 bytes → ceil(bytes / 1,048,576) = 11; compare > 10."
+              }
+            ]
+          },
+          "errors": []
+        },
+        "b": {
+          "matches": [
+            "/lab/almost.bin",
+            "/lab/exact.bin"
+          ],
+          "status": "ok"
+        }
+      },
+      "rule": "The displayed prediction and reference have a deterministically demonstrable size-predicate difference. This challenge checks the explicit saved-reference contract; it does not adjudicate every interpretation of the original ambiguous MB wording, nor label every nonexact model output semantically wrong.",
+      "questions": [
+        "Which comparison operator did the saved model add to the reference predicate?",
+        "What explicit contract are you checking when the original request says ambiguous MB?",
+        "Can a command be syntactically valid and still select a different rounded size bucket?"
+      ]
+    }
+  }
+}
