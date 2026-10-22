@@ -57,13 +57,14 @@ jobs:
             sleep 1
           done
           cd apps/web
-          PLAYWRIGHT_BASE_URL=http://127.0.0.1:3010 npm run test:e2e
+          PLAYWRIGHT_EVIDENCE_DIR="$GITHUB_WORKSPACE/docs/visual-qa/learning-ci" PLAYWRIGHT_BASE_URL=http://127.0.0.1:3010 npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: product-browser-evidence
           path: |
             docs/visual-qa/screenshots/*.png
+            docs/visual-qa/learning-ci
             apps/web/playwright-report
             apps/web/test-results
             /tmp/shellforge-api.log

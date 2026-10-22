@@ -2,10 +2,9 @@ import { expect, test } from "@playwright/test";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
-const evidence = process.env.PLAYWRIGHT_EVIDENCE_DIR ?? path.resolve(
-  process.cwd(),
-  "../../docs/visual-qa/screenshots",
-);
+const evidence =
+  process.env.PLAYWRIGHT_EVIDENCE_DIR ??
+  path.resolve(process.cwd(), "../../docs/visual-qa/screenshots");
 const request = "Find files larger than 100 MiB in the current directory";
 const command = "find . -type f -size +100M";
 
@@ -18,8 +17,8 @@ test("landing → actual API proposal → anatomy → copy → reset", async ({
   context,
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("/");
-  await expect(page).toHaveTitle("ShellForge — The Interactive Command Laboratory");
+  await page.goto("/workshop");
+  await expect(page).toHaveTitle("Command anatomy workshop · ShellForge");
   await page
     .getByRole("link", { name: "Enter the Forge", exact: true })
     .first()
@@ -253,7 +252,7 @@ test("mobile navigation, inspector tabs and reduced motion", async ({
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
+  await page.goto("/workshop");
   await page.getByRole("button", { name: "Menu +" }).click();
   await expect(
     page.getByRole("navigation", { name: "Main navigation" }),
@@ -300,7 +299,7 @@ test("research claims remain separated and actual landing example works", async 
   await expect(page.locator(".safety-study")).toContainText(
     "not the language model",
   );
-  await page.goto("/");
+  await page.goto("/workshop");
   await page.getByRole("button", { name: "Rounded size", exact: true }).click();
   await expect(page.locator(".comparison-explanation")).toContainText(
     "larger than 99 MiB",
@@ -314,7 +313,7 @@ test("normal motion visibly assembles the command and keeps token study interact
 }) => {
   await page.setViewportSize({ width: 1536, height: 1024 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("/");
+  await page.goto("/workshop");
   const first = page.getByRole("button", {
     name: "find: Utility",
     exact: true,
@@ -356,7 +355,7 @@ test("reduced motion leaves the kinetic controls and page content immediately re
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
+  await page.goto("/workshop");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator(".route-shutter")).not.toBeVisible();
   await page.getByRole("button", { name: "Assemble", exact: true }).click();
@@ -392,7 +391,7 @@ for (const [width, height] of [
           errors.push(message.text());
     });
     for (const [route, name] of [
-      ["/", "landing"],
+      ["/workshop", "landing"],
       ["/forge", "forge"],
       ["/xray", "xray"],
       ["/manual", "manual"],

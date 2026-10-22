@@ -1,0 +1,11 @@
+{
+  "verified_at": "2026-10-22T13:10:43.386Z",
+  "baseURL": "http://127.0.0.1:3007",
+  "title": "ShellForge — The Almost Right Lab",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "realInteractions": true,
+  "consoleErrors": []
+}

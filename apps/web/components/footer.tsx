@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <Link href="/" className="footer-brand">
-        ShellForge<span> / The interactive command laboratory.</span>
+        ShellForge<span> / The Almost Right Lab.</span>
       </Link>
       <div>
         <span>Made to understand. Never to execute.</span>

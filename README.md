@@ -1,6 +1,15 @@
-# ShellForge — The Interactive Command Laboratory
+# ShellForge — The Almost Right Lab
 
-Describe the operation. Understand the command. Inspect the consequences.
+**One character can change everything. Predict. Investigate. Prove.**
+
+Four complete Linux investigations with locked predictions, actual interpreter
+playback, bounded counterexample construction, command repair, independent transfer
+questions and reproducible Investigation Records.
+
+[Open the public flagship case](https://shellforge-workshop.vercel.app/cases/missing-100) ·
+[Six-minute demo](docs/product/ALMOST-RIGHT-DEMO.md) ·
+[Algorithms, contracts and limits](docs/product/ALMOST-RIGHT-LAB.md) ·
+[Comparison with existing teaching tools](docs/product/TEACHING-TOOLS-COMPARISON.md)
 
 An Operating Systems demonstration with a pure in-memory virtual filesystem, plus
 a Next.js + FastAPI workbench around the preserved Python research implementation.
@@ -32,7 +41,11 @@ Open [the local workshop](http://127.0.0.1:3000).
 
 | Route | Working experience |
 | --- | --- |
-| `/` | Original artwork, editorial motion, interactive GNU find comparison, live API example |
+| `/` | Case gallery with expandable investigations and local practice evidence |
+| `/cases/missing-100` | Flagship prediction → trace → generated witness → revision → transfer → export |
+| `/cases/locked-room`, `/cases/sticky-file` | Independent directory-search and sticky-unlink investigations |
+| `/beat` | Genuine preserved rank-16 prediction, reviewed predicate contract and command repair |
+| `/workshop` | Preserved command anatomy workshop, editorial motion and live API example |
 | `/lab` | Real interpreter trace playback, permissions, virtual state diffs/undo, and five deterministic CPU scheduling policies |
 | `/studio` | 1,222 genuine primary base/tuned pairs, separate 32-case pilot, real inference smoke evidence, authenticated live runtime mode when reachable |
 | `/forge` | Validated template proposal, structured intent, token anatomy, copy and review receipt |
@@ -40,7 +53,12 @@ Open [the local workshop](http://127.0.0.1:3000).
 | `/manual` | 12 searchable, filterable recipes with editable, API-validated parameters |
 | `/bench` | All 32 saved pilot base/tuned prediction pairs with source hashes; separate final metrics and safety evaluation |
 
-Start in **[the Impact Lab](http://127.0.0.1:3000/lab)**. Compare `find ./data -type f
+The new starting point is **[The Missing 100 MiB](https://shellforge-workshop.vercel.app/cases/missing-100)**.
+The learning loop needs no network or model request. Optional server-side Gemini
+selects reviewed questions only; missing configuration is explicitly labeled and
+curated hints always work. It cannot grade or invent filesystem state.
+
+For unrestricted supported command exploration, open **[the Impact Lab](http://127.0.0.1:3000/lab)**. Compare `find ./data -type f
 -size 100M`, `-size +100M` and `-size 104857600c` on boundary-case files. Try recursive
 virtual removal, chmod search permissions, the sticky directory, then preview/apply
 and undo. No command is executed. The browser interprets only the documented strict

@@ -36,7 +36,7 @@ export function FocusPanel({
     </>
   );
 }
-function FocusDialog({
+export function FocusDialog({
   id,
   title,
   onClose,

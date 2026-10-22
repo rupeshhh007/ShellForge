@@ -3,7 +3,7 @@ export const dynamic = "force-static";
 export function GET() {
   return Response.json({
     product: "ShellForge",
-    feature: "interactive-command-laboratory-v2",
+    feature: "almost-right-lab-v1",
     commit:
       process.env.SHELLFORGE_BUILD_COMMIT ??
       process.env.VERCEL_GIT_COMMIT_SHA ??

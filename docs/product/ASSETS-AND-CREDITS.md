@@ -108,3 +108,38 @@ readability. Intentional deviations from generated concepts: actual fixture
 paths and counts, actual saved predictions, no “run with confidence” claims,
 exact permission semantics, and a full 0–100% accuracy scale. Browser renders,
 not the concept images, are the implementation evidence.
+
+## Almost Right Lab (2026-10-22)
+
+The current cream/evergreen visual language was retained. The new file artifacts,
+dossier covers, command split, hypothesis tray, event loupe and witness controls
+are original native HTML/CSS/Motion components. No third-party component source was
+copied and no additional runtime package was installed. Existing MIT/OFL notices
+and earlier source acknowledgments remain applicable.
+
+Built-in ImageGen produced `public/artwork/almost-right-evidence.webp`, a transparent
+1000×667 WebP. Original prompt:
+
+> Original transparent production illustration for ShellForge The Almost Right Lab.
+> Same tactile sculptural creative studio material family: deep evergreen ceramic
+> folder open like a miniature evidence case, warm cream folded sheets, a golden
+> yellow magnifying lens with a pink rim hovering over one tiny
+> orange plus-shaped physical glyph on a strip of green paper. Subtle cobalt paper
+> tab, thin dark ink curved connector. No text, no numbers, no logos, humans, robots
+> or keyboard. Technical but playful, editorial museum of Linux mistakes, elegant
+> high-quality soft studio light and fine paper grain, 3/4 isometric view, restrained
+> organic composition, isolated on genuinely transparent background, generous margin.
+> All critical command and file data will be native HTML outside this art.
+
+Encoded locally from the generated RGBA PNG; transparency preserved. The artwork
+is decorative; it contains no fabricated research or simulator evidence.
+
+Current primary references inspected: [Onlines](https://onlines.com.ar/),
+[Francesca Noemi Marconi](https://www.francescanoemimarconi.it/),
+[Bencho](https://bencho.dev/), [Rare UI](https://rareui.com/),
+[Motion shared-layout documentation](https://motion.dev/docs/react-layout-animations),
+and [GSAP Flip documentation](https://gsap.com/docs/v3/Plugins/Flip/). Editorial
+pacing, press/focus state changes and spatial continuity informed the design.
+The existing Motion dependency implements transitions; GSAP was not added.
+Onlines was accessible during this inspection, superseding the earlier failed fetch
+note for this round. No reference artwork or restricted component source was copied.

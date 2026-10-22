@@ -6,7 +6,7 @@ const path = require('node:path');
  const dir=path.resolve(process.env.PLAYWRIGHT_EVIDENCE_DIR || 'docs/visual-qa/studio');await fs.mkdir(dir,{recursive:true});
  const browser=await chromium.launch();const context=await browser.newContext({viewport:{width:1440,height:1000},recordVideo:{dir,size:{width:1440,height:1000}}});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const base=process.env.QA_BASE_URL || 'http://127.0.0.1:3005';
- await page.goto(base);await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(1000);await page.screenshot({path:path.join(dir,'home-desktop.png')});
+ await page.goto(base+"/workshop");await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(1000);await page.screenshot({path:path.join(dir,'home-desktop.png')});
  await page.getByRole('link',{name:'Explore Model Studio',exact:false}).first().click();await expect(page.getByLabel('Saved case').locator('option')).toHaveCount(1222);await page.waitForTimeout(700);
  if(process.env.QA_LIVE_MODEL==='1'){
    await page.getByRole('button',{name:'Live Model',exact:true}).click();const input=page.getByLabel('Natural-language request');await expect(input).toBeEnabled({timeout:60000});

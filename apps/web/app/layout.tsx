@@ -6,6 +6,7 @@ import "@fontsource/ibm-plex-mono/latin-400.css";
 import "./globals.css";
 import "./impact.css";
 import "./studio.css";
+import "./learning.css";
 import { StudioCursor } from "@/components/studio-cursor";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
@@ -14,11 +15,11 @@ import { MotionProvider } from "@/components/motion-provider";
 
 export const metadata: Metadata = {
   title: {
-    default: "ShellForge — The Interactive Command Laboratory",
+    default: "ShellForge — The Almost Right Lab",
     template: "%s · ShellForge",
   },
   description:
-    "Describe the operation. Understand the command. Inspect the consequences. Bash proposals and static review, without execution.",
+    "One character can change everything. Predict, investigate and prove command behavior on synthetic data.",
 };
 
 export default function RootLayout({

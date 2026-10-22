@@ -91,3 +91,18 @@ separately and never substitutes a fabricated risk result.
 Repeat browser QA with PLAYWRIGHT_BASE_URL set to the actual hosted alias. Set
 PLAYWRIGHT_EVIDENCE_DIR to an external directory when checking a clean deployed
 revision so screenshot writes cannot make deployment provenance dirty.
+
+## Almost Right Lab release
+
+The primary entry is now the case gallery; `/cases/missing-100` launches the full
+no-login teaching flow directly. Four cases, witness generation, progress and record
+export work without an API/model key. The existing free Render service adds the
+optional question route; the deployment does not enable Gemini or billing. See
+`ALMOST-RIGHT-LAB.md` for server configuration and strict budget limitations.
+
+For this release, use the existing feature branch, free Render service and Vercel
+project above. Never merge PR #2 as a deployment shortcut. The source/evaluator
+identity is included in downloaded records. Reconcile PR head, Vercel metadata and
+both public version endpoints after deployment. The earlier provisioning/cold-start
+notes are historical; consult the latest release verification rather than treating
+an earlier limitation as current health evidence.

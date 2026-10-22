@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const links = [
+  ["/", "Case Files"],
   ["/forge", "The Forge"],
   ["/lab", "The Lab"],
   ["/studio", "Model Studio"],
@@ -27,7 +28,7 @@ export function Navigation() {
         </svg>
         ShellForge
       </Link>
-      <span className="brand-caption">The interactive command laboratory</span>
+      <span className="brand-caption">The Almost Right Lab</span>
       <button
         className="menu-button"
         type="button"
@@ -46,7 +47,13 @@ export function Navigation() {
           <Link
             key={href}
             href={href}
-            aria-current={pathname === href ? "page" : undefined}
+            aria-current={
+              pathname === href ||
+              (href === "/" &&
+                (pathname.startsWith("/cases/") || pathname === "/beat"))
+                ? "page"
+                : undefined
+            }
             onClick={() => setOpen(false)}
           >
             {label}
