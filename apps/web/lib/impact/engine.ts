@@ -48,7 +48,23 @@ export type Trace = {
   passed: boolean | null;
   detail: string;
 };
+export type TraceEvent = {
+  stage:
+    | "parse"
+    | "resolve"
+    | "visit"
+    | "permission"
+    | "predicate"
+    | "match"
+    | "change"
+    | "error"
+    | "complete";
+  detail: string;
+  path?: string;
+  token?: number;
+};
 export type Result = {
+  events: TraceEvent[];
   status: "ok" | "partial" | "unsupported" | "error";
   message: string;
   program: Program | null;
@@ -472,6 +488,7 @@ function validate(snapshot: Snapshot): void {
 }
 export function simulate(command: string, snapshot: Snapshot): Result {
   const base: Result = {
+    events: [],
     status: "ok",
     message: "",
     program: null,
@@ -488,15 +505,39 @@ export function simulate(command: string, snapshot: Snapshot): Result {
     validate(snapshot);
     p = parse(command);
     base.program = p;
+    base.events.push({
+      stage: "parse",
+      detail: `Parsed ${p.utility}: ${p.tokens.length} literal tokens; no shell expansion.`,
+    });
   } catch (e) {
     return {
       ...base,
+      events: [
+        {
+          stage: "error",
+          detail: e instanceof Error ? e.message : "Invalid input",
+        },
+      ],
       status: e instanceof Unsupported ? "unsupported" : "error",
       message: e instanceof Error ? e.message : "Invalid input.",
     };
   }
   const entries = new Map(snapshot.entries.map((e) => [e.path, e]));
   const target = normalizePath(p.path);
+  base.events.push({
+    stage: "resolve",
+    path: target,
+    detail: `Resolved ${p.path} inside synthetic /lab.`,
+  });
+  const checkAccess = (entry: Entry, mask: number): boolean => {
+    const granted = allowed(entry, mask);
+    base.events.push({
+      stage: "permission",
+      path: entry.path,
+      detail: `student uid 1000: require ${mask & 4 ? "r" : ""}${mask & 2 ? "w" : ""}${mask & 1 ? "x" : ""}; mode ${modeString(entry.mode)} → ${granted ? "granted" : "denied"}.`,
+    });
+    return granted;
+  };
   const accessAncestors = (path: string): string | null => {
     const ancestors: string[] = [];
     for (let dir = parent(path); dir.startsWith(ROOT); dir = parent(dir))
@@ -505,19 +546,22 @@ export function simulate(command: string, snapshot: Snapshot): Result {
       const e = entries.get(dir);
       if (!e || e.kind !== "directory")
         return `Not a directory or missing ancestor: ${dir}`;
-      if (!allowed(e, 1)) return `Search permission (x) denied: ${dir}`;
+      if (!checkAccess(e, 1)) return `Search permission (x) denied: ${dir}`;
     }
     return null;
   };
-  const bad = (message: string): Result => ({
-    ...base,
-    status: "error",
-    message,
-    errors: [message],
-    changes: [],
-    matches: [],
-    after: snapshot,
-  });
+  const bad = (message: string): Result => {
+    base.events.push({ stage: "error", detail: message, path: target });
+    return {
+      ...base,
+      status: "error",
+      message,
+      errors: [message],
+      changes: [],
+      matches: [],
+      after: snapshot,
+    };
+  };
   const ancestorError = accessAncestors(target);
   if (ancestorError) return bad(ancestorError);
   const entry = entries.get(target);
@@ -536,10 +580,20 @@ export function simulate(command: string, snapshot: Snapshot): Result {
       list.sort((a, b) => a.path.localeCompare(b.path, "en"));
     const walk = (e: Entry, depth: number) => {
       base.visited.push(e.path);
+      base.events.push({
+        stage: "visit",
+        path: e.path,
+        detail: `Visit depth ${depth}: ${e.kind}, ${e.size} logical bytes.`,
+      });
       const traces: Trace[] = [];
+      const recordTrace = (trace: Trace) => {
+        traces.push(trace);
+        base.events.push({stage: "predicate", path: e.path, token: trace.token,
+          detail: `${trace.label}: ${trace.passed === null ? "skip" : trace.passed ? "pass" : "fail"}. ${trace.detail}`});
+      };
       let match = depth >= p.minDepth;
       if (depth < p.minDepth)
-        traces.push({
+        recordTrace({
           token: p.tokens.findIndex((t) => t.value === "-mindepth"),
           label: "Minimum depth",
           passed: false,
@@ -547,7 +601,7 @@ export function simulate(command: string, snapshot: Snapshot): Result {
         });
       for (const pred of p.predicates) {
         if (!match) {
-          traces.push({
+          recordTrace({
             token: pred.token,
             label: pred.kind,
             passed: null,
@@ -581,20 +635,27 @@ export function simulate(command: string, snapshot: Snapshot): Result {
             e.kind === "file"
               ? `${e.size} logical bytes.`
               : `${children.get(e.path)?.length ?? 0} immediate entries.`;
-          if (e.kind === "directory" && !allowed(e, 4)) {
+          if (e.kind === "directory" && !checkAccess(e, 4)) {
             passed = false;
             base.errors.push(
               `Read permission (r) denied for -empty: ${e.path}`,
             );
           }
         }
-        traces.push({ token: pred.token, label: pred.kind, passed, detail });
+        recordTrace({ token: pred.token, label: pred.kind, passed, detail });
         match = match && passed;
       }
       base.traces[e.path] = traces;
-      if (match) base.matches.push(e.path);
+      if (match) {
+        base.matches.push(e.path);
+        base.events.push({
+          stage: "match",
+          path: e.path,
+          detail: "All evaluated predicates passed; include this entry.",
+        });
+      }
       if (e.kind === "directory" && depth < p.maxDepth) {
-        if (!allowed(e, 5)) {
+        if (!checkAccess(e, 5)) {
           base.errors.push(`Traversal requires read + search (r+x): ${e.path}`);
           return;
         }
@@ -604,6 +665,7 @@ export function simulate(command: string, snapshot: Snapshot): Result {
     walk(entry, 0);
     base.status = base.errors.length ? "partial" : "ok";
     base.message = `${base.matches.length} match${base.matches.length === 1 ? "" : "es"} among ${base.visited.length} visited entries.${base.errors.length ? " Incomplete traversal; see permission errors." : ""}`;
+    base.events.push({ stage: "complete", detail: base.message });
     return base;
   }
   if (target === ROOT)
@@ -616,7 +678,7 @@ export function simulate(command: string, snapshot: Snapshot): Result {
     child: Entry | undefined,
   ): string | null => {
     const e = entries.get(path);
-    if (!e || e.kind !== "directory" || !allowed(e, 3))
+    if (!e || e.kind !== "directory" || !checkAccess(e, 3))
       return `Directory write + search (w+x) denied: ${path}`;
     if (
       child &&
@@ -638,6 +700,7 @@ export function simulate(command: string, snapshot: Snapshot): Result {
     if (!entry) {
       if (p.force) {
         base.message = "Missing virtual entry ignored by -f. No changes.";
+        base.events.push({stage: "complete", detail: base.message});
         return base;
       }
       return bad(`Path does not exist: ${target}`);
@@ -652,7 +715,7 @@ export function simulate(command: string, snapshot: Snapshot): Result {
       const denial =
         accessAncestors(e.path) || canChangeDirectory(parent(e.path), e);
       if (denial) return bad(denial);
-      if (e.kind === "directory" && !allowed(e, 5))
+      if (e.kind === "directory" && !checkAccess(e, 5))
         return bad(`Recursive removal requires directory r+x: ${e.path}`);
     }
     for (const e of targets) {
@@ -661,6 +724,7 @@ export function simulate(command: string, snapshot: Snapshot): Result {
     }
   } else if (p.utility === "chmod") {
     if (!entry) return bad(`Path does not exist: ${target}`);
+    base.events.push({stage: "permission", path: entry.path, detail: `chmod requires ownership: entry uid ${entry.uid}, student uid ${IDENTITY.uid} → ${entry.uid === IDENTITY.uid ? "granted" : "denied"}.`});
     if (entry.uid !== IDENTITY.uid)
       return bad(
         "Only the virtual owner may chmod this entry. No root elevation is modeled.",
@@ -688,7 +752,7 @@ export function simulate(command: string, snapshot: Snapshot): Result {
   } else {
     if (entry) {
       // Modeled no-options touch by the owner; no timestamps supplied by the user.
-      if (entry.uid !== IDENTITY.uid && !allowed(entry, 2))
+      if (entry.uid !== IDENTITY.uid && !checkAccess(entry, 2))
         return bad(
           "touch requires ownership or write permission in this model.",
         );
@@ -718,5 +782,12 @@ export function simulate(command: string, snapshot: Snapshot): Result {
   });
   base.message = `${base.changes.length} virtual metadata change${base.changes.length === 1 ? "" : "s"} previewed. Apply explicitly to change the in-memory snapshot.`;
   base.matches = base.changes.map((c) => c.path);
+  for (const c of base.changes)
+    base.events.push({
+      stage: "change",
+      path: c.path,
+      detail: `${c.kind}: ${c.before ? modeString(c.before.mode) : "absent"} → ${c.after ? modeString(c.after.mode) : "absent"}. Preview only.`,
+    });
+  base.events.push({ stage: "complete", detail: base.message });
   return base;
 }
