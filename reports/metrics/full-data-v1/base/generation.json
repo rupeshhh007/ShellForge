@@ -1,0 +1,127 @@
+{
+  "bash_syntax_validity": 0.9824561403508771,
+  "exact_match_count": 31,
+  "exact_match_wilson_95": [
+    0.017469623033583466,
+    0.03487517635188492
+  ],
+  "normalized_match": 0.025518341307814992,
+  "ast_supported_pairs": 1216,
+  "ast_node_kind_dice_mean": 0.7447808037006532,
+  "per_category": {
+    "compression": {
+      "n": 15,
+      "exact_match": 0.0,
+      "wilson_95": [
+        0,
+        0.20388330103584862
+      ]
+    },
+    "file_operations": {
+      "n": 41,
+      "exact_match": 0.17073170731707318,
+      "wilson_95": [
+        0.08525251977594998,
+        0.3126261240040417
+      ]
+    },
+    "file_search": {
+      "n": 610,
+      "exact_match": 0.02459016393442623,
+      "wilson_95": [
+        0.014957605168449626,
+        0.04017301257397198
+      ]
+    },
+    "navigation": {
+      "n": 9,
+      "exact_match": 0.0,
+      "wilson_95": [
+        0,
+        0.2991450484195441
+      ]
+    },
+    "networking": {
+      "n": 29,
+      "exact_match": 0.034482758620689655,
+      "wilson_95": [
+        0.006113214292762653,
+        0.17175521879320288
+      ]
+    },
+    "other": {
+      "n": 307,
+      "exact_match": 0.013029315960912053,
+      "wilson_95": [
+        0.005078198044988052,
+        0.03301665219030426
+      ]
+    },
+    "permissions": {
+      "n": 15,
+      "exact_match": 0.26666666666666666,
+      "wilson_95": [
+        0.10897453325692374,
+        0.5195043405598057
+      ]
+    },
+    "process_management": {
+      "n": 17,
+      "exact_match": 0.0,
+      "wilson_95": [
+        0,
+        0.1843181350088518
+      ]
+    },
+    "system_monitoring": {
+      "n": 5,
+      "exact_match": 0.0,
+      "wilson_95": [
+        0,
+        0.43448246478317476
+      ]
+    },
+    "text_processing": {
+      "n": 200,
+      "exact_match": 0.0,
+      "wilson_95": [
+        1.734723475976807e-18,
+        0.018845326377266575
+      ]
+    },
+    "unclassified": {
+      "n": 6,
+      "exact_match": 0.0,
+      "wilson_95": [
+        2.7755575615628914e-17,
+        0.3903342879021653
+      ]
+    }
+  },
+  "formatting_violation_count": 2,
+  "generation_truncated_count": 3,
+  "failure_categories": {
+    "text_mismatch_requires_semantic_review": 1223,
+    "exact_match": 31
+  },
+  "uncertainty_limit": "Wilson intervals assume independent cases; grouped corpus dependencies can widen uncertainty.",
+  "structural_metric_limit": "AST trivia match and node-kind overlap are descriptive only, not semantic equivalence.",
+  "n": 1254,
+  "exact_match": 0.024720893141945772,
+  "elapsed_seconds": 593.267773696,
+  "elapsed_seconds_scope": "current invocation",
+  "reused_prediction_count": 0,
+  "metric_definition": "Exact command bytes; syntax via bash -n with clean environment. No execution or semantic equivalence testing.",
+  "backend": "hf",
+  "model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "adapter": null,
+  "model_revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "test_sha256": "0453571106fe629697aac7e3391c7803f618d5c703ddfdbbfd08c9a6f79a460b",
+  "decoding": {
+    "do_sample": false,
+    "max_input_tokens": 512,
+    "max_new_tokens": 256
+  },
+  "test_selection": "entire held-out test",
+  "fine_tuning_completed": false
+}

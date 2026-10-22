@@ -1,0 +1,72 @@
+{
+  "created_at": "2026-10-22T07:26:27.872116+00:00",
+  "request": "Find all regular files larger than 100 MiB in ./data",
+  "source": "scripts/smoke_selected_model.py; real local inference, not held-out evaluation",
+  "records": [
+    {
+      "command": "find ./data -type f -size +100M",
+      "raw_output": "find ./data -type f -size +100M",
+      "model": "base",
+      "mode": "live",
+      "identity": {
+        "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+        "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+        "adapter_sha256": "afff8a917b26c0443053a45b04fff6328cf351e2eb455e3b3195b3af2512c8fc",
+        "rank": 16,
+        "tensor_count": 336,
+        "training_examples": 10026,
+        "tokenizer_source": "pinned base revision; adapter Qwen2Tokenizer config checked"
+      },
+      "settings": {
+        "max_new_tokens": 128,
+        "do_sample": false,
+        "max_time": 35.0
+      },
+      "elapsed_seconds": 4.0303553328849375,
+      "complete": true,
+      "executed": false,
+      "device": "cpu",
+      "generated_tokens": 14,
+      "inspection": {
+        "risk": "SAFE",
+        "reasons": [],
+        "syntax_valid": true,
+        "policy": "static-v2"
+      }
+    },
+    {
+      "command": "find ./data -type f -size +100M",
+      "raw_output": "find ./data -type f -size +100M",
+      "model": "tuned",
+      "mode": "live",
+      "identity": {
+        "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+        "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+        "adapter_sha256": "afff8a917b26c0443053a45b04fff6328cf351e2eb455e3b3195b3af2512c8fc",
+        "rank": 16,
+        "tensor_count": 336,
+        "training_examples": 10026,
+        "tokenizer_source": "pinned base revision; adapter Qwen2Tokenizer config checked"
+      },
+      "settings": {
+        "max_new_tokens": 128,
+        "do_sample": false,
+        "max_time": 35.0
+      },
+      "elapsed_seconds": 1.3449442922137678,
+      "complete": true,
+      "executed": false,
+      "device": "cpu",
+      "generated_tokens": 14,
+      "inspection": {
+        "risk": "SAFE",
+        "reasons": [],
+        "syntax_valid": true,
+        "policy": "static-v2"
+      }
+    }
+  ],
+  "live_inference": false,
+  "display_mode": "saved-smoke-evidence",
+  "semantic_correctness": "not verified"
+}

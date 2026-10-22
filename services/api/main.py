@@ -33,7 +33,7 @@ def inspect(command):
     return safety, tokens
 
 
-def create_app(provider: ModelProvider | None = None, per_minute=30) -> FastAPI:
+def create_app(provider: ModelProvider | None = None, per_minute=30, remote_provider=None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app):
         adapter = os.getenv("SHELLFORGE_MODEL_ADAPTER")
@@ -197,6 +197,8 @@ def create_app(provider: ModelProvider | None = None, per_minute=30) -> FastAPI:
             ],
         )
 
+    from .remote_model import router
+    api.include_router(router(inspect, remote_provider))
     return api
 
 
